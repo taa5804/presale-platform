@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>전자쿠폰 사용처리</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:#f4f6f8;
+  color:#172b3d;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;
+}
+.wrap{
+  max-width:520px;
+  margin:0 auto;
+  padding:24px 16px 50px;
+}
+h1{
+  text-align:center;
+  font-size:25px;
+  margin:15px 0 7px;
+}
+.sub{
+  text-align:center;
+  color:#667085;
+  font-size:14px;
+  line-height:1.6;
+  margin-bottom:22px;
+}
+.card{
+  background:#fff;
+  padding:20px;
+  border-radius:16px;
+  box-shadow:0 4px 18px rgba(0,0,0,.07);
+}
+label{
+  display:block;
+  margin:10px 0 7px;
+  font-size:14px;
+  font-weight:700;
+}
+input{
+  width:100%;
+  height:48px;
+  border:1px solid #d0d5dd;
+  border-radius:10px;
+  padding:0 13px;
+  font-size:16px;
+}
+button{
+  width:100%;
+  height:50px;
+  border:0;
+  border-radius:11px;
+  margin-top:18px;
+  background:#1165d7;
+  color:#fff;
+  font-size:17px;
+  font-weight:800;
+  cursor:pointer;
+}
+button:disabled{opacity:.55}
+.result{
+  display:none;
+  margin-top:18px;
+  padding:15px;
+  border-radius:11px;
+  line-height:1.6;
+}
+.ok{
+  background:#ecfdf3;
+  color:#067647;
+}
+.err{
+  background:#fef3f2;
+  color:#b42318;
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+<h1>전자쿠폰 사용처리</h1>
+
+<div class="sub">
+고객의 쿠폰번호를 입력한 후<br>
+사용처리를 진행합니다.
+</div>
+
+<div class="card">
+
+<label for="couponCode">쿠폰번호</label>
+
+<input
+  id="couponCode"
+  type="text"
+  placeholder="쿠폰번호를 입력하세요"
+  autocomplete="off"
+>
+
+<button id="useBtn" type="button">
+쿠폰 사용처리
+</button>
+
+<div id="result" class="result"></div>
+
+</div>
+</div>
+
+<script>
+
+const couponCode =
+  document.getElementById("couponCode");
+
+const useBtn =
+  document.getElementById("useBtn");
+
+const result =
+  document.getElementById("result");
+
+
+function showMessage(text,type){
+  result.style.display="block";
+  result.className="result "+type;
+  result.textContent=text;
+}
+
+
+useBtn.addEventListener("click",async()=>{
+
+  const code=couponCode.value.trim();
+
+  if(!code){
+    showMessage(
+      "쿠폰번호를 입력해주세요.",
+      "err"
+    );
+    return;
+  }
+
+  if(!confirm("이 쿠폰을 사용처리하시겠습니까?")){
+    return;
+  }
+
+  useBtn.disabled=true;
+  useBtn.textContent="처리 중...";
+
+  try{
+
+    const res=await fetch("/api/coupon-use",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify({
+        coupon_code:code
+      })
+    });
+
+    const data=await res.json();
+
+    if(!res.ok || data.ok===false){
+      throw new Error(
+        data.message ||
+        "쿠폰 사용처리에 실패했습니다."
+      );
+    }
+
+    showMessage(
+      "쿠폰 사용처리가 완료되었습니다.",
+      "ok"
+    );
+
+    couponCode.value="";
+
+  }catch(err){
+
+    showMessage(
+      err.message ||
+      "쿠폰 처리 중 오류가 발생했습니다.",
+      "err"
+    );
+
+  }finally{
+
+    useBtn.disabled=false;
+    useBtn.textContent="쿠폰 사용처리";
+
+  }
+
+});
+
+
+couponCode.addEventListener(
+  "keydown",
+  function(e){
+    if(e.key==="Enter"){
+      useBtn.click();
+    }
+  }
+);
+
+</script>
+
+</body>
+</html>
