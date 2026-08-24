@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>전자쿠폰 조회현황</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:#f4f6f8;
+  color:#172b3d;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;
+}
+
+.wrap{
+  max-width:1200px;
+  margin:0 auto;
+  padding:22px 14px 50px;
+}
+
+.hero{
+  background:#153c55;
+  color:#fff;
+  border-radius:16px;
+  padding:24px;
+  margin-bottom:18px;
+}
+
+.hero small{
+  color:#ffbf35;
+  font-weight:800;
+  letter-spacing:1px;
+}
+
+.hero h1{
+  margin:7px 0;
+  font-size:27px;
+}
+
+.hero p{
+  margin:0;
+  font-size:14px;
+}
+
+.summary{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-bottom:18px;
+}
+
+.summary-box{
+  background:#fff;
+  border-radius:13px;
+  padding:17px;
+}
+
+.summary-box span{
+  display:block;
+  color:#667085;
+  font-size:13px;
+}
+
+.summary-box strong{
+  display:block;
+  margin-top:6px;
+  font-size:21px;
+}
+
+.panel{
+  background:#fff;
+  border-radius:16px;
+  overflow:hidden;
+}
+
+.panel-head{
+  padding:18px;
+  font-weight:800;
+  border-bottom:1px solid #eaecf0;
+}
+
+.table-wrap{
+  overflow-x:auto;
+}
+
+table{
+  width:100%;
+  min-width:1050px;
+  border-collapse:collapse;
+}
+
+th,
+td{
+  padding:12px 10px;
+  border-bottom:1px solid #eaecf0;
+  font-size:13px;
+  text-align:left;
+  white-space:nowrap;
+}
+
+th{
+  background:#f8fafc;
+}
+
+.status{
+  font-weight:800;
+}
+
+.empty{
+  padding:35px 10px;
+  text-align:center;
+  color:#667085;
+}
+
+.pager{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+  padding:18px;
+}
+
+.pager button{
+  height:40px;
+  padding:0 16px;
+  border:1px solid #d0d5dd;
+  border-radius:8px;
+  background:#fff;
+  cursor:pointer;
+  font-weight:700;
+}
+
+.pager button:disabled{
+  opacity:.4;
+  cursor:default;
+}
+
+.page-no{
+  font-weight:800;
+}
+
+@media(max-width:700px){
+  .summary{
+    grid-template-columns:1fr;
+  }
+
+  .hero h1{
+    font-size:23px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+  <div class="hero">
+    <small>ELECTRONIC COUPON HISTORY</small>
+    <h1>전자쿠폰 조회현황</h1>
+    <p>발행된 전자쿠폰의 발행·사용 현황을 확인합니다.</p>
+  </div>
+
+  <div class="summary">
+
+    <div class="summary-box">
+      <span>현재 페이지 발행건수</span>
+      <strong id="totalCount">0건</strong>
+    </div>
+
+    <div class="summary-box">
+      <span>사용 가능</span>
+      <strong id="unusedCount">0건</strong>
+    </div>
+
+    <div class="summary-box">
+      <span>사용 완료</span>
+      <strong id="usedCount">0건</strong>
+    </div>
+
+  </div>
+
+  <div class="panel">
+
+    <div class="panel-head">
+      쿠폰 발행내역
+    </div>
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>발행일</th>
+            <th>분양현장</th>
+            <th>쿠폰번호</th>
+            <th>쿠폰명</th>
+            <th>쿠폰금액</th>
+            <th>유효기간</th>
+            <th>상태</th>
+            <th>사용일</th>
+            <th>사용마트</th>
+          </tr>
+        </thead>
+
+        <tbody id="historyBody">
+          <tr>
+            <td colspan="9" class="empty">
+              불러오는 중...
+            </td>
+          </tr>
+        </tbody>
+
+      </table>
+
+    </div>
+
+    <div class="pager">
+
+      <button id="prevBtn" type="button">
+        이전
+      </button>
+
+      <span id="pageNo" class="page-no">
+        1
+      </span>
+
+      <button id="nextBtn" type="button">
+        다음
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+(function(){
+
+  var page = 1;
+  var pageSize = 100;
+
+  var historyBody =
+    document.getElementById("historyBody");
+
+  var totalCount =
+    document.getElementById("totalCount");
+
+  var unusedCount =
+    document.getElementById("unusedCount");
+
+  var usedCount =
+    document.getElementById("usedCount");
+
+  var pageNo =
+    document.getElementById("pageNo");
+
+  var prevBtn =
+    document.getElementById("prevBtn");
+
+  var nextBtn =
+    document.getElementById("nextBtn");
+
+
+  function money(value){
+    return Number(value || 0)
+      .toLocaleString("ko-KR") + "원";
+  }
+
+
+  function date(value){
+
+    if(!value) return "-";
+
+    var d = new Date(value);
+
+    if(isNaN(d.getTime())){
+      return value;
+    }
+
+    return d.toLocaleDateString("ko-KR");
+  }
+
+
+  function statusName(value){
+
+    if(value === "used"){
+      return "사용 완료";
+    }
+
+    if(value === "expired"){
+      return "기간 만료";
+    }
+
+    return "사용 가능";
+  }
+
+
+  async function load(){
+
+    historyBody.innerHTML =
+      '<tr><td colspan="9" class="empty">불러오는 중...</td></tr>';
+
+    try{
+
+      var response =
+        await fetch(
+          "/api/coupon-history" +
+          "?page=" + page +
+          "&page_size=" + pageSize
+        );
+
+      var result =
+        await response.json();
+
+      if(!response.ok || !result.ok){
+        throw new Error(
+          result.message ||
+          "조회에 실패했습니다."
+        );
+      }
+
+      var rows =
+        Array.isArray(result.rows)
+          ? result.rows
+          : [];
+
+      totalCount.textContent =
+        rows.length.toLocaleString("ko-KR") + "건";
+
+      var unused =
+        rows.filter(function(row){
+          return row.status !== "used";
+        }).length;
+
+      var used =
+        rows.filter(function(row){
+          return row.status === "used";
+        }).length;
+
+      unusedCount.textContent =
+        unused.toLocaleString("ko-KR") + "건";
+
+      usedCount.textContent =
+        used.toLocaleString("ko-KR") + "건";
+
+      pageNo.textContent =
+        page.toLocaleString("ko-KR");
+
+      prevBtn.disabled =
+        page <= 1;
+
+      nextBtn.disabled =
+        rows.length < pageSize;
+
+
+      if(rows.length === 0){
+
+        historyBody.innerHTML =
+          '<tr><td colspan="9" class="empty">발행된 쿠폰이 없습니다.</td></tr>';
+
+        return;
+      }
+
+
+      historyBody.innerHTML =
+        rows.map(function(row){
+
+          return `
+            <tr>
+              <td>${date(row.created_at)}</td>
+              <td>${row.company_id || "-"}</td>
+              <td>${row.coupon_code || "-"}</td>
+              <td>${row.coupon_name || "-"}</td>
+              <td>${money(row.coupon_amount)}</td>
+              <td>${date(row.valid_until)}</td>
+              <td class="status">${statusName(row.status)}</td>
+              <td>${date(row.used_at)}</td>
+              <td>${row.mart_id || "-"}</td>
+            </tr>
+          `;
+
+        }).join("");
+
+    }catch(error){
+
+      historyBody.innerHTML =
+        '<tr><td colspan="9" class="empty">조회현황을 불러오지 못했습니다.</td></tr>';
+
+      console.error(error);
+    }
+  }
+
+
+  prevBtn.addEventListener(
+    "click",
+    function(){
+
+      if(page <= 1){
+        return;
+      }
+
+      page--;
+      load();
+    }
+  );
+
+
+  nextBtn.addEventListener(
+    "click",
+    function(){
+
+      page++;
+      load();
+    }
+  );
+
+
+  load();
+
+})();
+</script>
+
+</body>
+</html>
