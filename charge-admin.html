@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>분양사 충전금 관리</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:#f4f6f8;
+  color:#172b3d;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;
+}
+.wrap{
+  max-width:1100px;
+  margin:0 auto;
+  padding:24px 16px 60px;
+}
+.hero{
+  background:#153c55;
+  color:#fff;
+  border-radius:16px;
+  padding:26px;
+  margin-bottom:20px;
+}
+.hero small{
+  color:#ffbf35;
+  font-weight:800;
+  letter-spacing:1px;
+}
+.hero h2{
+  margin:8px 0;
+  font-size:28px;
+}
+.hero p{
+  margin:0;
+}
+.panel{
+  background:#fff;
+  border-radius:16px;
+  padding:22px;
+  margin-bottom:20px;
+  box-shadow:0 4px 18px rgba(0,0,0,.06);
+}
+.panel h3{
+  margin:0 0 18px;
+}
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+}
+.field label{
+  display:block;
+  font-size:14px;
+  font-weight:700;
+  margin-bottom:7px;
+}
+.field input,
+.field textarea{
+  width:100%;
+  border:1px solid #d0d5dd;
+  border-radius:10px;
+  padding:0 12px;
+  font-size:15px;
+}
+.field input{
+  height:46px;
+}
+.field textarea{
+  min-height:90px;
+  padding-top:12px;
+  resize:vertical;
+}
+.full{
+  grid-column:1/-1;
+}
+.quick{
+  display:flex;
+  gap:8px;
+  margin-top:14px;
+  flex-wrap:wrap;
+}
+.quick button{
+  border:1px solid #1165d7;
+  background:#fff;
+  color:#1165d7;
+  border-radius:9px;
+  padding:9px 13px;
+  font-weight:700;
+  cursor:pointer;
+}
+.primary{
+  width:100%;
+  height:50px;
+  border:0;
+  margin-top:18px;
+  border-radius:10px;
+  background:#1165d7;
+  color:#fff;
+  font-size:17px;
+  font-weight:800;
+  cursor:pointer;
+}
+.primary:disabled{
+  opacity:.55;
+}
+.message{
+  display:none;
+  padding:13px;
+  margin-top:14px;
+  border-radius:9px;
+}
+.ok{
+  display:block;
+  background:#ecfdf3;
+  color:#067647;
+}
+.err{
+  display:block;
+  background:#fef3f2;
+  color:#b42318;
+}
+.summary{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+  margin-bottom:18px;
+}
+.summary div{
+  padding:16px;
+  border-radius:12px;
+  background:#f8fafc;
+}
+.summary span{
+  display:block;
+  font-size:13px;
+  color:#667085;
+}
+.summary strong{
+  display:block;
+  margin-top:5px;
+  font-size:21px;
+}
+.table-wrap{
+  overflow-x:auto;
+}
+table{
+  width:100%;
+  min-width:800px;
+  border-collapse:collapse;
+}
+th,td{
+  padding:12px 9px;
+  border-bottom:1px solid #eaecf0;
+  text-align:left;
+  font-size:14px;
+}
+th{
+  background:#f8fafc;
+  font-weight:800;
+}
+.amount{
+  text-align:right;
+  font-weight:800;
+}
+.empty{
+  text-align:center;
+  padding:30px 10px;
+  color:#667085;
+}
+@media(max-width:700px){
+  .form-grid{grid-template-columns:1fr}
+  .full{grid-column:auto}
+  .summary{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+  <div class="hero">
+    <small>AD BALANCE CHARGE</small>
+    <h2>분양사 충전금 관리</h2>
+    <p>분양현장별 충전금 등록 및 전체 내역 관리</p>
+  </div>
+
+  <div class="panel">
+
+    <h3>충전금 등록</h3>
+
+    <div class="form-grid">
+
+      <div class="field">
+        <label>분양현장 코드</label>
+        <input id="projectCode" type="text" placeholder="예: GJSALE001">
+      </div>
+
+      <div class="field">
+        <label>분양사명</label>
+        <input id="companyName" type="text" placeholder="예: ○○건설">
+      </div>
+
+      <div class="field">
+        <label>분양현장명</label>
+        <input id="siteName" type="text" placeholder="예: ○○ 센트럴파크">
+      </div>
+
+      <div class="field">
+        <label>충전금액</label>
+        <input id="chargeAmount" type="number" min="0" step="10000" placeholder="예: 5000000">
+      </div>
+
+      <div class="field">
+        <label>충전일자</label>
+        <input id="chargeDate" type="date">
+      </div>
+
+      <div class="field full">
+        <label>메모</label>
+        <textarea id="chargeMemo" placeholder="필요한 내용을 입력하세요."></textarea>
+      </div>
+
+    </div>
+
+    <div class="quick">
+      <button type="button" data-amount="5000000">500만원</button>
+      <button type="button" data-amount="10000000">1,000만원</button>
+      <button type="button" data-amount="20000000">2,000만원</button>
+    </div>
+
+    <button id="saveBtn" class="primary" type="button">
+      충전금 등록
+    </button>
+
+    <div id="message" class="message"></div>
+
+  </div>
+
+  <div class="panel">
+
+    <h3>등록된 충전금 전체 내역</h3>
+
+    <div class="summary">
+      <div>
+        <span>등록 건수</span>
+        <strong id="totalCount">0건</strong>
+      </div>
+
+      <div>
+        <span>총 충전금</span>
+        <strong id="totalCharge">0원</strong>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>분양현장 코드</th>
+            <th>분양사명</th>
+            <th>분양현장명</th>
+            <th>충전일자</th>
+            <th>충전금액</th>
+            <th>메모</th>
+          </tr>
+        </thead>
+
+        <tbody id="historyBody">
+          <tr>
+            <td colspan="6" class="empty">불러오는 중...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+(function(){
+
+  const projectCode=document.getElementById("projectCode");
+  const companyName=document.getElementById("companyName");
+  const siteName=document.getElementById("siteName");
+  const chargeAmount=document.getElementById("chargeAmount");
+  const chargeDate=document.getElementById("chargeDate");
+  const chargeMemo=document.getElementById("chargeMemo");
+
+  const saveBtn=document.getElementById("saveBtn");
+  const message=document.getElementById("message");
+
+  const totalCount=document.getElementById("totalCount");
+  const totalCharge=document.getElementById("totalCharge");
+  const historyBody=document.getElementById("historyBody");
+
+  chargeDate.value=new Date().toISOString().slice(0,10);
+
+  document.querySelectorAll("[data-amount]").forEach(function(btn){
+    btn.addEventListener("click",function(){
+      chargeAmount.value=btn.getAttribute("data-amount");
+    });
+  });
+
+  function showMessage(text,type){
+    message.className="message "+type;
+    message.textContent=text;
+  }
+
+  function money(value){
+    return Number(value||0).toLocaleString("ko-KR")+"원";
+  }
+
+  async function loadHistory(){
+
+    try{
+
+      const res=await fetch("/api/ad-charge-history");
+      const data=await res.json();
+
+      if(!res.ok || !data.ok){
+        throw new Error(data.message||"조회 실패");
+      }
+
+      const rows=Array.isArray(data.rows)?data.rows:[];
+
+      totalCount.textContent=
+        rows.length.toLocaleString("ko-KR")+"건";
+
+      totalCharge.textContent=
+        money(data.total_charge);
+
+      if(rows.length===0){
+        historyBody.innerHTML=
+          '<tr><td colspan="6" class="empty">등록된 충전금 내역이 없습니다.</td></tr>';
+        return;
+      }
+
+      historyBody.innerHTML=rows.map(function(row){
+        return `
+          <tr>
+            <td>${row.project_code||"-"}</td>
+            <td>${row.company_name||"-"}</td>
+            <td>${row.site_name||"-"}</td>
+            <td>${row.charge_date||"-"}</td>
+            <td class="amount">${money(row.charge_amount)}</td>
+            <td>${row.memo||"-"}</td>
+          </tr>
+        `;
+      }).join("");
+
+    }catch(error){
+
+      historyBody.innerHTML=
+        '<tr><td colspan="6" class="empty">충전금 내역을 불러오지 못했습니다.</td></tr>';
+
+    }
+  }
+
+  saveBtn.addEventListener("click",async function(){
+
+    const amount=Number(chargeAmount.value);
+
+    if(!companyName.value.trim()){
+      showMessage("분양사명을 입력해 주세요.","err");
+      return;
+    }
+
+    if(!siteName.value.trim()){
+      showMessage("분양현장명을 입력해 주세요.","err");
+      return;
+    }
+
+    if(!amount || amount<=0){
+      showMessage("충전금액을 입력해 주세요.","err");
+      return;
+    }
+
+    if(!chargeDate.value){
+      showMessage("충전일자를 입력해 주세요.","err");
+      return;
+    }
+
+    saveBtn.disabled=true;
+    saveBtn.textContent="등록 중...";
+
+    try{
+
+      const res=await fetch("/api/save-ad-charge",{
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+          project_code:projectCode.value.trim(),
+          company_name:companyName.value.trim(),
+          site_name:siteName.value.trim(),
+          charge_amount:amount,
+          charge_date:chargeDate.value,
+          memo:chargeMemo.value.trim()
+        })
+      });
+
+      const data=await res.json();
+
+      if(!res.ok || !data.ok){
+        throw new Error(data.message||"등록 실패");
+      }
+
+      showMessage("충전금이 정상 등록되었습니다.","ok");
+
+      projectCode.value="";
+      companyName.value="";
+      siteName.value="";
+      chargeAmount.value="";
+      chargeMemo.value="";
+      chargeDate.value=new Date().toISOString().slice(0,10);
+
+      await loadHistory();
+
+    }catch(error){
+
+      showMessage(
+        error.message||"충전금 등록에 실패했습니다.",
+        "err"
+      );
+
+    }finally{
+
+      saveBtn.disabled=false;
+      saveBtn.textContent="충전금 등록";
+
+    }
+  });
+
+  loadHistory();
+
+})();
+</script>
+
+</body>
+</html>
