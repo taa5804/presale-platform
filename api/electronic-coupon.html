@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>전자쿠폰 | 우리아파트 분양</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #f4f6f8;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "Noto Sans KR", Arial, sans-serif;
+      color: #172b3d;
+    }
+
+    .wrap {
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 24px 16px 50px;
+    }
+
+    .title {
+      text-align: center;
+      font-size: 25px;
+      font-weight: 800;
+      margin: 18px 0 8px;
+    }
+
+    .sub {
+      text-align: center;
+      color: #667085;
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 18px;
+      padding: 22px 18px;
+      box-shadow: 0 4px 18px rgba(0,0,0,.07);
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      margin: 15px 0 7px;
+    }
+
+    input {
+      width: 100%;
+      height: 48px;
+      border: 1px solid #d0d5dd;
+      border-radius: 10px;
+      padding: 0 13px;
+      font-size: 16px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #1165d7;
+    }
+
+    button {
+      width: 100%;
+      height: 50px;
+      margin-top: 20px;
+      border: 0;
+      border-radius: 11px;
+      background: #1165d7;
+      color: #fff;
+      font-size: 17px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: .55;
+      cursor: default;
+    }
+
+    .result {
+      display: none;
+      margin-top: 18px;
+      padding: 16px;
+      border-radius: 12px;
+      background: #f8fafc;
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    .success {
+      background: #ecfdf3;
+      color: #067647;
+    }
+
+    .error {
+      background: #fef3f2;
+      color: #b42318;
+    }
+
+    .coupon {
+      display: none;
+      margin-top: 20px;
+      padding: 22px 16px;
+      border: 2px dashed #1165d7;
+      border-radius: 16px;
+      text-align: center;
+      background: #f5f9ff;
+    }
+
+    .coupon-name {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .coupon-amount {
+      font-size: 30px;
+      font-weight: 900;
+      color: #1165d7;
+      margin: 8px 0;
+    }
+
+    .coupon-code {
+      margin-top: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      word-break: break-all;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+  <div class="title">전자쿠폰</div>
+
+  <div class="sub">
+    발급받은 쿠폰번호를 입력하여<br>
+    쿠폰 정보를 확인하세요.
+  </div>
+
+  <div class="card">
+
+    <label for="couponCode">쿠폰번호</label>
+
+    <input
+      id="couponCode"
+      type="text"
+      placeholder="쿠폰번호를 입력하세요"
+      autocomplete="off"
+    >
+
+    <button id="checkBtn" type="button">
+      쿠폰 확인
+    </button>
+
+    <div id="result" class="result"></div>
+
+    <div id="couponBox" class="coupon">
+
+      <div id="couponName" class="coupon-name"></div>
+
+      <div id="couponAmount" class="coupon-amount"></div>
+
+      <div id="couponCodeView" class="coupon-code"></div>
+
+      <div id="validUntil"></div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+const couponCode = document.getElementById("couponCode");
+const checkBtn = document.getElementById("checkBtn");
+
+const result = document.getElementById("result");
+const couponBox = document.getElementById("couponBox");
+
+const couponName = document.getElementById("couponName");
+const couponAmount = document.getElementById("couponAmount");
+const couponCodeView = document.getElementById("couponCodeView");
+const validUntil = document.getElementById("validUntil");
+
+
+function showMessage(message, type) {
+
+  result.style.display = "block";
+  result.className = "result " + type;
+  result.textContent = message;
+
+}
+
+
+checkBtn.addEventListener("click", async function () {
+
+  const code = couponCode.value.trim();
+
+  result.style.display = "none";
+  couponBox.style.display = "none";
+
+  if (!code) {
+
+    showMessage("쿠폰번호를 입력해주세요.", "error");
+    return;
+
+  }
+
+  checkBtn.disabled = true;
+  checkBtn.textContent = "확인 중...";
+
+  try {
+
+    const response = await fetch(
+      "/api/coupon-check?coupon_code=" +
+      encodeURIComponent(code)
+    );
+
+    const data = await response.json();
+
+    if (!response.ok || data.ok === false) {
+
+      throw new Error(
+        data.message || "쿠폰을 확인할 수 없습니다."
+      );
+
+    }
+
+    const coupon = data.coupon || data.data || data;
+
+    couponName.textContent =
+      coupon.coupon_name || "전자쿠폰";
+
+    if (
+      coupon.coupon_amount !== undefined &&
+      coupon.coupon_amount !== null
+    ) {
+
+      couponAmount.textContent =
+        Number(coupon.coupon_amount).toLocaleString("ko-KR") +
+        "원";
+
+    } else {
+
+      couponAmount.textContent = "";
+
+    }
+
+    couponCodeView.textContent =
+      "쿠폰번호 : " +
+      (coupon.coupon_code || code);
+
+    if (coupon.valid_until) {
+
+      const date =
+        new Date(coupon.valid_until);
+
+      validUntil.textContent =
+        "사용기한 : " +
+        date.toLocaleDateString("ko-KR");
+
+    } else {
+
+      validUntil.textContent = "";
+
+    }
+
+    couponBox.style.display = "block";
+
+    showMessage(
+      "사용 가능한 쿠폰입니다.",
+      "success"
+    );
+
+  } catch (error) {
+
+    showMessage(
+      error.message ||
+      "쿠폰 확인 중 오류가 발생했습니다.",
+      "error"
+    );
+
+  } finally {
+
+    checkBtn.disabled = false;
+    checkBtn.textContent = "쿠폰 확인";
+
+  }
+
+});
+
+
+couponCode.addEventListener(
+  "keydown",
+  function (event) {
+
+    if (event.key === "Enter") {
+      checkBtn.click();
+    }
+
+  }
+);
+
+</script>
+
+</body>
+</html>
