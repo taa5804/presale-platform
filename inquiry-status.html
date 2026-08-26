@@ -1,7 +1,30 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#12394d">
+<title>조회 현황 | 우리아파트 분양</title>
+
 <style>
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  width:100%;
+  min-height:100%;
+}
+
+body{
+  background:#f5f7f9;
+  overflow-x:hidden;
+}
+
 #viewStatusApp{
   width:100%;
-  padding:18px;
+  max-width:1200px;
+  margin:0 auto;
+  padding:clamp(10px,2.5vw,18px);
   background:#f5f7f9;
   color:#172b3d;
   font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",Arial,sans-serif;
@@ -17,23 +40,26 @@
 
 #viewStatusApp .head h2{
   margin:0 0 5px;
-  font-size:24px;
+  font-size:clamp(21px,3vw,24px);
 }
 
 #viewStatusApp .head p{
   margin:0;
   color:#71808d;
   font-size:13px;
+  line-height:1.5;
+  word-break:keep-all;
 }
 
 #viewStatusApp .summary{
   display:grid;
-  grid-template-columns:repeat(4,1fr);
+  grid-template-columns:repeat(4,minmax(0,1fr));
   gap:10px;
   margin-bottom:14px;
 }
 
 #viewStatusApp .summary-box{
+  min-width:0;
   padding:15px;
   border:1px solid #dfe5ea;
   border-radius:10px;
@@ -48,7 +74,9 @@
 }
 
 #viewStatusApp .summary-box strong{
-  font-size:21px;
+  display:block;
+  font-size:clamp(18px,2.5vw,21px);
+  overflow-wrap:anywhere;
 }
 
 #viewStatusApp .panel{
@@ -75,7 +103,9 @@
 #viewStatusApp input,
 #viewStatusApp select,
 #viewStatusApp button{
-  height:38px;
+  width:100%;
+  min-width:0;
+  height:40px;
   padding:0 9px;
   border:1px solid #cad4dc;
   border-radius:6px;
@@ -98,7 +128,9 @@
 }
 
 #viewStatusApp .table-wrap{
-  overflow:auto;
+  width:100%;
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
 }
 
 #viewStatusApp table{
@@ -138,27 +170,70 @@
   padding:55px 10px;
   color:#8b98a3;
   text-align:center;
+  font-size:13px;
 }
 
-@media(max-width:750px){
+@media(max-width:900px){
+  #viewStatusApp .summary{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  #viewStatusApp .filters{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  #viewStatusApp .filters #rg,
+  #viewStatusApp .filters #kw{
+    grid-column:auto;
+  }
+
+  #viewStatusApp .filters #searchBtn{
+    grid-column:1 / -1;
+  }
+}
+
+@media(max-width:560px){
   #viewStatusApp{
     padding:10px;
   }
 
   #viewStatusApp .summary{
-    grid-template-columns:1fr 1fr;
+    gap:8px;
+  }
+
+  #viewStatusApp .summary-box{
+    padding:12px;
   }
 
   #viewStatusApp .filters{
-    grid-template-columns:1fr 1fr;
+    grid-template-columns:1fr;
   }
 
-  #viewStatusApp .head h2{
-    font-size:21px;
+  #viewStatusApp .filters #searchBtn{
+    grid-column:auto;
+  }
+
+  #viewStatusApp input,
+  #viewStatusApp select,
+  #viewStatusApp button{
+    height:44px;
+    font-size:13px;
+  }
+
+  #viewStatusApp .panel-title{
+    font-size:15px;
+  }
+}
+
+@media(max-width:360px){
+  #viewStatusApp .summary{
+    grid-template-columns:1fr;
   }
 }
 </style>
+</head>
 
+<body>
 
 <div id="viewStatusApp">
 
@@ -190,7 +265,6 @@
     </div>
 
   </div>
-
 
   <div class="panel">
 
@@ -235,11 +309,9 @@
 
     </div>
 
-
     <div class="table-tools">
       총 <strong id="cnt">0</strong>건
     </div>
-
 
     <div class="table-wrap">
 
@@ -271,7 +343,6 @@
 
 </div>
 
-
 <script>
 (function(){
 "use strict";
@@ -302,7 +373,6 @@ function show(A){
   el("empty").style.display=
     total ? "none" : "block";
 
-
   A.forEach(function(x){
 
     if(x.valid){
@@ -330,20 +400,11 @@ function show(A){
     el("rows").appendChild(tr);
   });
 
-
-  el("v1").textContent=
-    n(total)+"건";
-
-  el("v2").textContent=
-    n(valid)+"건";
-
-  el("v3").textContent=
-    n(point)+" P";
-
-  el("v4").textContent=
-    n(charge)+"원";
+  el("v1").textContent=n(total)+"건";
+  el("v2").textContent=n(valid)+"건";
+  el("v3").textContent=n(point)+" P";
+  el("v4").textContent=n(charge)+"원";
 }
-
 
 function search(){
 
@@ -357,11 +418,9 @@ function search(){
     .trim()
     .toLowerCase();
 
-
   var result=D.filter(function(x){
 
-    var date=
-      String(x.date||"").slice(0,10);
+    var date=String(x.date||"").slice(0,10);
 
     if(sd && date<sd){
       return false;
@@ -380,34 +439,26 @@ function search(){
       (x.apt||"")
     ).toLowerCase();
 
-    if(
-      kw &&
-      !text.includes(kw)
-    ){
+    if(kw && !text.includes(kw)){
       return false;
     }
 
     return true;
   });
 
-
   show(result);
 }
-
 
 el("searchBtn").onclick=search;
 
 el("kw").addEventListener(
   "keydown",
   function(e){
-
     if(e.key==="Enter"){
       search();
     }
-
   }
 );
-
 
 var today=new Date();
 
@@ -419,8 +470,10 @@ today.setDate(1);
 el("sd").value=
   today.toISOString().slice(0,10);
 
-
 show(D);
 
 })();
 </script>
+
+</body>
+</html>
