@@ -1,0 +1,2143 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#102536">
+<title>분양 등록·수정 | 우리아파트 분양 플랫폼</title>
+</head>
+<body>
+<style>
+#saleAdmin,
+#saleAdmin *{box-sizing:border-box}
+
+#saleAdmin.sale-admin{
+  --navy:#102536;
+  --gold:#b8914f;
+  --line:#dfe4e8;
+  width:100%;
+  max-width:1180px;
+  min-height:100vh;
+  margin:auto;
+  padding:26px;
+  background:#f3f5f7;
+  color:#17212b;
+  font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",sans-serif
+}
+
+#saleAdmin button,
+#saleAdmin input,
+#saleAdmin select,
+#saleAdmin textarea{font:inherit}
+
+#saleAdmin .admin-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  padding:27px;
+  border-radius:18px;
+  background:linear-gradient(135deg,#102536,#17384f);
+  color:#fff;
+  box-shadow:0 15px 35px rgba(15,36,52,.17)
+}
+
+#saleAdmin .admin-head small,
+#saleAdmin .panel-head small{
+  display:block;
+  margin-bottom:7px;
+  color:#d3b16e;
+  font-weight:800;
+  letter-spacing:1.7px
+}
+
+#saleAdmin .admin-head h1{margin:0 0 8px;font-size:29px}
+#saleAdmin .admin-head p{margin:0;color:#cbd5dc;font-size:13px}
+
+#saleAdmin .admin-head button,
+#saleAdmin .save-page{
+  min-height:45px;
+  padding:0 18px;
+  border:0;
+  border-radius:9px;
+  background:var(--gold);
+  color:#102536;
+  font-weight:800;
+  cursor:pointer
+}
+
+#saleAdmin .basic-card,
+#saleAdmin .editor-panel{
+  margin-top:20px;
+  padding:24px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:#fff
+}
+
+#saleAdmin .basic-card h2{margin:0 0 18px;font-size:19px}
+
+#saleAdmin .form-grid,
+#saleAdmin .text-fields{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px
+}
+
+#saleAdmin label span{
+  display:block;
+  margin-bottom:7px;
+  color:#52606c;
+  font-size:12px;
+  font-weight:700
+}
+
+#saleAdmin input,
+#saleAdmin select,
+#saleAdmin textarea{
+  width:100%;
+  border:1px solid #d8dee3;
+  border-radius:9px;
+  outline:0;
+  background:#fff
+}
+
+#saleAdmin input,
+#saleAdmin select{
+  height:44px;
+  padding:0 13px
+}
+
+#saleAdmin textarea{padding:12px;resize:vertical}
+
+#saleAdmin input:focus,
+#saleAdmin select:focus,
+#saleAdmin textarea:focus{
+  border-color:var(--gold);
+  box-shadow:0 0 0 3px rgba(184,145,79,.12)
+}
+
+#saleAdmin .full{grid-column:1/-1}
+
+#saleAdmin .page-tabs{
+  display:flex;
+  gap:8px;
+  margin:20px 0;
+  padding:10px;
+  overflow-x:auto;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:#fff
+}
+
+#saleAdmin .page-tabs button{
+  flex:0 0 auto;
+  min-height:40px;
+  padding:0 16px;
+  border:0;
+  border-radius:9px;
+  background:#eef1f3;
+  color:#53606b;
+  font-size:12px;
+  font-weight:700
+}
+
+#saleAdmin .page-tabs button.active{
+  background:var(--navy);
+  color:#fff
+}
+
+#saleAdmin .editor-panel{display:none;margin-top:0}
+#saleAdmin .editor-panel.active{display:block}
+
+#saleAdmin .panel-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  margin-bottom:22px;
+  padding-bottom:17px;
+  border-bottom:1px solid #e8ecef
+}
+
+#saleAdmin .panel-head h2{margin:0;font-size:21px}
+
+#saleAdmin .editor-layout{
+  display:grid;
+  grid-template-columns:minmax(300px,.9fr) minmax(340px,1.1fr);
+  gap:27px
+}
+
+#saleAdmin .photo-editor{
+  padding:14px;
+  border:1px solid #e0e5e9;
+  border-radius:14px;
+  background:#f7f8f9
+}
+
+#saleAdmin .photo-stage{
+  position:relative;
+  width:100%;
+  height:410px;
+  overflow:hidden;
+  border-radius:10px;
+  background:#dfe4e7;
+  touch-action:none;
+  cursor:grab
+}
+
+#saleAdmin .edit-image{
+  display:none;
+  position:absolute;
+  left:50%;
+  top:50%;
+  max-width:none;
+  max-height:none;
+  transform-origin:center;
+  pointer-events:none;
+  user-select:none
+}
+
+#saleAdmin .empty-photo{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:30px;
+  color:#76828b;
+  font-size:13px;
+  text-align:center
+}
+
+#saleAdmin .photo-input{display:none}
+
+#saleAdmin .photo-actions{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin-top:12px
+}
+
+#saleAdmin .photo-actions button{
+  min-height:38px;
+  padding:6px;
+  border:1px solid #d9dfe3;
+  border-radius:8px;
+  background:#fff;
+  color:#35424d;
+  font-size:11px;
+  font-weight:700
+}
+
+#saleAdmin .photo-actions .upload-btn{
+  border-color:var(--navy);
+  background:var(--navy);
+  color:#fff
+}
+
+#saleAdmin .photo-actions .delete-photo{
+  border-color:#e1a4a4;
+  color:#b73737
+}
+
+#saleAdmin .photo-editor p{
+  margin:10px 2px 0;
+  color:#7c8790;
+  font-size:11px
+}
+
+#saleAdmin .save-message{
+  position:fixed;
+  right:24px;
+  bottom:24px;
+  z-index:100;
+  display:none;
+  padding:14px 18px;
+  border-radius:10px;
+  background:#132c3f;
+  color:#fff;
+  box-shadow:0 10px 28px rgba(0,0,0,.2)
+}
+
+#saleAdmin .save-message.show{display:block}
+
+@media(max-width:850px){
+  #saleAdmin.sale-admin{padding:14px}
+
+  #saleAdmin .admin-head,
+  #saleAdmin .panel-head{
+    align-items:flex-start;
+    flex-direction:column
+  }
+
+  #saleAdmin .admin-head button,
+  #saleAdmin .save-page{width:100%}
+
+  #saleAdmin .form-grid,
+  #saleAdmin .text-fields,
+  #saleAdmin .editor-layout{
+    grid-template-columns:1fr
+  }
+
+  #saleAdmin .full{grid-column:auto}
+  #saleAdmin .photo-stage{height:380px}
+}
+
+@media(max-width:520px){
+  #saleAdmin.sale-admin{padding:9px}
+
+  #saleAdmin .basic-card,
+  #saleAdmin .editor-panel{padding:16px}
+
+  #saleAdmin .admin-head{padding:21px}
+  #saleAdmin .admin-head h1{font-size:24px}
+  #saleAdmin .photo-stage{height:340px}
+
+  #saleAdmin .photo-actions{
+    grid-template-columns:1fr 1fr
+  }
+}
+</style>
+
+<div id="saleAdmin" class="sale-admin">
+
+  <header class="admin-head">
+    <div>
+      <small>CATALOG MANAGER</small>
+      <h1>분양 등록·수정</h1>
+      <p>기본정보와 카탈로그 1~4페이지를 관리합니다.</p>
+    </div>
+    <button id="saveAllBtn" type="button">전체 저장</button>
+  </header>
+
+  <section class="basic-card">
+    <h2>분양 기본정보</h2>
+
+    <div class="form-grid">
+      <label>
+        <span>단지명</span>
+        <input id="projectName" type="text" placeholder="단지명 입력">
+      </label>
+
+      <label>
+        <span>분양 상태</span>
+        <select id="saleStatus">
+          <option>분양 중</option>
+          <option>분양 예정</option>
+          <option>분양 종료</option>
+        </select>
+      </label>
+
+      <label>
+        <span>지역</span>
+        <input id="projectArea" type="text" placeholder="광주광역시 광산구">
+      </label>
+
+      <label>
+        <span>입주 예정</span>
+        <input id="moveInDate" type="text" placeholder="2029년 3월">
+      </label>
+
+      <label>
+        <span>상담 전화번호</span>
+        <input id="contactPhone" type="tel" placeholder="062-000-0000">
+      </label>
+
+      <label>
+        <span>모델하우스 주소</span>
+        <input id="modelhouseAddress" type="text" placeholder="주소 입력">
+      </label>
+    </div>
+  </section>
+
+  <nav class="page-tabs">
+    <button class="active" type="button" data-page="1">1 표지</button>
+    <button type="button" data-page="2">2 입지</button>
+    <button type="button" data-page="3">3 프리미엄</button>
+    <button type="button" data-page="4">4 단지</button>
+  </nav>
+
+  <main>
+
+    <section class="editor-panel active" data-panel="1">
+      <div class="panel-head">
+        <div>
+          <small>PAGE 01</small>
+          <h2>표지 페이지</h2>
+        </div>
+        <button class="save-page" type="button">이 페이지 저장</button>
+      </div>
+
+      <div class="editor-layout">
+
+        <div class="photo-editor" data-key="cover">
+          <div class="photo-stage">
+            <img class="edit-image" alt="">
+            <div class="empty-photo">대표 조감도 또는 실내사진 업로드</div>
+          </div>
+
+          <input class="photo-input" type="file" accept="image/*">
+
+          <div class="photo-actions">
+            <button class="upload-btn" type="button">사진 업로드</button>
+            <button class="zoom-out" type="button">축소</button>
+            <button class="zoom-in" type="button">확대</button>
+            <button class="rotate-left" type="button">왼쪽 회전</button>
+            <button class="rotate-right" type="button">오른쪽 회전</button>
+            <button class="delete-photo" type="button">삭제</button>
+          </div>
+
+          <p>사진을 손가락이나 마우스로 움직여 위치를 조절합니다.</p>
+        </div>
+
+        <div class="text-fields">
+          <label>
+            <span>영문 소제목</span>
+            <input data-field="coverEyebrow" type="text" value="PREMIUM RESIDENCE">
+          </label>
+
+          <label>
+            <span>단지명</span>
+            <input data-field="coverTitle" type="text" placeholder="단지명을 입력해 주세요">
+          </label>
+
+          <label class="full">
+            <span>대표 문구</span>
+            <textarea data-field="coverDescription" rows="4" placeholder="일상이 작품이 되는 새로운 주거의 시작"></textarea>
+          </label>
+
+          <label>
+            <span>브랜드 문구</span>
+            <input data-field="coverBrand" type="text" value="THE FIRST LIFE">
+          </label>
+        </div>
+
+      </div>
+    </section>
+
+
+    <section class="editor-panel" data-panel="2">
+      <div class="panel-head">
+        <div>
+          <small>PAGE 02</small>
+          <h2>입지환경</h2>
+        </div>
+        <button class="save-page" type="button">이 페이지 저장</button>
+      </div>
+
+      <div class="editor-layout">
+
+        <div class="photo-editor" data-key="location">
+          <div class="photo-stage">
+            <img class="edit-image" alt="">
+            <div class="empty-photo">항공사진 또는 입지지도 업로드</div>
+          </div>
+
+          <input class="photo-input" type="file" accept="image/*">
+
+          <div class="photo-actions">
+            <button class="upload-btn" type="button">사진 업로드</button>
+            <button class="zoom-out" type="button">축소</button>
+            <button class="zoom-in" type="button">확대</button>
+            <button class="rotate-left" type="button">왼쪽 회전</button>
+            <button class="rotate-right" type="button">오른쪽 회전</button>
+            <button class="delete-photo" type="button">삭제</button>
+          </div>
+        </div>
+
+        <div class="text-fields">
+          <label class="full">
+            <span>제목</span>
+            <input data-field="locationTitle" type="text" value="모든 가치가 하나로 모이는 완벽한 입지">
+          </label>
+
+          <label class="full">
+            <span>설명</span>
+            <textarea data-field="locationDescription" rows="3"></textarea>
+          </label>
+
+          <label><span>교통환경</span><input data-field="trafficText" type="text"></label>
+          <label><span>교육환경</span><input data-field="educationText" type="text"></label>
+          <label><span>생활환경</span><input data-field="lifeText" type="text"></label>
+          <label><span>자연환경</span><input data-field="natureText" type="text"></label>
+        </div>
+
+      </div>
+    </section>
+
+
+    <section class="editor-panel" data-panel="3">
+      <div class="panel-head">
+        <div>
+          <small>PAGE 03</small>
+          <h2>프리미엄 6</h2>
+        </div>
+        <button class="save-page" type="button">이 페이지 저장</button>
+      </div>
+
+      <div class="editor-layout">
+
+        <div class="photo-editor" data-key="premium">
+          <div class="photo-stage">
+            <img class="edit-image" alt="">
+            <div class="empty-photo">실내 또는 특화설계 이미지 업로드</div>
+          </div>
+
+          <input class="photo-input" type="file" accept="image/*">
+
+          <div class="photo-actions">
+            <button class="upload-btn" type="button">사진 업로드</button>
+            <button class="zoom-out" type="button">축소</button>
+            <button class="zoom-in" type="button">확대</button>
+            <button class="rotate-left" type="button">왼쪽 회전</button>
+            <button class="rotate-right" type="button">오른쪽 회전</button>
+            <button class="delete-photo" type="button">삭제</button>
+          </div>
+        </div>
+
+        <div class="text-fields">
+          <label class="full">
+            <span>페이지 제목</span>
+            <input data-field="premiumTitle" type="text" value="삶의 품격을 높이는 프리미엄 6">
+          </label>
+
+          <label><span>프리미엄 1</span><input data-field="premium1"></label>
+          <label><span>프리미엄 2</span><input data-field="premium2"></label>
+          <label><span>프리미엄 3</span><input data-field="premium3"></label>
+          <label><span>프리미엄 4</span><input data-field="premium4"></label>
+          <label><span>프리미엄 5</span><input data-field="premium5"></label>
+          <label><span>프리미엄 6</span><input data-field="premium6"></label>
+        </div>
+
+      </div>
+    </section>
+
+
+    <section class="editor-panel" data-panel="4">
+      <div class="panel-head">
+        <div>
+          <small>PAGE 04</small>
+          <h2>단지소개</h2>
+        </div>
+        <button class="save-page" type="button">이 페이지 저장</button>
+      </div>
+
+      <div class="editor-layout">
+
+        <div class="photo-editor" data-key="complex">
+          <div class="photo-stage">
+            <img class="edit-image" alt="">
+            <div class="empty-photo">단지 조감도 업로드</div>
+          </div>
+
+          <input class="photo-input" type="file" accept="image/*">
+
+          <div class="photo-actions">
+            <button class="upload-btn" type="button">사진 업로드</button>
+            <button class="zoom-out" type="button">축소</button>
+            <button class="zoom-in" type="button">확대</button>
+            <button class="rotate-left" type="button">왼쪽 회전</button>
+            <button class="rotate-right" type="button">오른쪽 회전</button>
+            <button class="delete-photo" type="button">삭제</button>
+          </div>
+        </div>
+
+        <div class="text-fields">
+          <label class="full">
+            <span>페이지 제목</span>
+            <input data-field="complexTitle" type="text" value="자연과 건축이 어우러진 아름다운 단지">
+          </label>
+
+          <label class="full">
+            <span>단지 설명</span>
+            <textarea data-field="complexDescription" rows="4"></textarea>
+          </label>
+
+          <label><span>특징 1</span><input data-field="complex1"></label>
+          <label><span>특징 2</span><input data-field="complex2"></label>
+          <label><span>특징 3</span><input data-field="complex3"></label>
+          <label><span>특징 4</span><input data-field="complex4"></label>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <div id="saveMessage" class="save-message"></div>
+
+</div>
+
+
+<script>
+(function(){
+"use strict";
+
+function initSaleAdmin(){
+
+  var root=document.getElementById("saleAdmin");
+  if(!root)return;
+
+  function $(s,p){
+    return (p||root).querySelector(s);
+  }
+
+  function $$(s,p){
+    return Array.prototype.slice.call(
+      (p||root).querySelectorAll(s)
+    );
+  }
+
+  var tabs=$$(".page-tabs button");
+  var panels=$$(".editor-panel");
+
+  tabs.forEach(function(btn,i){
+
+    btn.onclick=function(){
+
+      tabs.forEach(function(x){
+        x.classList.remove("active");
+      });
+
+      panels.forEach(function(x){
+        x.classList.remove("active");
+      });
+
+      btn.classList.add("active");
+
+      if(panels[i]){
+        panels[i].classList.add("active");
+      }
+    };
+
+  });
+
+
+  function fitImage(img,stage){
+
+    var sw=stage.clientWidth;
+    var sh=stage.clientHeight;
+    var iw=img.naturalWidth||sw;
+    var ih=img.naturalHeight||sh;
+
+    var ratio=Math.max(
+      sw/iw,
+      sh/ih
+    );
+
+    img.style.width=
+      (iw*ratio)+"px";
+
+    img.style.height=
+      (ih*ratio)+"px";
+  }
+
+
+  $$(".photo-editor").forEach(function(editor){
+
+    var stage=$(".photo-stage",editor);
+    var img=$(".edit-image",editor);
+    var input=$(".photo-input",editor);
+    var empty=$(".empty-photo",editor);
+
+    if(!stage||!img||!input)return;
+
+    var scale=1;
+    var rotation=0;
+    var x=0;
+    var y=0;
+    var dragging=false;
+    var startX=0;
+    var startY=0;
+
+
+    function draw(){
+
+      img.style.transform=
+        "translate(calc(-50% + "+
+        x+
+        "px),calc(-50% + "+
+        y+
+        "px)) scale("+
+        scale+
+        ") rotate("+
+        rotation+
+        "deg)";
+    }
+
+
+    function reset(){
+
+      scale=1;
+      rotation=0;
+      x=0;
+      y=0;
+
+      draw();
+    }
+
+
+    var uploadBtn=$(".upload-btn",editor);
+    var zoomIn=$(".zoom-in",editor);
+    var zoomOut=$(".zoom-out",editor);
+    var rotateLeft=$(".rotate-left",editor);
+    var rotateRight=$(".rotate-right",editor);
+    var deleteBtn=$(".delete-photo",editor);
+
+
+    if(uploadBtn){
+
+      uploadBtn.onclick=function(){
+        input.click();
+      };
+
+    }
+
+
+    input.onchange=function(){
+
+      var file=
+        input.files &&
+        input.files[0];
+
+      if(!file)return;
+
+      if(!file.type.startsWith("image/")){
+
+        alert(
+          "이미지 파일을 선택해 주세요."
+        );
+
+        input.value="";
+        return;
+      }
+
+      var reader=
+        new FileReader();
+
+      reader.onload=function(e){
+
+        img.onload=function(){
+
+          fitImage(img,stage);
+
+          img.style.display=
+            "block";
+
+          if(empty){
+            empty.style.display=
+              "none";
+          }
+
+          reset();
+        };
+
+        img.src=e.target.result;
+      };
+
+      reader.readAsDataURL(file);
+    };
+
+
+    if(zoomIn){
+
+      zoomIn.onclick=function(){
+
+        scale=Math.min(
+          3,
+          scale+0.1
+        );
+
+        draw();
+      };
+
+    }
+
+
+    if(zoomOut){
+
+      zoomOut.onclick=function(){
+
+        scale=Math.max(
+          0.3,
+          scale-0.1
+        );
+
+        draw();
+      };
+
+    }
+
+
+    if(rotateLeft){
+
+      rotateLeft.onclick=function(){
+
+        rotation-=90;
+        draw();
+
+      };
+
+    }
+
+
+    if(rotateRight){
+
+      rotateRight.onclick=function(){
+
+        rotation+=90;
+        draw();
+
+      };
+
+    }
+
+
+    if(deleteBtn){
+
+      deleteBtn.onclick=function(){
+
+        img.removeAttribute("src");
+
+        img.style.display=
+          "none";
+
+        input.value="";
+
+        if(empty){
+          empty.style.display=
+            "flex";
+        }
+
+        reset();
+      };
+
+    }
+
+
+    stage.onpointerdown=function(e){
+
+      if(!img.src)return;
+
+      dragging=true;
+
+      startX=
+        e.clientX-x;
+
+      startY=
+        e.clientY-y;
+
+      try{
+        stage.setPointerCapture(
+          e.pointerId
+        );
+      }catch(err){}
+
+    };
+
+
+    stage.onpointermove=function(e){
+
+      if(!dragging)return;
+
+      x=e.clientX-startX;
+      y=e.clientY-startY;
+
+      draw();
+    };
+
+
+    stage.onpointerup=function(){
+      dragging=false;
+    };
+
+
+    stage.onpointercancel=function(){
+      dragging=false;
+    };
+
+  });
+
+
+  function showMessage(text){
+
+    var box=$("#saveMessage");
+
+    if(!box)return;
+
+    box.textContent=text;
+
+    box.classList.add(
+      "show"
+    );
+
+    setTimeout(function(){
+
+      box.classList.remove(
+        "show"
+      );
+
+    },1800);
+  }
+
+
+  function temporarySave(){
+
+    showMessage(
+      "현재 입력 내용이 화면에 유지되고 있습니다. 서버 연결 후 실제 저장됩니다."
+    );
+
+  }
+
+
+  var saveAllBtn=
+    $("#saveAllBtn");
+
+  if(saveAllBtn){
+    saveAllBtn.onclick=
+      temporarySave;
+  }
+
+
+  $$(".save-page").forEach(
+    function(btn){
+
+      btn.onclick=
+        temporarySave;
+
+    }
+  );
+
+}
+
+
+if(document.readyState==="loading"){
+
+  document.addEventListener(
+    "DOMContentLoaded",
+    initSaleAdmin
+  );
+
+}else{
+
+  initSaleAdmin();
+
+}
+
+})();
+</script>
+
+<style>
+#saleAdmin58,
+#saleAdmin58 *{
+  box-sizing:border-box;
+}
+
+#saleAdmin58{
+  --navy:#102536;
+  --gold:#b8914f;
+  --line:#dfe4e8;
+
+  width:100%;
+  max-width:1180px;
+  min-height:100vh;
+  margin:auto;
+  padding:26px;
+  background:#f3f5f7;
+  color:#17212b;
+  font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",sans-serif;
+}
+
+#saleAdmin58 button,
+#saleAdmin58 input,
+#saleAdmin58 textarea{
+  font:inherit;
+}
+
+#saleAdmin58 .admin-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  padding:27px;
+  border-radius:18px;
+  background:linear-gradient(135deg,#102536,#17384f);
+  color:#fff;
+  box-shadow:0 15px 35px rgba(15,36,52,.17);
+}
+
+#saleAdmin58 .admin-head small,
+#saleAdmin58 .panel-head small{
+  display:block;
+  margin-bottom:7px;
+  color:#d3b16e;
+  font-weight:800;
+  letter-spacing:1.7px;
+}
+
+#saleAdmin58 .admin-head h1{
+  margin:0 0 8px;
+  font-size:29px;
+}
+
+#saleAdmin58 .admin-head p{
+  margin:0;
+  color:#cbd5dc;
+  font-size:13px;
+}
+
+#saleAdmin58 .admin-head button,
+#saleAdmin58 .save-page{
+  min-height:45px;
+  padding:0 18px;
+  border:0;
+  border-radius:9px;
+  background:var(--gold);
+  color:#102536;
+  font-weight:800;
+  cursor:pointer;
+}
+
+#saleAdmin58 .page-tabs{
+  display:flex;
+  gap:8px;
+  margin:20px 0;
+  padding:10px;
+  overflow-x:auto;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:#fff;
+}
+
+#saleAdmin58 .page-tabs button{
+  flex:0 0 auto;
+  min-height:40px;
+  padding:0 16px;
+  border:0;
+  border-radius:9px;
+  background:#eef1f3;
+  color:#53606b;
+  font-size:12px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+#saleAdmin58 .page-tabs button.active{
+  background:var(--navy);
+  color:#fff;
+}
+
+#saleAdmin58 .editor-panel{
+  display:none;
+  padding:24px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:#fff;
+  box-shadow:0 10px 28px rgba(25,39,52,.07);
+}
+
+#saleAdmin58 .editor-panel.active{
+  display:block;
+}
+
+#saleAdmin58 .panel-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  margin-bottom:22px;
+  padding-bottom:17px;
+  border-bottom:1px solid #e8ecef;
+}
+
+#saleAdmin58 .panel-head h2{
+  margin:0;
+  font-size:21px;
+}
+
+#saleAdmin58 .editor-layout{
+  display:grid;
+  grid-template-columns:minmax(300px,.9fr) minmax(340px,1.1fr);
+  gap:27px;
+}
+
+#saleAdmin58 .photo-editor{
+  padding:14px;
+  border:1px solid #e0e5e9;
+  border-radius:14px;
+  background:#f7f8f9;
+}
+
+#saleAdmin58 .photo-stage{
+  position:relative;
+  width:100%;
+  height:410px;
+  overflow:hidden;
+  border-radius:10px;
+  background:#dfe4e7;
+  touch-action:none;
+  cursor:grab;
+}
+
+#saleAdmin58 .floor-stage{
+  background:#edf0ee;
+}
+
+#saleAdmin58 .edit-image{
+  display:none;
+  position:absolute;
+  left:50%;
+  top:50%;
+  max-width:none;
+  max-height:none;
+  transform-origin:center;
+  pointer-events:none;
+  user-select:none;
+}
+
+#saleAdmin58 .empty-photo{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:30px;
+  color:#76828b;
+  font-size:13px;
+  text-align:center;
+}
+
+#saleAdmin58 .photo-input{
+  display:none;
+}
+
+#saleAdmin58 .photo-actions{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin-top:12px;
+}
+
+#saleAdmin58 .photo-actions button{
+  min-height:38px;
+  padding:6px;
+  border:1px solid #d9dfe3;
+  border-radius:8px;
+  background:#fff;
+  color:#35424d;
+  font-size:11px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+#saleAdmin58 .photo-actions .upload-btn{
+  border-color:var(--navy);
+  background:var(--navy);
+  color:#fff;
+}
+
+#saleAdmin58 .photo-actions .delete-photo{
+  border-color:#e1a4a4;
+  color:#b73737;
+}
+
+#saleAdmin58 .photo-editor p{
+  margin:10px 2px 0;
+  color:#7c8790;
+  font-size:11px;
+}
+
+#saleAdmin58 .text-fields{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
+}
+
+#saleAdmin58 label span{
+  display:block;
+  margin-bottom:7px;
+  color:#52606c;
+  font-size:12px;
+  font-weight:700;
+}
+
+#saleAdmin58 input,
+#saleAdmin58 textarea{
+  width:100%;
+  border:1px solid #d8dee3;
+  border-radius:9px;
+  outline:0;
+  background:#fff;
+}
+
+#saleAdmin58 input{
+  height:44px;
+  padding:0 13px;
+}
+
+#saleAdmin58 textarea{
+  padding:12px;
+  resize:vertical;
+  line-height:1.5;
+}
+
+#saleAdmin58 input:focus,
+#saleAdmin58 textarea:focus{
+  border-color:var(--gold);
+  box-shadow:0 0 0 3px rgba(184,145,79,.12);
+}
+
+#saleAdmin58 .full{
+  grid-column:1/-1;
+}
+
+#saleAdmin58 .title-field{
+  display:block;
+  margin-bottom:18px;
+}
+
+#saleAdmin58 .community-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+}
+
+#saleAdmin58 .community-item{
+  padding:10px;
+  border:1px solid #e1e6ea;
+  border-radius:13px;
+  background:#f7f8f9;
+}
+
+#saleAdmin58 .mini-photo{
+  position:relative;
+  height:190px;
+  margin-bottom:10px;
+  overflow:hidden;
+  border:1px dashed #bfc8cf;
+  border-radius:10px;
+  background:#edf0f2;
+  cursor:pointer;
+}
+
+#saleAdmin58 .mini-photo span{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#77838c;
+  font-size:12px;
+}
+
+#saleAdmin58 .mini-photo img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+#saleAdmin58 .save-message{
+  position:fixed;
+  right:24px;
+  bottom:24px;
+  z-index:100;
+  display:none;
+  padding:14px 18px;
+  border-radius:10px;
+  background:#132c3f;
+  color:#fff;
+  box-shadow:0 10px 28px rgba(0,0,0,.2);
+}
+
+#saleAdmin58 .save-message.show{
+  display:block;
+}
+
+@media(max-width:850px){
+
+  #saleAdmin58{
+    padding:14px;
+  }
+
+  #saleAdmin58 .admin-head,
+  #saleAdmin58 .panel-head{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  #saleAdmin58 .admin-head button,
+  #saleAdmin58 .save-page{
+    width:100%;
+  }
+
+  #saleAdmin58 .editor-layout,
+  #saleAdmin58 .text-fields{
+    grid-template-columns:1fr;
+  }
+
+  #saleAdmin58 .full{
+    grid-column:auto;
+  }
+
+  #saleAdmin58 .community-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  #saleAdmin58 .photo-stage{
+    height:380px;
+  }
+}
+
+@media(max-width:520px){
+
+  #saleAdmin58{
+    padding:9px;
+  }
+
+  #saleAdmin58 .admin-head{
+    padding:21px;
+  }
+
+  #saleAdmin58 .admin-head h1{
+    font-size:24px;
+  }
+
+  #saleAdmin58 .editor-panel{
+    padding:16px;
+  }
+
+  #saleAdmin58 .photo-stage{
+    height:340px;
+  }
+
+  #saleAdmin58 .photo-actions{
+    grid-template-columns:1fr 1fr;
+  }
+
+  #saleAdmin58 .community-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  #saleAdmin58 .mini-photo{
+    height:145px;
+  }
+}
+</style>
+
+
+<div id="saleAdmin58">
+
+  <div class="admin-head">
+    <div>
+      <small>CATALOG MANAGER</small>
+      <h1>분양 등록·수정</h1>
+      <p>카탈로그 5~8페이지를 관리합니다.</p>
+    </div>
+
+    <button id="saveAllBtn58" type="button">
+      전체 저장
+    </button>
+  </div>
+
+
+  <div class="page-tabs">
+    <button type="button" class="active">5 평면 A</button>
+    <button type="button">6 평면 B</button>
+    <button type="button">7 커뮤니티</button>
+    <button type="button">8 상담</button>
+  </div>
+
+
+  <!-- PAGE 05 -->
+  <section class="editor-panel active" data-panel="5">
+
+    <div class="panel-head">
+      <div>
+        <small>PAGE 05</small>
+        <h2>평면도 A</h2>
+      </div>
+
+      <button class="save-page" type="button">
+        이 페이지 저장
+      </button>
+    </div>
+
+    <div class="editor-layout">
+
+      <div class="photo-editor" data-key="unitA">
+
+        <div class="photo-stage floor-stage">
+          <img class="edit-image" alt="">
+          <div class="empty-photo">
+            평면도 A 이미지 업로드
+          </div>
+        </div>
+
+        <input class="photo-input" type="file" accept="image/*">
+
+        <div class="photo-actions">
+          <button class="upload-btn" type="button">사진 업로드</button>
+          <button class="zoom-out" type="button">축소</button>
+          <button class="zoom-in" type="button">확대</button>
+          <button class="rotate-left" type="button">왼쪽 회전</button>
+          <button class="rotate-right" type="button">오른쪽 회전</button>
+          <button class="delete-photo" type="button">삭제</button>
+        </div>
+
+        <p>
+          사진을 손가락이나 마우스로 움직여 위치를 조절합니다.
+        </p>
+
+      </div>
+
+      <div class="text-fields">
+
+        <label>
+          <span>평형명</span>
+          <input data-field="unitAName" value="84A TYPE">
+        </label>
+
+        <label>
+          <span>세대수</span>
+          <input data-field="unitACount" placeholder="예: 총 312세대">
+        </label>
+
+        <label>
+          <span>전용면적</span>
+          <input data-field="unitAPrivate" placeholder="예: 84.98㎡">
+        </label>
+
+        <label>
+          <span>공급면적</span>
+          <input data-field="unitASupply" placeholder="예: 112.45㎡">
+        </label>
+
+        <label>
+          <span>계약면적</span>
+          <input data-field="unitAContract" placeholder="예: 168.72㎡">
+        </label>
+
+        <label>
+          <span>특징 1</span>
+          <input data-field="unitAFeature1" placeholder="4Bay 판상형">
+        </label>
+
+        <label>
+          <span>특징 2</span>
+          <input data-field="unitAFeature2" placeholder="알파룸 제공">
+        </label>
+
+        <label>
+          <span>특징 3</span>
+          <input data-field="unitAFeature3" placeholder="넓은 수납공간">
+        </label>
+
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- PAGE 06 -->
+  <section class="editor-panel" data-panel="6">
+
+    <div class="panel-head">
+      <div>
+        <small>PAGE 06</small>
+        <h2>평면도 B</h2>
+      </div>
+
+      <button class="save-page" type="button">
+        이 페이지 저장
+      </button>
+    </div>
+
+    <div class="editor-layout">
+
+      <div class="photo-editor" data-key="unitB">
+
+        <div class="photo-stage floor-stage">
+          <img class="edit-image" alt="">
+          <div class="empty-photo">
+            평면도 B 이미지 업로드
+          </div>
+        </div>
+
+        <input class="photo-input" type="file" accept="image/*">
+
+        <div class="photo-actions">
+          <button class="upload-btn" type="button">사진 업로드</button>
+          <button class="zoom-out" type="button">축소</button>
+          <button class="zoom-in" type="button">확대</button>
+          <button class="rotate-left" type="button">왼쪽 회전</button>
+          <button class="rotate-right" type="button">오른쪽 회전</button>
+          <button class="delete-photo" type="button">삭제</button>
+        </div>
+
+        <p>
+          사진을 손가락이나 마우스로 움직여 위치를 조절합니다.
+        </p>
+
+      </div>
+
+      <div class="text-fields">
+
+        <label>
+          <span>평형명</span>
+          <input data-field="unitBName" value="84B TYPE">
+        </label>
+
+        <label>
+          <span>세대수</span>
+          <input data-field="unitBCount" placeholder="예: 총 198세대">
+        </label>
+
+        <label>
+          <span>전용면적</span>
+          <input data-field="unitBPrivate" placeholder="예: 84.97㎡">
+        </label>
+
+        <label>
+          <span>공급면적</span>
+          <input data-field="unitBSupply" placeholder="예: 113.12㎡">
+        </label>
+
+        <label>
+          <span>계약면적</span>
+          <input data-field="unitBContract" placeholder="예: 169.45㎡">
+        </label>
+
+        <label>
+          <span>특징 1</span>
+          <input data-field="unitBFeature1" placeholder="타워형 구조">
+        </label>
+
+        <label>
+          <span>특징 2</span>
+          <input data-field="unitBFeature2" placeholder="독립형 주방">
+        </label>
+
+        <label>
+          <span>특징 3</span>
+          <input data-field="unitBFeature3" placeholder="팬트리 제공">
+        </label>
+
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- PAGE 07 -->
+  <section class="editor-panel" data-panel="7">
+
+    <div class="panel-head">
+      <div>
+        <small>PAGE 07</small>
+        <h2>커뮤니티</h2>
+      </div>
+
+      <button class="save-page" type="button">
+        이 페이지 저장
+      </button>
+    </div>
+
+    <label class="full title-field">
+      <span>페이지 제목</span>
+      <input
+        data-field="communityTitle"
+        value="일상을 특별하게 만드는 다양한 커뮤니티"
+      >
+    </label>
+
+    <div class="community-grid">
+
+      <div class="community-item">
+        <div class="mini-photo">
+          <span>사진 1 업로드</span>
+        </div>
+        <input data-field="communityName1" placeholder="클럽 라운지">
+      </div>
+
+      <div class="community-item">
+        <div class="mini-photo">
+          <span>사진 2 업로드</span>
+        </div>
+        <input data-field="communityName2" placeholder="피트니스센터">
+      </div>
+
+      <div class="community-item">
+        <div class="mini-photo">
+          <span>사진 3 업로드</span>
+        </div>
+        <input data-field="communityName3" placeholder="골프연습장">
+      </div>
+
+      <div class="community-item">
+        <div class="mini-photo">
+          <span>사진 4 업로드</span>
+        </div>
+        <input data-field="communityName4" placeholder="독서실">
+      </div>
+
+      <div class="community-item">
+        <div class="mini-photo">
+          <span>사진 5 업로드</span>
+        </div>
+        <input data-field="communityName5" placeholder="어린이집">
+      </div>
+
+      <div class="community-item">
+        <div class="mini-photo">
+          <span>사진 6 업로드</span>
+        </div>
+        <input data-field="communityName6" placeholder="게스트하우스">
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- PAGE 08 -->
+  <section class="editor-panel" data-panel="8">
+
+    <div class="panel-head">
+      <div>
+        <small>PAGE 08</small>
+        <h2>상담·방문예약</h2>
+      </div>
+
+      <button class="save-page" type="button">
+        이 페이지 저장
+      </button>
+    </div>
+
+    <div class="editor-layout">
+
+      <div class="photo-editor" data-key="contact">
+
+        <div class="photo-stage">
+          <img class="edit-image" alt="">
+          <div class="empty-photo">
+            모델하우스 대표 이미지 업로드
+          </div>
+        </div>
+
+        <input class="photo-input" type="file" accept="image/*">
+
+        <div class="photo-actions">
+          <button class="upload-btn" type="button">사진 업로드</button>
+          <button class="zoom-out" type="button">축소</button>
+          <button class="zoom-in" type="button">확대</button>
+          <button class="rotate-left" type="button">왼쪽 회전</button>
+          <button class="rotate-right" type="button">오른쪽 회전</button>
+          <button class="delete-photo" type="button">삭제</button>
+        </div>
+
+      </div>
+
+      <div class="text-fields">
+
+        <label class="full">
+          <span>마지막 페이지 제목</span>
+          <input
+            data-field="contactTitle"
+            value="당신의 새로운 시작을 직접 만나보세요"
+          >
+        </label>
+
+        <label class="full">
+          <span>안내 문구</span>
+          <textarea
+            data-field="contactDescription"
+            rows="4"
+            placeholder="모델하우스 방문예약과 상담을 신청할 수 있습니다."
+          ></textarea>
+        </label>
+
+        <label>
+          <span>상담 전화번호</span>
+          <input
+            data-field="contactPhone"
+            type="tel"
+            placeholder="062-000-0000"
+          >
+        </label>
+
+        <label>
+          <span>모델하우스 주소</span>
+          <input
+            data-field="contactAddress"
+            placeholder="주소 입력"
+          >
+        </label>
+
+        <label>
+          <span>버튼 문구</span>
+          <input
+            data-field="visitButtonText"
+            value="방문예약 신청"
+          >
+        </label>
+
+        <label>
+          <span>고객 포인트</span>
+          <input
+            data-field="rewardPoint"
+            value="3,000포인트"
+          >
+        </label>
+
+      </div>
+    </div>
+
+  </section>
+
+
+  <div id="saveMessage58" class="save-message"></div>
+
+</div>
+
+
+<script>
+(function(){
+"use strict";
+
+function initSaleAdmin58(){
+
+  var root=document.getElementById("saleAdmin58");
+
+  if(!root){
+    return;
+  }
+
+  function $(s,p){
+    return (p||root).querySelector(s);
+  }
+
+  function $$(s,p){
+    return Array.prototype.slice.call(
+      (p||root).querySelectorAll(s)
+    );
+  }
+
+
+  var tabs=$$(".page-tabs button");
+
+  var panels=[
+    $('.editor-panel[data-panel="5"]'),
+    $('.editor-panel[data-panel="6"]'),
+    $('.editor-panel[data-panel="7"]'),
+    $('.editor-panel[data-panel="8"]')
+  ];
+
+
+  function openPage(index){
+
+    tabs.forEach(function(btn,i){
+
+      if(i===index){
+        btn.classList.add("active");
+      }else{
+        btn.classList.remove("active");
+      }
+
+    });
+
+
+    panels.forEach(function(panel,i){
+
+      if(!panel){
+        return;
+      }
+
+      if(i===index){
+
+        panel.classList.add("active");
+        panel.style.display="block";
+
+      }else{
+
+        panel.classList.remove("active");
+        panel.style.display="none";
+
+      }
+
+    });
+
+  }
+
+
+  tabs.forEach(function(btn,index){
+
+    btn.onclick=function(e){
+
+      e.preventDefault();
+      e.stopPropagation();
+
+      openPage(index);
+
+    };
+
+  });
+
+
+  openPage(0);
+
+
+  $$(".photo-editor").forEach(function(editor){
+
+    var stage=$(".photo-stage",editor);
+    var img=$(".edit-image",editor);
+    var input=$(".photo-input",editor);
+    var empty=$(".empty-photo",editor);
+
+    if(!stage || !img || !input){
+      return;
+    }
+
+    var scale=1;
+    var rotation=0;
+    var x=0;
+    var y=0;
+
+    var dragging=false;
+    var startX=0;
+    var startY=0;
+
+
+    function draw(){
+
+      img.style.transform=
+        "translate(calc(-50% + "+
+        x+
+        "px),calc(-50% + "+
+        y+
+        "px)) scale("+
+        scale+
+        ") rotate("+
+        rotation+
+        "deg)";
+
+    }
+
+
+    function reset(){
+
+      scale=1;
+      rotation=0;
+      x=0;
+      y=0;
+
+      draw();
+
+    }
+
+
+    function fitImage(){
+
+      var sw=stage.clientWidth;
+      var sh=stage.clientHeight;
+
+      if(!sw || !sh){
+        return;
+      }
+
+      var iw=img.naturalWidth||sw;
+      var ih=img.naturalHeight||sh;
+
+      var ratio=Math.max(
+        sw/iw,
+        sh/ih
+      );
+
+      img.style.width=
+        (iw*ratio)+"px";
+
+      img.style.height=
+        (ih*ratio)+"px";
+
+    }
+
+
+    var uploadBtn=$(".upload-btn",editor);
+    var zoomOut=$(".zoom-out",editor);
+    var zoomIn=$(".zoom-in",editor);
+    var rotateLeft=$(".rotate-left",editor);
+    var rotateRight=$(".rotate-right",editor);
+    var deleteBtn=$(".delete-photo",editor);
+
+
+    if(uploadBtn){
+
+      uploadBtn.onclick=function(e){
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        input.click();
+
+      };
+
+    }
+
+
+    input.onchange=function(){
+
+      var file=
+        input.files &&
+        input.files[0];
+
+      if(!file){
+        return;
+      }
+
+      if(
+        !file.type ||
+        !file.type.startsWith("image/")
+      ){
+
+        input.value="";
+        return;
+
+      }
+
+
+      var reader=
+        new FileReader();
+
+
+      reader.onload=function(e){
+
+        img.onload=function(){
+
+          fitImage();
+
+          img.style.display="block";
+
+          if(empty){
+            empty.style.display="none";
+          }
+
+          reset();
+
+        };
+
+        img.src=e.target.result;
+
+      };
+
+
+      reader.readAsDataURL(file);
+
+    };
+
+
+    if(zoomIn){
+
+      zoomIn.onclick=function(e){
+
+        e.preventDefault();
+
+        scale=Math.min(
+          3,
+          scale+0.1
+        );
+
+        draw();
+
+      };
+
+    }
+
+
+    if(zoomOut){
+
+      zoomOut.onclick=function(e){
+
+        e.preventDefault();
+
+        scale=Math.max(
+          0.3,
+          scale-0.1
+        );
+
+        draw();
+
+      };
+
+    }
+
+
+    if(rotateLeft){
+
+      rotateLeft.onclick=function(e){
+
+        e.preventDefault();
+
+        rotation-=90;
+
+        draw();
+
+      };
+
+    }
+
+
+    if(rotateRight){
+
+      rotateRight.onclick=function(e){
+
+        e.preventDefault();
+
+        rotation+=90;
+
+        draw();
+
+      };
+
+    }
+
+
+    if(deleteBtn){
+
+      deleteBtn.onclick=function(e){
+
+        e.preventDefault();
+
+        img.removeAttribute("src");
+        img.style.display="none";
+
+        input.value="";
+
+        if(empty){
+          empty.style.display="flex";
+        }
+
+        reset();
+
+      };
+
+    }
+
+
+    stage.onpointerdown=function(e){
+
+      if(!img.getAttribute("src")){
+        return;
+      }
+
+      dragging=true;
+
+      startX=e.clientX-x;
+      startY=e.clientY-y;
+
+      try{
+
+        stage.setPointerCapture(
+          e.pointerId
+        );
+
+      }catch(err){}
+
+    };
+
+
+    stage.onpointermove=function(e){
+
+      if(!dragging){
+        return;
+      }
+
+      x=e.clientX-startX;
+      y=e.clientY-startY;
+
+      draw();
+
+    };
+
+
+    stage.onpointerup=function(){
+      dragging=false;
+    };
+
+
+    stage.onpointercancel=function(){
+      dragging=false;
+    };
+
+  });
+
+
+  function showMessage(){
+
+    var box=$("#saveMessage58");
+
+    if(!box){
+      return;
+    }
+
+    box.textContent=
+      "현재 입력 내용이 화면에 유지되고 있습니다. 서버 연결 후 실제 저장됩니다.";
+
+    box.classList.add("show");
+
+    setTimeout(function(){
+
+      box.classList.remove("show");
+
+    },1800);
+
+  }
+
+
+  var saveAllBtn=
+    $("#saveAllBtn58");
+
+  if(saveAllBtn){
+
+    saveAllBtn.onclick=function(e){
+
+      e.preventDefault();
+
+      showMessage();
+
+    };
+
+  }
+
+
+  $$(".save-page").forEach(function(btn){
+
+    btn.onclick=function(e){
+
+      e.preventDefault();
+
+      showMessage();
+
+    };
+
+  });
+
+}
+
+
+if(document.readyState==="loading"){
+
+  document.addEventListener(
+    "DOMContentLoaded",
+    initSaleAdmin58
+  );
+
+}else{
+
+  initSaleAdmin58();
+
+}
+
+})();
+</script>
+</body>
+</html>
