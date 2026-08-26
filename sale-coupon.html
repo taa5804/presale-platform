@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>분양쿠폰 | 우리아파트</title>
+  <style>
+    *{box-sizing:border-box}
+    html,body{margin:0;width:100%;min-height:100%}
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;
+      background:#f5f7fa;
+      color:#172b3d;
+    }
+    .wrap{
+      max-width:720px;
+      margin:0 auto;
+      padding:24px 14px 50px;
+    }
+    .card{
+      background:#fff;
+      border:1px solid #e5e9ef;
+      border-radius:14px;
+      padding:20px;
+      box-shadow:0 4px 14px rgba(0,0,0,.04);
+    }
+    h1{
+      margin:0 0 10px;
+      font-size:24px;
+    }
+    .desc{
+      margin:0 0 20px;
+      color:#667789;
+      line-height:1.6;
+    }
+    .field{
+      width:100%;
+      height:46px;
+      border:1px solid #ccd5df;
+      border-radius:8px;
+      padding:0 12px;
+      font-size:16px;
+      margin-bottom:10px;
+    }
+    .btn{
+      width:100%;
+      height:46px;
+      border:0;
+      border-radius:8px;
+      background:#1165d7;
+      color:#fff;
+      font-size:16px;
+      font-weight:700;
+      cursor:pointer;
+    }
+    .result{
+      margin-top:18px;
+      padding:16px;
+      border-radius:10px;
+      background:#f7f9fc;
+      display:none;
+      line-height:1.7;
+    }
+  </style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="card">
+    <h1>분양쿠폰 조회</h1>
+    <p class="desc">발급받은 쿠폰번호를 입력해 주세요.</p>
+
+    <input
+      id="couponNumber"
+      class="field"
+      type="text"
+      placeholder="쿠폰번호 입력"
+    >
+
+    <button id="searchBtn" class="btn">쿠폰 조회</button>
+
+    <div id="result" class="result"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  const couponNumber = document.getElementById("couponNumber");
+  const searchBtn = document.getElementById("searchBtn");
+  const result = document.getElementById("result");
+
+  searchBtn.addEventListener("click", function(){
+
+    const value = couponNumber.value.trim();
+
+    if(!value){
+      alert("쿠폰번호를 입력해 주세요.");
+      couponNumber.focus();
+      return;
+    }
+
+    result.style.display = "block";
+
+    result.innerHTML =
+      "<strong>쿠폰번호</strong> : " + value + "<br>" +
+      "<strong>상태</strong> : 조회 준비중<br>" +
+      "<strong>유효기간</strong> : 확인 예정";
+  });
+
+})();
+</script>
+
+</body>
+</html>
