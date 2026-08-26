@@ -1,0 +1,238 @@
+<style>
+#chargeHistoryApp{
+  width:100%;
+  background:#f5f7f9;
+  padding:24px;
+  box-sizing:border-box;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",
+              Roboto,"Noto Sans KR",Arial,sans-serif;
+  color:#17212b;
+}
+
+#chargeHistoryApp *{
+  box-sizing:border-box;
+}
+
+#chargeHistoryApp .wrap{
+  max-width:1100px;
+  margin:0 auto;
+}
+
+#chargeHistoryApp .hero{
+  background:#123248;
+  border-radius:18px;
+  padding:28px 30px;
+  color:#fff;
+  margin-bottom:18px;
+  box-shadow:0 8px 24px rgba(0,0,0,.08);
+}
+
+#chargeHistoryApp .hero small{
+  display:block;
+  color:#d3a34a;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:1.2px;
+  margin-bottom:7px;
+}
+
+#chargeHistoryApp .hero h2{
+  margin:0 0 7px;
+  font-size:28px;
+  font-weight:800;
+}
+
+#chargeHistoryApp .hero p{
+  margin:0;
+  color:#d7e1e7;
+  font-size:14px;
+}
+
+#chargeHistoryApp .summary{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+  margin-bottom:18px;
+}
+
+#chargeHistoryApp .summary-card{
+  background:#fff;
+  border:1px solid #e2e7eb;
+  border-radius:14px;
+  padding:20px;
+}
+
+#chargeHistoryApp .summary-card span{
+  display:block;
+  color:#77838e;
+  font-size:13px;
+  margin-bottom:9px;
+}
+
+#chargeHistoryApp .summary-card strong{
+  display:block;
+  font-size:25px;
+  color:#142d3e;
+}
+
+#chargeHistoryApp .summary-card.balance strong{
+  color:#b27a20;
+}
+
+#chargeHistoryApp .panel{
+  background:#fff;
+  border:1px solid #e2e7eb;
+  border-radius:14px;
+  overflow:hidden;
+}
+
+#chargeHistoryApp .panel-head{
+  padding:20px 22px;
+  border-bottom:1px solid #e8ecef;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+#chargeHistoryApp .panel-head h3{
+  margin:0;
+  font-size:18px;
+}
+
+#chargeHistoryApp .panel-head span{
+  font-size:12px;
+  color:#8a959d;
+}
+
+#chargeHistoryApp .table-wrap{
+  width:100%;
+  overflow-x:auto;
+}
+
+#chargeHistoryApp table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:780px;
+}
+
+#chargeHistoryApp th{
+  background:#f7f8f9;
+  color:#59656f;
+  font-size:13px;
+  font-weight:700;
+  padding:14px 12px;
+  border-bottom:1px solid #e4e8eb;
+  text-align:center;
+  white-space:nowrap;
+}
+
+#chargeHistoryApp td{
+  padding:15px 12px;
+  border-bottom:1px solid #edf0f2;
+  text-align:center;
+  font-size:14px;
+  white-space:nowrap;
+}
+
+#chargeHistoryApp tbody tr:last-child td{
+  border-bottom:0;
+}
+
+#chargeHistoryApp .minus{
+  color:#c0392b;
+  font-weight:700;
+}
+
+#chargeHistoryApp .empty{
+  padding:55px 20px;
+  text-align:center;
+  color:#8a959d;
+  display:none;
+}
+
+@media(max-width:700px){
+  #chargeHistoryApp{
+    padding:14px;
+  }
+
+  #chargeHistoryApp .hero{
+    padding:22px 20px;
+  }
+
+  #chargeHistoryApp .hero h2{
+    font-size:23px;
+  }
+
+  #chargeHistoryApp .summary{
+    grid-template-columns:1fr;
+    gap:9px;
+  }
+
+  #chargeHistoryApp .summary-card{
+    padding:16px;
+  }
+
+  #chargeHistoryApp .summary-card strong{
+    font-size:22px;
+  }
+}
+</style>
+
+<div id="chargeHistoryApp">
+
+  <div class="hero">
+    <small>AD BALANCE HISTORY</small>
+    <h2>충전금 사용내역</h2>
+    <p>분양 광고 유효조회에 따른 충전금 차감내역을 확인합니다.</p>
+  </div>
+
+  <div class="summary">
+
+    <div class="summary-card">
+      <span>총 충전금</span>
+      <strong id="totalCharge">0원</strong>
+    </div>
+
+    <div class="summary-card">
+      <span>누적 사용금액</span>
+      <strong id="totalUsed">0원</strong>
+    </div>
+
+    <div class="summary-card balance">
+      <span>현재 잔액</span>
+      <strong id="currentBalance">0원</strong>
+    </div>
+
+  </div>
+
+  <div class="panel">
+
+    <div class="panel-head">
+      <h3>사용내역</h3>
+      <span>유효조회 완료 기준</span>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>날짜</th>
+            <th>분양현장</th>
+            <th>유효조회</th>
+            <th>건당 차감액</th>
+            <th>차감금액</th>
+            <th>사용 후 잔액</th>
+          </tr>
+        </thead>
+
+        <tbody id="historyBody"></tbody>
+      </table>
+    </div>
+
+    <div id="emptyHistory" class="empty">
+      아직 충전금 사용내역이 없습니다.
+    </div>
+
+  </div>
+
+</div>
