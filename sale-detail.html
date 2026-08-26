@@ -520,6 +520,34 @@
     padding-right:14px
   }
 }
+
+#aptCatalog .coupon-guide{
+  position:absolute;
+  z-index:18;
+  left:12px;
+  right:12px;
+  bottom:70px;
+  padding:10px 12px;
+  border:1px solid rgba(200,163,95,.55);
+  border-radius:10px;
+  background:rgba(4,20,36,.90);
+  color:#fff;
+  text-align:center;
+  line-height:1.45;
+  backdrop-filter:blur(6px);
+}
+#aptCatalog .coupon-guide strong{
+  display:block;
+  margin-bottom:3px;
+  color:var(--gold);
+  font-size:11px;
+}
+#aptCatalog .coupon-guide span{
+  display:block;
+  font-size:10px;
+  word-break:keep-all;
+}
+
 </style>
 
 
@@ -888,6 +916,12 @@ body{
   </button>
 
 
+
+  <div class="coupon-guide" role="note" aria-live="polite">
+    <strong>전자쿠폰 발급 안내</strong>
+    <span>8페이지를 모두 확인하고 유효조회 60초를 끝까지 완료해야 전자쿠폰이 발급됩니다.</span>
+  </div>
+
   <div class="catalog-bottom">
 
     <div class="dots"></div>
@@ -1230,7 +1264,7 @@ body{
     );
 
 
-    /* 전자쿠폰 이동 */
+    /* 전자쿠폰 자동 발급 및 이동 */
 
     rewardBtn.addEventListener(
       "click",
@@ -1240,19 +1274,54 @@ body{
           return;
         }
 
+        var now=new Date();
+
+        function pad(v){
+          return String(v).padStart(2,"0");
+        }
+
+        var couponNo=
+          "APT-"+
+          now.getFullYear()+
+          pad(now.getMonth()+1)+
+          pad(now.getDate())+
+          "-"+
+          Math.random().toString(36).slice(2,8).toUpperCase();
+
+        var expires=new Date(now);
+        expires.setDate(expires.getDate()+30);
+
+        var couponData={
+          couponNo:couponNo,
+          issuedAt:
+            now.getFullYear()+"-"+
+            pad(now.getMonth()+1)+"-"+
+            pad(now.getDate())+" "+
+            pad(now.getHours())+":"+
+            pad(now.getMinutes()),
+          expiresAt:
+            expires.getFullYear()+"-"+
+            pad(expires.getMonth()+1)+"-"+
+            pad(expires.getDate()),
+          status:"사용 가능",
+          point:3000
+        };
+
+        try{
+          localStorage.setItem(
+            "presaleIssuedCoupon",
+            JSON.stringify(couponData)
+          );
+        }catch(e){}
+
         rewardBtn.disabled=true;
+        rewardBtn.textContent="전자쿠폰 발급 완료";
 
-        rewardBtn.textContent=
-          "전자쿠폰 이동 중...";
-
-        window.location.href=
-          "/sale-coupon.html";
-
+        window.location.href="/sale-coupon.html";
       }
     );
 
-
-    update();
+update();
   }
 
 
