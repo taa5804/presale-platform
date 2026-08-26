@@ -1,268 +1,505 @@
-<!doctype html>
-<html lang="ko">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#1165d7">
-
-<title>우리아파트 분양 플랫폼</title>
-
 <style>
-*{box-sizing:border-box}
+#saleMain,
+#saleMain *{
+  box-sizing:border-box;
+}
 
-html,body{
-  margin:0;
+#saleMain.sale-main{
   width:100%;
-  min-height:100%;
-}
-
-body{
-  background:#f4f6f8;
-  color:#172b3d;
-  font-family:-apple-system,BlinkMacSystemFont,
-  "Segoe UI","Noto Sans KR",Arial,sans-serif;
-}
-
-a{
-  color:inherit;
-  text-decoration:none;
-}
-
-.wrap{
-  width:100%;
-  max-width:720px;
+  max-width:760px;
   margin:0 auto;
-  padding:0 14px 50px;
+  padding:22px 14px 50px;
+  background:#eef8fc;
+  color:#14212b;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
 }
 
-/* 상단 */
-.header{
-  min-height:76px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-
-.brand{
-  font-size:21px;
-  font-weight:900;
-  color:#1165d7;
-}
-
-.admin{
-  font-size:13px;
-  color:#64748b;
-}
-
-/* 메인 안내 */
-.hero{
-  background:#1165d7;
+#saleMain .main-head{
+  padding:28px 22px;
+  background:#123c52;
+  border-radius:20px;
   color:#fff;
-  border-radius:18px;
-  padding:27px 22px;
-  margin-bottom:18px;
 }
 
-.hero h1{
-  margin:0 0 10px;
-  font-size:25px;
-  line-height:1.35;
+#saleMain .eyebrow{
+  display:block;
+  margin-bottom:8px;
+  color:#d6ad55;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:1.5px;
 }
 
-.hero p{
+#saleMain .main-head h1{
+  margin:0 0 8px;
+  font-size:28px;
+}
+
+#saleMain .main-head p{
   margin:0;
-  font-size:15px;
-  line-height:1.7;
-  opacity:.95;
+  font-size:14px;
+  line-height:1.6;
+  color:#d8e8ef;
 }
 
-/* 메뉴 */
-.section-title{
-  margin:25px 2px 12px;
-  font-size:18px;
-  font-weight:900;
+#saleMain .filter-box{
+  display:flex;
+  gap:7px;
+  margin:16px 0;
+  padding:10px;
+  background:#fff;
+  border-radius:15px;
+  overflow-x:auto;
 }
 
-.menu-grid{
+#saleMain .filter{
+  flex:none;
+  padding:10px 15px;
+  border:0;
+  border-radius:10px;
+  background:#edf3f6;
+  color:#50606b;
+  font-weight:700;
+  cursor:pointer;
+}
+
+#saleMain .filter.active{
+  background:#123c52;
+  color:#fff;
+}
+
+#saleMain .project-list{
+  display:grid;
+  gap:18px;
+}
+
+#saleMain .project-card{
+  overflow:hidden;
+  background:#fff;
+  border-radius:20px;
+  box-shadow:0 8px 24px rgba(25,55,70,.09);
+}
+
+#saleMain .project-image{
+  position:relative;
+  height:330px;
+  background:#8fb4c3;
+  overflow:hidden;
+}
+
+#saleMain .image-one{
+  background:linear-gradient(150deg,#a9d1dc,#527b8d);
+}
+
+#saleMain .image-two{
+  background:linear-gradient(150deg,#b4d7ca,#547f73);
+}
+
+#saleMain .image-shade{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(
+    to bottom,
+    rgba(0,0,0,.05),
+    rgba(0,0,0,.05) 45%,
+    rgba(0,0,0,.68)
+  );
+}
+
+#saleMain .card-top{
+  position:absolute;
+  top:18px;
+  left:18px;
+  right:18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+#saleMain .status,
+#saleMain .area{
+  padding:7px 11px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:800;
+}
+
+#saleMain .status{
+  background:#ee9d19;
+  color:#fff;
+}
+
+#saleMain .status.upcoming{
+  background:#d5ad59;
+  color:#162532;
+}
+
+#saleMain .area{
+  background:rgba(18,60,82,.88);
+  color:#fff;
+}
+
+#saleMain .project-title{
+  position:absolute;
+  left:20px;
+  right:20px;
+  bottom:22px;
+  color:#fff;
+}
+
+#saleMain .project-title small{
+  color:#f0c568;
+  font-weight:800;
+  letter-spacing:1.4px;
+}
+
+#saleMain .project-title h2{
+  margin:8px 0 5px;
+  font-size:26px;
+}
+
+#saleMain .project-title p{
+  margin:0;
+  font-size:14px;
+}
+
+#saleMain .project-info{
+  padding:18px;
+}
+
+#saleMain .info-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:12px;
+  gap:10px;
 }
 
-.card{
-  background:#fff;
-  border:1px solid #e3e8ee;
-  border-radius:15px;
-  padding:19px 16px;
-  min-height:120px;
-  box-shadow:0 3px 12px rgba(0,0,0,.04);
-  transition:.15s;
+#saleMain .info-grid div{
+  padding:14px;
+  background:#f1f8fb;
+  border-radius:13px;
 }
 
-.card:active{
-  transform:scale(.98);
-}
-
-.icon{
-  font-size:25px;
-  margin-bottom:11px;
-}
-
-.card strong{
+#saleMain .info-grid span{
   display:block;
-  font-size:16px;
   margin-bottom:6px;
-}
-
-.card span{
-  display:block;
-  color:#64748b;
-  font-size:13px;
-  line-height:1.5;
-}
-
-/* 전체폭 메뉴 */
-.full{
-  grid-column:1 / -1;
-}
-
-/* 하단 */
-.footer{
-  text-align:center;
-  margin-top:32px;
-  color:#8a97a6;
+  color:#71818b;
   font-size:12px;
-  line-height:1.7;
 }
 
-@media(max-width:420px){
-  .hero h1{
-    font-size:22px;
+#saleMain .info-grid strong{
+  font-size:15px;
+}
+
+#saleMain .benefit{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:12px;
+  padding:14px;
+  background:#f7f4e8;
+  border-radius:13px;
+  font-size:13px;
+}
+
+#saleMain .benefit strong{
+  color:#b46b20;
+}
+
+#saleMain .detail-btn{
+  width:100%;
+  margin-top:12px;
+  padding:16px;
+  border:0;
+  border-radius:13px;
+  background:#118984;
+  color:#fff;
+  font-size:15px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+#saleMain .detail-btn.disabled{
+  background:#bbc6ca;
+  cursor:default;
+}
+
+#saleMain .guide-box{
+  margin-top:22px;
+  padding:20px;
+  background:#fff;
+  border-radius:18px;
+}
+
+#saleMain .guide-box h3{
+  margin:0 0 15px;
+  font-size:19px;
+}
+
+#saleMain .guide-list{
+  display:grid;
+  gap:9px;
+}
+
+#saleMain .guide-list div{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:13px;
+  background:#f1f8fb;
+  border-radius:12px;
+  font-size:13px;
+}
+
+#saleMain .guide-list b{
+  color:#118984;
+}
+
+@media(max-width:480px){
+  #saleMain.sale-main{
+    padding:12px 10px 35px;
   }
 
-  .card{
-    padding:17px 13px;
+  #saleMain .main-head{
+    padding:23px 18px;
+  }
+
+  #saleMain .main-head h1{
+    font-size:24px;
+  }
+
+  #saleMain .project-image{
+    height:300px;
+  }
+
+  #saleMain .project-title h2{
+    font-size:23px;
   }
 }
 </style>
-</head>
 
-<body>
+<div id="saleMain" class="sale-main">
 
-<div class="wrap">
-
-  <header class="header">
-    <div class="brand">우리아파트 분양 플랫폼</div>
-    <div class="admin">분양사</div>
+  <header class="main-head">
+    <span class="eyebrow">PREMIUM HOUSING</span>
+    <h1>우리 아파트 분양</h1>
+    <p>관심 지역의 분양 정보를 고급 모바일 카탈로그로 확인하세요.</p>
   </header>
 
-
-  <section class="hero">
-    <h1>분양 현장을<br>한 곳에서 관리하세요.</h1>
-
-    <p>
-      분양 카탈로그부터 전자쿠폰,
-      충전금 및 운영 현황까지
-      통합 관리할 수 있습니다.
-    </p>
+  <section class="filter-box">
+    <button type="button" class="filter active" data-area="all">전체</button>
+    <button type="button" class="filter" data-area="seoul">서울특별시</button>
+    <button type="button" class="filter" data-area="busan">부산광역시</button>
+    <button type="button" class="filter" data-area="daegu">대구광역시</button>
+    <button type="button" class="filter" data-area="incheon">인천광역시</button>
+    <button type="button" class="filter" data-area="jg">전남광주통합특별시</button>
+    <button type="button" class="filter" data-area="daejeon">대전광역시</button>
+    <button type="button" class="filter" data-area="ulsan">울산광역시</button>
+    <button type="button" class="filter" data-area="sejong">세종특별자치시</button>
+    <button type="button" class="filter" data-area="gyeonggi">경기도</button>
+    <button type="button" class="filter" data-area="gangwon">강원특별자치도</button>
+    <button type="button" class="filter" data-area="chungbuk">충청북도</button>
+    <button type="button" class="filter" data-area="chungnam">충청남도</button>
+    <button type="button" class="filter" data-area="jeonbuk">전북특별자치도</button>
+    <button type="button" class="filter" data-area="gyeongbuk">경상북도</button>
+    <button type="button" class="filter" data-area="gyeongnam">경상남도</button>
+    <button type="button" class="filter" data-area="jeju">제주특별자치도</button>
   </section>
 
+  <section class="project-list">
 
-  <div class="section-title">
-    분양사 메뉴
-  </div>
+    <article class="project-card" data-area="jg">
+      <div class="project-image image-one">
+        <div class="image-shade"></div>
 
+        <div class="card-top">
+          <span class="status">분양 중</span>
+        </div>
 
-  <div class="menu-grid">
+        <div class="project-title">
+          <small>PREMIUM RESIDENCE</small>
+          <h2>단지명을 입력해 주세요</h2>
+        </div>
+      </div>
 
-    <!-- 분양 카탈로그 -->
-    <a class="card"
-       href="/catalog-timer.html">
+      <div class="project-info">
+        <div class="info-grid">
+          <div>
+            <span>총 세대수</span>
+            <strong>1,520세대</strong>
+          </div>
 
-      <div class="icon">🏢</div>
+          <div>
+            <span>입주 예정</span>
+            <strong>2030년 1월</strong>
+          </div>
 
-      <strong>분양 카탈로그</strong>
+          <div>
+            <span>주요 평형</span>
+            <strong>84A · 84B</strong>
+          </div>
 
-      <span>
-        분양 현장 및 카탈로그를
-        확인합니다.
-      </span>
+          <div>
+            <span>분양 상태</span>
+            <strong>분양 중</strong>
+          </div>
+        </div>
 
-    </a>
+        <div class="benefit">
+          <span>8페이지 카탈로그 확인 완료 시</span>
+          <strong>3,000포인트 제공</strong>
+        </div>
 
+        <button type="button"
+                class="detail-btn"
+                data-link="/분양-상세">
+          분양 카탈로그 보기
+        </button>
+      </div>
+    </article>
 
-    <!-- 전자쿠폰 -->
-    <a class="card"
-       href="/coupon.html">
+    <article class="project-card" data-area="jg">
+      <div class="project-image image-two">
+        <div class="image-shade"></div>
 
-      <div class="icon">🎫</div>
+        <div class="card-top">
+          <span class="status upcoming">분양 예정</span>
+        </div>
 
-      <strong>전자쿠폰</strong>
+        <div class="project-title">
+          <small>NEW LIFESTYLE</small>
+          <h2>새로운 분양단지</h2>
+        </div>
+      </div>
 
-      <span>
-        고객 전자쿠폰 발행 및
-        사용현황을 관리합니다.
-      </span>
+      <div class="project-info">
+        <div class="info-grid">
+          <div>
+            <span>총 세대수</span>
+            <strong>980세대</strong>
+          </div>
 
-    </a>
+          <div>
+            <span>입주 예정</span>
+            <strong>2030년 6월</strong>
+          </div>
 
+          <div>
+            <span>주요 평형</span>
+            <strong>74 · 84 · 101</strong>
+          </div>
 
-    <!-- 충전금 -->
-    <a class="card"
-       href="/charge.html">
+          <div>
+            <span>분양 상태</span>
+            <strong>분양 예정</strong>
+          </div>
+        </div>
 
-      <div class="icon">💳</div>
+        <div class="benefit">
+          <span>카탈로그 공개 후</span>
+          <strong>포인트 혜택 제공</strong>
+        </div>
 
-      <strong>충전금 관리</strong>
+        <button type="button"
+                class="detail-btn disabled"
+                disabled>
+          공개 예정
+        </button>
+      </div>
+    </article>
 
-      <span>
-        분양 현장별 충전금
-        등록 및 현황을 확인합니다.
-      </span>
+  </section>
 
-    </a>
+  <section class="guide-box">
+    <h3>이용 방법</h3>
 
+    <div class="guide-list">
+      <div>
+        <b>01</b>
+        <span>관심 있는 분양단지를 선택합니다.</span>
+      </div>
 
-    <!-- 포인트 정산 -->
-    <a class="card"
-       href="/point-settlement.html">
+      <div>
+        <b>02</b>
+        <span>8페이지 모바일 카탈로그를 확인합니다.</span>
+      </div>
 
-      <div class="icon">📊</div>
-
-      <strong>포인트 정산관리</strong>
-
-      <span>
-        마트 포인트 사용 및
-        정산내역을 관리합니다.
-      </span>
-
-    </a>
-
-
-    <!-- 시스템 설정 -->
-    <a class="card full"
-       href="/settings.html">
-
-      <div class="icon">⚙️</div>
-
-      <strong>시스템 설정</strong>
-
-      <span>
-        분양 현장 및 플랫폼 운영 설정을
-        관리합니다.
-      </span>
-
-    </a>
-
-  </div>
-
-
-  <div class="footer">
-    우리아파트 분양 플랫폼<br>
-    분양사 통합 관리 시스템
-  </div>
+      <div>
+        <b>03</b>
+        <span>유효 확인 완료 후 포인트를 지급받습니다.</span>
+      </div>
+    </div>
+  </section>
 
 </div>
 
-</body>
-</html>
+<script>
+(function () {
+
+  function initSaleMain() {
+    var root = document.getElementById("saleMain");
+    if (!root) return;
+
+    root.onclick = function(e) {
+
+      var target = e.target;
+
+      while (target && target !== root) {
+
+        if (target.classList &&
+            target.classList.contains("filter")) {
+
+          var filters = root.querySelectorAll(".filter");
+          var cards = root.querySelectorAll(".project-card");
+          var area = target.getAttribute("data-area");
+
+          for (var i = 0; i < filters.length; i++) {
+            filters[i].classList.remove("active");
+          }
+
+          target.classList.add("active");
+
+          for (var j = 0; j < cards.length; j++) {
+
+            var cardArea =
+              cards[j].getAttribute("data-area");
+
+            if (area === "all" || cardArea === area) {
+              cards[j].style.display = "block";
+            } else {
+              cards[j].style.display = "none";
+            }
+          }
+
+          return;
+        }
+
+        if (target.classList &&
+            target.classList.contains("detail-btn") &&
+            target.getAttribute("data-link")) {
+
+          var link =
+            target.getAttribute("data-link");
+
+          if (link) {
+            window.location.href = link;
+          }
+
+          return;
+        }
+
+        target = target.parentElement;
+      }
+    };
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener(
+      "DOMContentLoaded",
+      initSaleMain
+    );
+  } else {
+    initSaleMain();
+  }
+
+})();
+</script>
