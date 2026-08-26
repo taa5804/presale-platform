@@ -4,14 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#1165d7">
-<title>분양쿠폰 | 우리아파트</title>
+<title>전자쿠폰 | 우리아파트</title>
 <style>
 *{box-sizing:border-box}
-html,body{
-  margin:0;
-  width:100%;
-  min-height:100%;
-}
+html,body{margin:0;width:100%;min-height:100%}
 body{
   background:#f5f7fa;
   color:#172b3d;
@@ -22,66 +18,135 @@ body{
   width:100%;
   max-width:720px;
   margin:0 auto;
-  padding:clamp(14px,4vw,24px) clamp(10px,3vw,14px) 50px;
+  padding:clamp(14px,4vw,28px) clamp(10px,3vw,14px) 50px;
 }
 .card{
   width:100%;
   background:#fff;
   border:1px solid #e5e9ef;
-  border-radius:14px;
-  padding:clamp(16px,4vw,20px);
-  box-shadow:0 4px 14px rgba(0,0,0,.04);
+  border-radius:16px;
+  padding:clamp(18px,4vw,24px);
+  box-shadow:0 4px 14px rgba(0,0,0,.05);
+}
+.head{
+  margin-bottom:18px;
+}
+.head .badge{
+  display:inline-block;
+  margin-bottom:8px;
+  padding:6px 10px;
+  border-radius:999px;
+  background:#eaf2ff;
+  color:#1165d7;
+  font-size:12px;
+  font-weight:800;
 }
 h1{
-  margin:0 0 10px;
-  font-size:clamp(22px,5vw,26px);
+  margin:0 0 7px;
+  font-size:clamp(22px,5vw,28px);
 }
 .desc{
-  margin:0 0 20px;
+  margin:0;
   color:#667789;
-  font-size:clamp(14px,3.5vw,16px);
+  font-size:14px;
   line-height:1.6;
   word-break:keep-all;
 }
-.field{
-  width:100%;
-  min-width:0;
-  height:48px;
-  border:1px solid #ccd5df;
-  border-radius:8px;
-  padding:0 12px;
-  font-size:16px;
-  margin-bottom:10px;
+.coupon{
+  overflow:hidden;
+  border:2px solid #1165d7;
+  border-radius:16px;
+  background:#fff;
 }
-.btn{
-  width:100%;
-  min-height:48px;
-  border:0;
-  border-radius:8px;
+.coupon-top{
+  padding:20px;
   background:#1165d7;
   color:#fff;
-  font-size:16px;
-  font-weight:700;
-  cursor:pointer;
+  text-align:center;
 }
-.result{
-  width:100%;
-  margin-top:18px;
-  padding:16px;
-  border-radius:10px;
-  background:#f7f9fc;
-  display:none;
-  line-height:1.7;
+.coupon-top small{
+  display:block;
+  margin-bottom:5px;
+  opacity:.86;
+}
+.coupon-top strong{
+  display:block;
+  font-size:clamp(22px,6vw,30px);
+  letter-spacing:.5px;
   overflow-wrap:anywhere;
 }
-@media(max-width:480px){
-  .wrap{
-    padding-left:10px;
-    padding-right:10px;
-  }
-  .card{
-    border-radius:12px;
-  }
+.info{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1px;
+  background:#e5e9ef;
+}
+.info div{
+  min-width:0;
+  padding:14px;
+  background:#fff;
+}
+.info span{
+  display:block;
+  margin-bottom:5px;
+  color:#71808d;
+  font-size:12px;
+}
+.info strong{
+  display:block;
+  font-size:14px;
+  overflow-wrap:anywhere;
+}
+.status{
+  color:#17804b;
+}
+.notice{
+  margin-top:14px;
+  padding:13px;
+  border-radius:10px;
+  background:#f7f4e8;
+  color:#72511d;
+  font-size:13px;
+  line-height:1.6;
+  word-break:keep-all;
+}
+.empty{
+  display:none;
+  padding:32px 15px;
+  border:1px dashed #c9d2da;
+  border-radius:12px;
+  color:#748391;
+  text-align:center;
+  line-height:1.7;
+}
+.actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+  margin-top:14px;
+}
+button,a.btn{
+  min-height:46px;
+  border:0;
+  border-radius:9px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#1165d7;
+  color:#fff;
+  font:inherit;
+  font-size:14px;
+  font-weight:800;
+  text-decoration:none;
+  cursor:pointer;
+}
+button.secondary,a.btn.secondary{
+  background:#e9eef4;
+  color:#314555;
+}
+@media(max-width:520px){
+  .info{grid-template-columns:1fr}
+  .actions{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -89,54 +154,108 @@ h1{
 
 <div class="wrap">
   <div class="card">
-    <h1>분양쿠폰 조회</h1>
-    <p class="desc">발급받은 쿠폰번호를 입력해 주세요.</p>
 
-    <input
-      id="couponNumber"
-      class="field"
-      type="text"
-      placeholder="쿠폰번호 입력"
-      autocomplete="off"
-    >
+    <div class="head">
+      <span class="badge">전자쿠폰</span>
+      <h1>발급된 분양쿠폰</h1>
+      <p class="desc">8페이지 전체 확인과 유효조회 60초를 완료한 고객에게 자동 발급됩니다.</p>
+    </div>
 
-    <button id="searchBtn" class="btn" type="button">쿠폰 조회</button>
+    <div id="couponBox" class="coupon">
+      <div class="coupon-top">
+        <small>쿠폰번호</small>
+        <strong id="couponNo">-</strong>
+      </div>
 
-    <div id="result" class="result"></div>
+      <div class="info">
+        <div>
+          <span>발급일시</span>
+          <strong id="issuedAt">-</strong>
+        </div>
+        <div>
+          <span>유효기간</span>
+          <strong id="expiresAt">-</strong>
+        </div>
+        <div>
+          <span>사용상태</span>
+          <strong id="status" class="status">-</strong>
+        </div>
+        <div>
+          <span>지급 포인트</span>
+          <strong id="point">-</strong>
+        </div>
+      </div>
+    </div>
+
+    <div id="empty" class="empty">
+      아직 발급된 전자쿠폰이 없습니다.<br>
+      분양 카탈로그 8페이지를 모두 확인하고 유효조회 60초를 끝까지 완료해 주세요.
+    </div>
+
+    <div class="notice">
+      전자쿠폰은 유효조회 조건을 충족한 경우에만 발급됩니다. 발급 후 유효기간과 사용상태를 이 화면에서 확인할 수 있습니다.
+    </div>
+
+    <div class="actions">
+      <a class="btn secondary" href="/index.html">분양목록으로</a>
+      <button type="button" id="copyBtn">쿠폰번호 복사</button>
+    </div>
+
   </div>
 </div>
 
 <script>
 (function(){
-  "use strict";
+"use strict";
 
-  const couponNumber = document.getElementById("couponNumber");
-  const searchBtn = document.getElementById("searchBtn");
-  const result = document.getElementById("result");
+var couponBox=document.getElementById("couponBox");
+var empty=document.getElementById("empty");
+var copyBtn=document.getElementById("copyBtn");
 
-  function searchCoupon(){
-    const value = couponNumber.value.trim();
+var data=null;
 
-    if(!value){
-      alert("쿠폰번호를 입력해 주세요.");
-      couponNumber.focus();
-      return;
-    }
+try{
+  data=JSON.parse(
+    localStorage.getItem("presaleIssuedCoupon")||"null"
+  );
+}catch(e){}
 
-    result.style.display = "block";
-    result.innerHTML =
-      "<strong>쿠폰번호</strong> : " + value + "<br>" +
-      "<strong>상태</strong> : 조회 준비중<br>" +
-      "<strong>유효기간</strong> : 확인 예정";
+if(!data || !data.couponNo){
+  couponBox.style.display="none";
+  empty.style.display="block";
+  copyBtn.disabled=true;
+  copyBtn.style.opacity=".5";
+  return;
+}
+
+document.getElementById("couponNo").textContent=
+  data.couponNo||"-";
+
+document.getElementById("issuedAt").textContent=
+  data.issuedAt||"-";
+
+document.getElementById("expiresAt").textContent=
+  data.expiresAt||"-";
+
+document.getElementById("status").textContent=
+  data.status||"사용 가능";
+
+document.getElementById("point").textContent=
+  Number(data.point||0).toLocaleString("ko-KR")+" P";
+
+copyBtn.addEventListener("click",function(){
+
+  if(!data.couponNo)return;
+
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(data.couponNo).then(function(){
+      alert("쿠폰번호가 복사되었습니다.");
+    });
+  }else{
+    alert("쿠폰번호: "+data.couponNo);
   }
+});
 
-  searchBtn.addEventListener("click", searchCoupon);
-
-  couponNumber.addEventListener("keydown", function(e){
-    if(e.key === "Enter"){
-      searchCoupon();
-    }
-  });
 })();
 </script>
 
