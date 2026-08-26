@@ -1,0 +1,328 @@
+<style>
+#systemAdmin{
+  font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",Arial,sans-serif;
+  background:#f5f7f9;
+  color:#172b3d;
+  padding:18px;
+}
+
+#systemAdmin *{
+  box-sizing:border-box;
+}
+
+#systemAdmin .admin-head{
+  margin-bottom:16px;
+}
+
+#systemAdmin h2{
+  margin:0 0 5px;
+  font-size:24px;
+}
+
+#systemAdmin .admin-head p{
+  margin:0;
+  font-size:13px;
+  color:#71808d;
+}
+
+#systemAdmin .setting-box{
+  background:#fff;
+  border:1px solid #dfe5ea;
+  border-radius:10px;
+  overflow:hidden;
+}
+
+#systemAdmin .setting-row{
+  min-height:76px;
+  padding:14px 16px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+  border-bottom:1px solid #e8ecef;
+}
+
+#systemAdmin .setting-row strong{
+  display:block;
+  font-size:14px;
+  margin-bottom:4px;
+}
+
+#systemAdmin .setting-row span{
+  display:block;
+  font-size:12px;
+  color:#71808d;
+}
+
+#systemAdmin .setting-row > div:last-child{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+#systemAdmin input,
+#systemAdmin select{
+  width:170px;
+  height:38px;
+  border:1px solid #cad4dc;
+  border-radius:6px;
+  padding:0 9px;
+  background:#fff;
+  font-size:13px;
+}
+
+#systemAdmin em{
+  min-width:20px;
+  font-size:12px;
+  font-style:normal;
+  color:#536575;
+}
+
+#systemAdmin .save-area{
+  padding:16px;
+  text-align:right;
+}
+
+#systemAdmin #saveBtn{
+  height:40px;
+  padding:0 22px;
+  border:0;
+  border-radius:6px;
+  background:#1769df;
+  color:#fff;
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+@media(max-width:650px){
+
+  #systemAdmin{
+    padding:10px;
+  }
+
+  #systemAdmin .setting-row{
+    align-items:flex-start;
+    flex-direction:column;
+    gap:10px;
+  }
+
+  #systemAdmin input,
+  #systemAdmin select{
+    width:100%;
+  }
+
+  #systemAdmin .setting-row > div:last-child{
+    width:100%;
+  }
+
+  #systemAdmin h2{
+    font-size:21px;
+  }
+}
+</style>
+
+
+<div id="systemAdmin">
+
+  <div class="admin-head">
+    <h2>시스템 설정</h2>
+    <p>분양사 플랫폼의 공통 운영값을 설정합니다.</p>
+  </div>
+
+  <div class="setting-box">
+
+    <div class="setting-row">
+      <div>
+        <strong>기본 포인트 지급액</strong>
+        <span>입주예정자·입주민에게 지급할 기본 포인트</span>
+      </div>
+
+      <div>
+        <input type="number" id="basePoint" value="3000">
+        <em>P</em>
+      </div>
+    </div>
+
+
+    <div class="setting-row">
+      <div>
+        <strong>서울·경기 기본 포인트</strong>
+        <span>서울·경기 지역에 적용할 기본 지급 포인트</span>
+      </div>
+
+      <div>
+        <input type="number" id="metroPoint" value="8000">
+        <em>P</em>
+      </div>
+    </div>
+
+
+    <div class="setting-row">
+      <div>
+        <strong>정산 주기</strong>
+        <span>마트 포인트 사용금액 정산 기준</span>
+      </div>
+
+      <select id="settleCycle">
+        <option value="weekly">주 1회</option>
+        <option value="biweekly">2주 1회</option>
+        <option value="monthly">월 1회</option>
+      </select>
+    </div>
+
+
+    <div class="setting-row">
+      <div>
+        <strong>충전금 부족 알림</strong>
+        <span>분양사 충전금이 기준금액 이하가 되면 알림</span>
+      </div>
+
+      <div>
+        <input type="number" id="lowBalance" value="100000">
+        <em>원</em>
+      </div>
+    </div>
+
+
+    <div class="setting-row">
+      <div>
+        <strong>포인트 사용</strong>
+        <span>전체 포인트 사용 기능을 켜거나 끕니다.</span>
+      </div>
+
+      <select id="pointUse">
+        <option value="on">사용</option>
+        <option value="off">중지</option>
+      </select>
+    </div>
+
+
+    <div class="setting-row">
+      <div>
+        <strong>전자쿠폰 사용</strong>
+        <span>분양사 전자쿠폰 기능의 전체 사용 여부</span>
+      </div>
+
+      <select id="couponUse">
+        <option value="on">사용</option>
+        <option value="off">중지</option>
+      </select>
+    </div>
+
+
+    <div class="setting-row">
+      <div>
+        <strong>마트 정산 기능</strong>
+        <span>마트별 포인트 정산 기능 사용 여부</span>
+      </div>
+
+      <select id="martSettle">
+        <option value="on">사용</option>
+        <option value="off">중지</option>
+      </select>
+    </div>
+
+
+    <div class="save-area">
+      <button type="button" id="saveBtn">
+        설정 저장
+      </button>
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+(function(){
+"use strict";
+
+var root=document.getElementById("systemAdmin");
+
+if(!root)return;
+
+function el(id){
+  return root.querySelector("#"+id);
+}
+
+var settings={
+  basePoint:3000,
+  metroPoint:8000,
+  settleCycle:"weekly",
+  lowBalance:100000,
+  pointUse:"on",
+  couponUse:"on",
+  martSettle:"on"
+};
+
+
+function loadSettings(){
+
+  el("basePoint").value=
+    settings.basePoint;
+
+  el("metroPoint").value=
+    settings.metroPoint;
+
+  el("settleCycle").value=
+    settings.settleCycle;
+
+  el("lowBalance").value=
+    settings.lowBalance;
+
+  el("pointUse").value=
+    settings.pointUse;
+
+  el("couponUse").value=
+    settings.couponUse;
+
+  el("martSettle").value=
+    settings.martSettle;
+}
+
+
+el("saveBtn").addEventListener(
+  "click",
+  function(){
+
+    settings.basePoint=
+      Number(
+        el("basePoint").value||0
+      );
+
+    settings.metroPoint=
+      Number(
+        el("metroPoint").value||0
+      );
+
+    settings.settleCycle=
+      el("settleCycle").value;
+
+    settings.lowBalance=
+      Number(
+        el("lowBalance").value||0
+      );
+
+    settings.pointUse=
+      el("pointUse").value;
+
+    settings.couponUse=
+      el("couponUse").value;
+
+    settings.martSettle=
+      el("martSettle").value;
+
+    alert(
+      "설정값을 확인했습니다."
+    );
+
+  }
+);
+
+
+loadSettings();
+
+})();
+</script>
