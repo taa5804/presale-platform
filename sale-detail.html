@@ -1,3 +1,10 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#071a2c">
+<title>분양 상세 | 우리 아파트 분양</title>
 <style>
 #aptCatalog,
 #aptCatalog *{box-sizing:border-box}
@@ -516,6 +523,102 @@
 </style>
 
 
+
+
+<style>
+html,body{
+  margin:0;
+  width:100%;
+  min-height:100%;
+  background:#0b1d2d;
+}
+body{
+  overflow-x:hidden;
+  font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR","Segoe UI",sans-serif;
+}
+
+/* 상세 카탈로그 전체 가변형 */
+#aptCatalog.apt-catalog{
+  width:min(100%,430px);
+  max-width:430px;
+  height:min(820px,100dvh);
+  min-height:min(620px,100dvh);
+}
+
+@media (min-width:431px){
+  body{
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:20px 0;
+  }
+
+  #aptCatalog.apt-catalog{
+    width:min(430px,100%);
+  }
+}
+
+@media (max-width:430px){
+  #aptCatalog.apt-catalog{
+    max-width:none;
+    width:100vw;
+    height:100dvh;
+    min-height:100dvh;
+    margin:0;
+    box-shadow:none;
+  }
+
+  #aptCatalog .apt-page{
+    padding-top:clamp(28px,7vw,34px);
+    padding-left:clamp(18px,6vw,26px);
+    padding-right:clamp(18px,6vw,26px);
+    padding-bottom:90px;
+  }
+
+  #aptCatalog .cover-copy{
+    left:clamp(20px,6vw,28px);
+    right:clamp(20px,6vw,28px);
+    bottom:clamp(130px,22vh,165px);
+  }
+
+  #aptCatalog .cover h1,
+  #aptCatalog .contact h2{
+    font-size:clamp(28px,8vw,34px);
+  }
+
+  #aptCatalog .section-title h2{
+    font-size:clamp(23px,6.5vw,27px);
+  }
+
+  #aptCatalog .premium{
+    grid-template-columns:42% 58%;
+  }
+
+  #aptCatalog .premium-copy{
+    padding-top:clamp(52px,14vw,68px);
+  }
+}
+
+@media (max-width:360px){
+  #aptCatalog .info-list,
+  #aptCatalog .feature-grid{
+    gap:7px;
+  }
+
+  #aptCatalog .contact-actions{
+    grid-template-columns:1fr;
+  }
+
+  #aptCatalog .nav{
+    width:30px;
+    height:50px;
+    font-size:28px;
+  }
+}
+</style>
+
+</head>
+<body>
 <div id="aptCatalog" class="apt-catalog">
 
   <div class="apt-track">
@@ -1168,3 +1271,5 @@
 
 })();
 </script>
+</body>
+</html>
