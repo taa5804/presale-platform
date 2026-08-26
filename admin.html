@@ -16,33 +16,43 @@ body{
 }
 .wrap{
   width:100%;
-  max-width:620px;
+  max-width:1280px;
   margin:0 auto;
-  padding:clamp(24px,7vw,60px) 14px 50px;
+  padding:14px;
 }
 .brand{
-  margin-bottom:14px;
-  padding:22px;
-  border-radius:16px;
+  margin-bottom:12px;
+  padding:18px 20px;
+  border-radius:14px;
   background:#123f55;
   color:#fff;
 }
 .brand small{
   display:block;
-  margin-bottom:8px;
+  margin-bottom:5px;
   color:#f0c15a;
   font-weight:800;
 }
-.brand h1{margin:0 0 7px;font-size:clamp(23px,5vw,29px)}
-.brand p{margin:0;color:#d8e5eb;font-size:13px;line-height:1.55}
-.card{
-  padding:20px;
-  border:1px solid #dfe6eb;
-  border-radius:16px;
-  background:#fff;
-  box-shadow:0 6px 20px rgba(0,0,0,.05);
+.brand h1{
+  margin:0 0 5px;
+  font-size:clamp(22px,4vw,28px);
 }
-h2{margin:0 0 16px;font-size:20px}
+.brand p{
+  margin:0;
+  color:#d8e5eb;
+  font-size:13px;
+}
+.card{
+  padding:18px;
+  border:1px solid #dfe6eb;
+  border-radius:14px;
+  background:#fff;
+  box-shadow:0 6px 20px rgba(0,0,0,.04);
+}
+#loginArea{
+  max-width:520px;
+  margin:40px auto 0;
+}
 .field{margin-bottom:12px}
 label{
   display:block;
@@ -60,16 +70,16 @@ input{
   font-size:15px;
 }
 button{
-  width:100%;
-  min-height:48px;
+  min-height:46px;
   border:0;
   border-radius:8px;
   background:#123f55;
   color:#fff;
-  font-size:15px;
+  font-size:14px;
   font-weight:800;
   cursor:pointer;
 }
+#loginArea button{width:100%}
 .demo{
   margin-top:15px;
   padding:14px;
@@ -79,41 +89,67 @@ button{
   font-size:13px;
   line-height:1.7;
 }
-.demo strong{display:block;margin-bottom:4px;color:#8a6511}
 .msg{min-height:22px;margin-top:10px;font-size:13px;font-weight:700}
 .msg.error{color:#c4473d}
 .msg.ok{color:#17804b}
 
-#menuArea{display:none}
-.menu{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:10px;
-}
-.menu a{
+#adminArea{display:none}
+.topbar{
   display:flex;
+  gap:8px;
   align-items:center;
   justify-content:space-between;
-  min-height:64px;
-  padding:0 17px;
-  border:1px solid #dfe6eb;
-  border-radius:10px;
-  background:#fff;
-  color:#172b3d;
-  font-size:16px;
-  font-weight:800;
-  text-decoration:none;
+  margin-bottom:10px;
 }
-.menu a span{color:#71808d;font-size:20px}
-.logout{
-  margin-top:14px;
-  background:#e9eef2;
+.tabs{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+  flex:1;
+}
+.tab{
+  width:100%;
+  background:#e8eef2;
   color:#314555;
 }
-@media(max-width:480px){
-  .wrap{padding-left:10px;padding-right:10px}
-  .card{padding:16px}
-  input{height:48px;font-size:16px}
+.tab.active{
+  background:#123f55;
+  color:#fff;
+}
+.logout{
+  flex:none;
+  padding:0 16px;
+  background:#dfe6eb;
+  color:#314555;
+}
+.frame-wrap{
+  overflow:hidden;
+  border:1px solid #dfe6eb;
+  border-radius:12px;
+  background:#fff;
+}
+#contentFrame{
+  display:block;
+  width:100%;
+  height:calc(100vh - 190px);
+  min-height:650px;
+  border:0;
+  background:#fff;
+}
+@media(max-width:700px){
+  .wrap{padding:8px}
+  .topbar{
+    align-items:stretch;
+    flex-direction:column;
+  }
+  .tabs{
+    grid-template-columns:1fr;
+  }
+  .logout{width:100%}
+  #contentFrame{
+    height:calc(100vh - 300px);
+    min-height:620px;
+  }
 }
 </style>
 </head>
@@ -124,7 +160,7 @@ button{
   <div class="brand">
     <small>WOORI APT PRESALE</small>
     <h1>분양사 관리자</h1>
-    <p>분양등록·수정, 충전금 사용내역, 조회현황을 관리합니다.</p>
+    <p>분양등록·수정 / 충전금 사용내역 / 조회현황</p>
   </div>
 
   <div id="loginArea" class="card">
@@ -146,30 +182,36 @@ button{
     </form>
 
     <div class="demo">
-      <strong>임시 관리자 로그인</strong>
+      <strong>임시 관리자 로그인</strong><br>
       아이디 : <b>presaleadmin</b><br>
       비밀번호 : <b>1234</b>
     </div>
   </div>
 
-  <div id="menuArea" class="card">
-    <h2>분양사 관리자 메뉴</h2>
+  <div id="adminArea">
+    <div class="topbar">
+      <div class="tabs">
+        <button type="button" class="tab active" data-src="/sale-admin.html">
+          분양등록·수정
+        </button>
+        <button type="button" class="tab" data-src="/charge-history.html">
+          충전금 사용내역
+        </button>
+        <button type="button" class="tab" data-src="/inquiry-status.html">
+          조회현황
+        </button>
+      </div>
 
-    <div class="menu">
-      <a href="/sale-admin.html">
-        분양등록·수정 <span>›</span>
-      </a>
-
-      <a href="/charge-history.html">
-        충전금 사용내역 <span>›</span>
-      </a>
-
-      <a href="/inquiry-status.html">
-        조회현황 <span>›</span>
-      </a>
+      <button type="button" id="logoutBtn" class="logout">로그아웃</button>
     </div>
 
-    <button type="button" id="logoutBtn" class="logout">로그아웃</button>
+    <div class="frame-wrap">
+      <iframe
+        id="contentFrame"
+        src="/sale-admin.html"
+        title="분양사 관리자 내용"
+      ></iframe>
+    </div>
   </div>
 
 </div>
@@ -179,29 +221,46 @@ button{
 "use strict";
 
 var loginArea=document.getElementById("loginArea");
-var menuArea=document.getElementById("menuArea");
+var adminArea=document.getElementById("adminArea");
 var form=document.getElementById("loginForm");
 var adminId=document.getElementById("adminId");
 var adminPw=document.getElementById("adminPw");
 var msg=document.getElementById("msg");
 var logoutBtn=document.getElementById("logoutBtn");
+var frame=document.getElementById("contentFrame");
+var tabs=Array.prototype.slice.call(document.querySelectorAll(".tab"));
 
 var TEMP_ID="presaleadmin";
 var TEMP_PW="1234";
 
-function showMenu(){
+function showAdmin(){
   loginArea.style.display="none";
-  menuArea.style.display="block";
+  adminArea.style.display="block";
 }
 
 function showLogin(){
-  menuArea.style.display="none";
+  adminArea.style.display="none";
   loginArea.style.display="block";
 }
 
+function openTab(btn){
+  tabs.forEach(function(x){
+    x.classList.remove("active");
+  });
+
+  btn.classList.add("active");
+  frame.src=btn.getAttribute("data-src");
+}
+
+tabs.forEach(function(btn){
+  btn.addEventListener("click",function(){
+    openTab(btn);
+  });
+});
+
 try{
   if(sessionStorage.getItem("presaleAdminLogin")==="1"){
-    showMenu();
+    showAdmin();
   }
 }catch(e){}
 
@@ -216,7 +275,10 @@ form.addEventListener("submit",function(e){
 
     msg.textContent="로그인되었습니다.";
     msg.classList.add("ok");
-    showMenu();
+    frame.src="/sale-admin.html";
+    tabs.forEach(function(x){x.classList.remove("active")});
+    tabs[0].classList.add("active");
+    showAdmin();
     return;
   }
 
