@@ -1,0 +1,1170 @@
+<style>
+#aptCatalog,
+#aptCatalog *{box-sizing:border-box}
+
+#aptCatalog.apt-catalog{
+  --navy:#071a2c;
+  --navy2:#102b42;
+  --gold:#c8a35f;
+  --ivory:#f6f2e9;
+  --text:#132238;
+  position:relative;
+  width:100%;
+  max-width:430px;
+  height:min(820px,100dvh);
+  min-height:620px;
+  margin:0 auto;
+  overflow:hidden;
+  background:#0b1d2d;
+  color:#fff;
+  font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR","Segoe UI",sans-serif;
+  box-shadow:0 18px 55px rgba(0,0,0,.22)
+}
+
+#aptCatalog .apt-track{
+  display:flex;
+  width:800%;
+  height:100%;
+  transition:transform .55s cubic-bezier(.22,.8,.28,1)
+}
+
+#aptCatalog .apt-page{
+  position:relative;
+  flex:0 0 12.5%;
+  width:12.5%;
+  height:100%;
+  overflow:hidden;
+  padding:34px 26px 90px;
+  background:#fff;
+  color:var(--text)
+}
+
+#aptCatalog .page-no{
+  position:absolute;
+  top:17px;
+  left:20px;
+  z-index:5;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:1.5px;
+  color:#fff
+}
+
+#aptCatalog .page-no.dark{color:var(--text)}
+
+#aptCatalog .shade{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  background:linear-gradient(180deg,rgba(2,14,27,.14),rgba(3,15,29,.3) 45%,rgba(2,12,24,.9))
+}
+
+#aptCatalog .cover{
+  background:
+    linear-gradient(180deg,rgba(4,20,36,.05),rgba(4,20,36,.15)),
+    url("https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1000&q=85")
+    center/cover no-repeat
+}
+
+#aptCatalog .cover-copy{
+  position:absolute;
+  z-index:2;
+  left:28px;
+  right:28px;
+  bottom:165px
+}
+
+#aptCatalog .eyebrow,
+#aptCatalog .section-title>span,
+#aptCatalog .premium-copy>span,
+#aptCatalog .unit-head>span,
+#aptCatalog .contact-copy>span{
+  display:block;
+  margin-bottom:12px;
+  color:var(--gold);
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:2px
+}
+
+#aptCatalog .cover h1,
+#aptCatalog .contact h2{
+  margin:0 0 14px;
+  font-family:Georgia,"Noto Serif KR",serif;
+  font-size:34px;
+  line-height:1.25;
+  font-weight:500
+}
+
+#aptCatalog .cover p,
+#aptCatalog .contact-copy p{
+  margin:0;
+  font-size:14px;
+  line-height:1.75;
+  color:rgba(255,255,255,.82)
+}
+
+#aptCatalog .cover-logo{
+  position:absolute;
+  z-index:2;
+  bottom:100px;
+  left:28px;
+  color:var(--gold);
+  font-family:Georgia,serif;
+  font-size:16px;
+  letter-spacing:2px
+}
+
+#aptCatalog .section-title{padding-top:24px}
+#aptCatalog .section-title.center{text-align:center}
+
+#aptCatalog .section-title h2{
+  margin:0 0 10px;
+  font-family:Georgia,"Noto Serif KR",serif;
+  font-size:27px;
+  line-height:1.35;
+  font-weight:500
+}
+
+#aptCatalog .section-title p{
+  margin:0;
+  color:#687485;
+  font-size:13px;
+  line-height:1.65
+}
+
+#aptCatalog .location-photo,
+#aptCatalog .complex-photo,
+#aptCatalog .premium-photo,
+#aptCatalog .modelhouse,
+#aptCatalog .floorplan,
+#aptCatalog .gallery>div{
+  position:relative;
+  overflow:hidden;
+  background:#d8dee2
+}
+
+#aptCatalog .location-photo{
+  height:38%;
+  margin:24px -26px 0;
+  background:url("https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=1000&q=85") center/cover
+}
+
+#aptCatalog .image-label{
+  position:absolute;
+  left:14px;
+  right:14px;
+  bottom:14px;
+  padding:10px 12px;
+  border:1px solid rgba(255,255,255,.45);
+  background:rgba(6,24,40,.48);
+  color:#fff;
+  font-size:11px;
+  backdrop-filter:blur(7px)
+}
+
+#aptCatalog .info-list{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:18px
+}
+
+#aptCatalog .info-list div,
+#aptCatalog .feature-grid div{
+  padding:12px;
+  border:1px solid #e5e8eb;
+  background:#fff
+}
+
+#aptCatalog .info-list b,
+#aptCatalog .feature-grid b{
+  display:block;
+  margin-bottom:5px;
+  font-size:12px
+}
+
+#aptCatalog .info-list span,
+#aptCatalog .feature-grid span{
+  color:#7a8490;
+  font-size:10px;
+  line-height:1.5
+}
+
+#aptCatalog .premium{
+  display:grid;
+  grid-template-columns:43% 57%;
+  padding:0 0 82px;
+  background:var(--navy);
+  color:#fff
+}
+
+#aptCatalog .premium-photo{
+  height:100%;
+  background:url("https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=800&q=85") center/cover
+}
+
+#aptCatalog .premium-copy{padding:68px 20px 20px}
+
+#aptCatalog .premium-copy h2{
+  margin:0 0 22px;
+  font-family:Georgia,"Noto Serif KR",serif;
+  font-size:25px;
+  line-height:1.35;
+  font-weight:500
+}
+
+#aptCatalog .premium-copy ul{list-style:none;margin:0;padding:0}
+
+#aptCatalog .premium-copy li{
+  position:relative;
+  padding:0 0 12px 18px;
+  margin-bottom:11px;
+  border-bottom:1px solid rgba(255,255,255,.13)
+}
+
+#aptCatalog .premium-copy li:before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:5px;
+  width:7px;
+  height:7px;
+  border:1px solid var(--gold);
+  transform:rotate(45deg)
+}
+
+#aptCatalog .premium-copy b{
+  display:block;
+  font-size:12px;
+  color:var(--gold)
+}
+
+#aptCatalog .premium-copy small{
+  display:block;
+  margin-top:3px;
+  color:#bdc7d1;
+  font-size:9px;
+  line-height:1.4
+}
+
+#aptCatalog .complex{background:var(--ivory)}
+
+#aptCatalog .complex-photo{
+  height:48%;
+  margin:22px -26px 0;
+  background:url("https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1000&q=85") center/cover
+}
+
+#aptCatalog .feature-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:14px
+}
+
+#aptCatalog .unit{
+  background:linear-gradient(150deg,#07192b,#102b44);
+  color:#fff
+}
+
+#aptCatalog .unit-head{padding-top:24px}
+
+#aptCatalog .unit-head h2{
+  margin:0;
+  color:var(--gold);
+  font-family:Georgia,serif;
+  font-size:35px;
+  font-weight:400
+}
+
+#aptCatalog .unit-head h2 small{font-size:13px}
+
+#aptCatalog .unit-head p{
+  margin:5px 0 0;
+  color:#c9d0d8;
+  font-size:11px
+}
+
+#aptCatalog .floorplan{
+  height:47%;
+  margin:20px 0 14px;
+  border:1px solid rgba(255,255,255,.18);
+  background:#edf0ed
+}
+
+#aptCatalog .unit-info{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  border-top:1px solid rgba(255,255,255,.18);
+  border-bottom:1px solid rgba(255,255,255,.18)
+}
+
+#aptCatalog .unit-info div{
+  padding:10px 4px;
+  text-align:center
+}
+
+#aptCatalog .unit-info b{
+  display:block;
+  color:#9eadba;
+  font-size:9px
+}
+
+#aptCatalog .unit-info span{
+  display:block;
+  margin-top:4px;
+  font-size:10px
+}
+
+#aptCatalog .unit-features{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:6px;
+  margin-top:14px
+}
+
+#aptCatalog .unit-features span{
+  padding:10px 4px;
+  border:1px solid rgba(200,163,95,.45);
+  color:var(--gold);
+  font-size:9px;
+  text-align:center
+}
+
+#aptCatalog .lifestyle{background:#f8f6f1}
+
+#aptCatalog .gallery{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-template-rows:1.35fr 1fr 1fr;
+  gap:7px;
+  height:68%;
+  margin-top:22px
+}
+
+#aptCatalog .gallery .wide{grid-column:1/3}
+
+#aptCatalog .gallery>div:nth-child(1){
+  background:url("https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=900&q=80") center/cover
+}
+
+#aptCatalog .gallery>div:nth-child(2){
+  background:url("https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=600&q=80") center/cover
+}
+
+#aptCatalog .gallery>div:nth-child(3){
+  background:url("https://images.unsplash.com/photo-1535131749006-b7f58c99034b?auto=format&fit=crop&w=600&q=80") center/cover
+}
+
+#aptCatalog .gallery>div:nth-child(4){
+  background:url("https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=600&q=80") center/cover
+}
+
+#aptCatalog .gallery>div:nth-child(5){
+  background:url("https://images.unsplash.com/photo-1560785496-3c9d27877182?auto=format&fit=crop&w=600&q=80") center/cover
+}
+
+#aptCatalog .gallery>div:nth-child(6){
+  background:url("https://images.unsplash.com/photo-1560185127-6ed189bf02f4?auto=format&fit=crop&w=600&q=80") center/cover
+}
+
+#aptCatalog .gallery span{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  padding:8px;
+  background:linear-gradient(transparent,rgba(0,0,0,.78));
+  color:#fff;
+  font-size:10px
+}
+
+#aptCatalog .contact{
+  background:
+    linear-gradient(180deg,rgba(4,18,34,.08),rgba(3,15,29,.42)),
+    url("https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1000&q=85")
+    center/cover;
+  color:#fff
+}
+
+#aptCatalog .contact-copy{
+  position:relative;
+  z-index:2;
+  padding-top:40px;
+  text-align:center
+}
+
+#aptCatalog .modelhouse{
+  z-index:2;
+  height:33%;
+  margin-top:28px;
+  border:1px solid rgba(255,255,255,.35);
+  background:rgba(255,255,255,.14)
+}
+
+#aptCatalog .contact-actions{
+  position:relative;
+  z-index:2;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+  margin-top:16px
+}
+
+#aptCatalog .contact-actions button,
+#aptCatalog .contact-actions a,
+#aptCatalog #rewardBtn{
+  min-height:47px;
+  border:1px solid var(--gold);
+  background:rgba(4,20,36,.7);
+  color:#fff;
+  font-size:11px;
+  text-decoration:none;
+  display:flex;
+  align-items:center;
+  justify-content:center
+}
+
+#aptCatalog #rewardBtn{
+  position:relative;
+  z-index:2;
+  width:100%;
+  margin-top:10px;
+  background:var(--gold);
+  color:#07192b;
+  font-weight:800
+}
+
+#aptCatalog #rewardBtn:disabled{opacity:.5}
+
+#aptCatalog .nav{
+  position:absolute;
+  z-index:15;
+  top:50%;
+  width:34px;
+  height:56px;
+  border:0;
+  background:rgba(3,16,28,.5);
+  color:#fff;
+  font-size:32px;
+  transform:translateY(-50%);
+  cursor:pointer
+}
+
+#aptCatalog .nav.prev{left:0}
+#aptCatalog .nav.next{right:0}
+
+#aptCatalog .catalog-bottom{
+  position:absolute;
+  z-index:20;
+  left:0;
+  right:0;
+  bottom:0;
+  min-height:70px;
+  padding:13px 18px;
+  background:linear-gradient(transparent,rgba(2,12,23,.94));
+  color:#fff
+}
+
+#aptCatalog .dots{
+  display:flex;
+  justify-content:center;
+  gap:7px
+}
+
+#aptCatalog .dots button{
+  width:7px;
+  height:7px;
+  padding:0;
+  border:1px solid rgba(255,255,255,.75);
+  border-radius:50%;
+  background:transparent
+}
+
+#aptCatalog .dots button.active{background:#fff}
+
+#aptCatalog .timer{
+  margin-top:10px;
+  text-align:center;
+  font-size:10px;
+  color:#cbd3da
+}
+
+#aptCatalog .timer b{color:var(--gold)}
+
+@media(max-width:380px){
+  #aptCatalog .apt-page{
+    padding-left:21px;
+    padding-right:21px
+  }
+
+  #aptCatalog .cover h1,
+  #aptCatalog .contact h2{
+    font-size:29px
+  }
+
+  #aptCatalog .section-title h2{
+    font-size:24px
+  }
+
+  #aptCatalog .premium-copy{
+    padding-left:16px;
+    padding-right:14px
+  }
+}
+</style>
+
+
+<div id="aptCatalog" class="apt-catalog">
+
+  <div class="apt-track">
+
+    <!-- PAGE 01 -->
+    <section class="apt-page cover">
+      <div class="shade"></div>
+      <div class="page-no">01 / 08</div>
+
+      <div class="cover-copy">
+        <span class="eyebrow">PREMIUM RESIDENCE</span>
+        <h1>단지명을 입력해 주세요</h1>
+        <p>일상이 작품이 되는 새로운 주거의 시작</p>
+      </div>
+
+      <div class="cover-logo">THE FIRST LIFE</div>
+    </section>
+
+
+    <!-- PAGE 02 -->
+    <section class="apt-page location">
+      <div class="page-no dark">02 / 08</div>
+
+      <div class="section-title">
+        <span>LOCATION</span>
+        <h2>모든 가치가 하나로 모이는<br>완벽한 입지</h2>
+        <p>교통·교육·생활·자연을 가까이 누리는 특별한 자리</p>
+      </div>
+
+      <div class="location-photo">
+        <div class="image-label">입지 항공사진 또는 지도</div>
+      </div>
+
+      <div class="info-list">
+        <div>
+          <b>교통환경</b>
+          <span>주요 도로와 대중교통 접근성</span>
+        </div>
+
+        <div>
+          <b>교육환경</b>
+          <span>학교와 교육시설을 가까이</span>
+        </div>
+
+        <div>
+          <b>생활환경</b>
+          <span>쇼핑·의료·문화시설 이용</span>
+        </div>
+
+        <div>
+          <b>자연환경</b>
+          <span>공원과 녹지의 쾌적한 생활</span>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- PAGE 03 -->
+    <section class="apt-page premium">
+      <div class="page-no">03 / 08</div>
+
+      <div class="premium-photo">
+        <div class="image-label">대표 실내 이미지</div>
+      </div>
+
+      <div class="premium-copy">
+        <span>PREMIUM</span>
+        <h2>삶의 품격을 높이는<br>프리미엄 6</h2>
+
+        <ul>
+          <li>
+            <b>원스톱 라이프</b>
+            <small>생활에 필요한 모든 것을 가깝게</small>
+          </li>
+          <li>
+            <b>브랜드 프리미엄</b>
+            <small>차별화된 주거 가치</small>
+          </li>
+          <li>
+            <b>혁신 설계</b>
+            <small>공간 활용을 높인 평면</small>
+          </li>
+          <li>
+            <b>특화 커뮤니티</b>
+            <small>입주민을 위한 다양한 시설</small>
+          </li>
+          <li>
+            <b>스마트 시스템</b>
+            <small>편리하고 안전한 생활</small>
+          </li>
+          <li>
+            <b>미래 가치</b>
+            <small>지역의 발전과 함께하는 입지</small>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+
+    <!-- PAGE 04 -->
+    <section class="apt-page complex">
+      <div class="page-no dark">04 / 08</div>
+
+      <div class="section-title center">
+        <span>COMPLEX</span>
+        <h2>자연과 건축이 어우러진<br>아름다운 단지</h2>
+      </div>
+
+      <div class="complex-photo">
+        <div class="image-label">단지 조감도</div>
+      </div>
+
+      <div class="feature-grid">
+        <div>
+          <b>쾌적한 조경</b>
+          <span>자연을 품은 단지</span>
+        </div>
+        <div>
+          <b>보행 중심</b>
+          <span>안전한 동선 설계</span>
+        </div>
+        <div>
+          <b>아이 중심</b>
+          <span>가족을 위한 공간</span>
+        </div>
+        <div>
+          <b>주민 편의</b>
+          <span>다양한 생활시설</span>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- PAGE 05 -->
+    <section class="apt-page unit">
+      <div class="page-no">05 / 08</div>
+
+      <div class="unit-head">
+        <span>UNIT PLAN 01</span>
+        <h2>84A <small>TYPE</small></h2>
+        <p>총 000세대</p>
+      </div>
+
+      <div class="floorplan">
+        <div class="image-label">84A 평면도 이미지</div>
+      </div>
+
+      <div class="unit-info">
+        <div>
+          <b>전용면적</b>
+          <span>84.98㎡</span>
+        </div>
+        <div>
+          <b>공급면적</b>
+          <span>112.45㎡</span>
+        </div>
+        <div>
+          <b>계약면적</b>
+          <span>168.72㎡</span>
+        </div>
+      </div>
+
+      <div class="unit-features">
+        <span>4Bay 판상형</span>
+        <span>알파룸 제공</span>
+        <span>넓은 수납공간</span>
+      </div>
+    </section>
+
+
+    <!-- PAGE 06 -->
+    <section class="apt-page unit">
+      <div class="page-no">06 / 08</div>
+
+      <div class="unit-head">
+        <span>UNIT PLAN 02</span>
+        <h2>84B <small>TYPE</small></h2>
+        <p>총 000세대</p>
+      </div>
+
+      <div class="floorplan">
+        <div class="image-label">84B 평면도 이미지</div>
+      </div>
+
+      <div class="unit-info">
+        <div>
+          <b>전용면적</b>
+          <span>84.97㎡</span>
+        </div>
+        <div>
+          <b>공급면적</b>
+          <span>113.12㎡</span>
+        </div>
+        <div>
+          <b>계약면적</b>
+          <span>169.45㎡</span>
+        </div>
+      </div>
+
+      <div class="unit-features">
+        <span>타워형 구조</span>
+        <span>독립형 주방</span>
+        <span>팬트리 제공</span>
+      </div>
+    </section>
+
+
+    <!-- PAGE 07 -->
+    <section class="apt-page lifestyle">
+      <div class="page-no dark">07 / 08</div>
+
+      <div class="section-title center">
+        <span>LIFESTYLE</span>
+        <h2>일상을 특별하게 만드는<br>다양한 커뮤니티</h2>
+      </div>
+
+      <div class="gallery">
+        <div class="wide"><span>클럽 라운지</span></div>
+        <div><span>피트니스</span></div>
+        <div><span>골프연습장</span></div>
+        <div><span>독서실</span></div>
+        <div><span>어린이집</span></div>
+        <div><span>게스트하우스</span></div>
+      </div>
+    </section>
+
+
+    <!-- PAGE 08 -->
+    <section class="apt-page contact">
+      <div class="shade"></div>
+      <div class="page-no">08 / 08</div>
+
+      <div class="contact-copy">
+        <span>CONTACT</span>
+        <h2>당신의 새로운 시작을<br>직접 만나보세요</h2>
+        <p>모델하우스 방문예약과 상담을 신청할 수 있습니다.</p>
+      </div>
+
+      <div class="modelhouse">
+        <div class="image-label">모델하우스 대표 이미지</div>
+      </div>
+
+      <div class="contact-actions">
+        <button type="button" id="visitBtn">
+          방문예약 신청
+        </button>
+
+        <a href="tel:0212345678">
+          상담전화 02-1234-5678
+        </a>
+      </div>
+
+      <button type="button" id="rewardBtn" disabled>
+        8페이지 확인 후 포인트 받기
+      </button>
+    </section>
+
+  </div>
+
+
+  <button type="button" class="nav prev" aria-label="이전 페이지">
+    ‹
+  </button>
+
+  <button type="button" class="nav next" aria-label="다음 페이지">
+    ›
+  </button>
+
+
+  <div class="catalog-bottom">
+
+    <div class="dots"></div>
+
+    <div class="timer">
+      유효조회 <b id="viewTime">00:00</b>
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+(function(){
+
+  function initAptCatalog(){
+
+    var root=document.getElementById("aptCatalog");
+    if(!root)return;
+
+    var track=root.querySelector(".apt-track");
+    var pages=Array.prototype.slice.call(
+      root.querySelectorAll(".apt-page")
+    );
+
+    var prevBtn=root.querySelector(".prev");
+    var nextBtn=root.querySelector(".next");
+    var dotsBox=root.querySelector(".dots");
+    var viewTime=root.querySelector("#viewTime");
+    var rewardBtn=root.querySelector("#rewardBtn");
+    var visitBtn=root.querySelector("#visitBtn");
+
+    if(
+      !track ||
+      !pages.length ||
+      !prevBtn ||
+      !nextBtn ||
+      !dotsBox ||
+      !viewTime ||
+      !rewardBtn ||
+      !visitBtn
+    ){
+      return;
+    }
+
+    var current=0;
+    var startX=0;
+    var moveX=0;
+    var activeSeconds=0;
+    var lastActivity=Date.now();
+
+    var viewed={0:true};
+
+    var requiredSeconds=60;
+    var idleLimit=10000;
+
+
+    /* 페이지 점 생성 */
+
+    dotsBox.innerHTML="";
+
+    pages.forEach(function(_,index){
+
+      var dot=document.createElement("button");
+
+      dot.type="button";
+
+      dot.setAttribute(
+        "aria-label",
+        (index+1)+"페이지"
+      );
+
+      dot.addEventListener(
+        "click",
+        function(){
+          goTo(index);
+        }
+      );
+
+      dotsBox.appendChild(dot);
+
+    });
+
+    var dots=Array.prototype.slice.call(
+      dotsBox.children
+    );
+
+
+    /* 화면 업데이트 */
+
+    function update(){
+
+      track.style.transform=
+        "translateX(-"+(current*12.5)+"%)";
+
+      dots.forEach(function(dot,index){
+
+        if(index===current){
+          dot.classList.add("active");
+        }else{
+          dot.classList.remove("active");
+        }
+
+      });
+
+      prevBtn.style.display=
+        current===0
+        ?"none"
+        :"block";
+
+      nextBtn.style.display=
+        current===pages.length-1
+        ?"none"
+        :"block";
+
+      viewed[current]=true;
+
+      checkReward();
+    }
+
+
+    /* 페이지 이동 */
+
+    function goTo(index){
+
+      current=Math.max(
+        0,
+        Math.min(
+          index,
+          pages.length-1
+        )
+      );
+
+      markActivity();
+
+      update();
+    }
+
+
+    /* 활동 갱신 */
+
+    function markActivity(){
+      lastActivity=Date.now();
+    }
+
+
+    /* 시간 표시 */
+
+    function formatTime(seconds){
+
+      var min=String(
+        Math.floor(seconds/60)
+      ).padStart(2,"0");
+
+      var sec=String(
+        seconds%60
+      ).padStart(2,"0");
+
+      return min+":"+sec;
+    }
+
+
+    /* 8페이지 + 60초 조건 */
+
+    function checkReward(){
+
+      var viewedCount=
+        Object.keys(viewed).length;
+
+      var allViewed=
+        viewedCount===pages.length;
+
+      var enoughTime=
+        activeSeconds>=requiredSeconds;
+
+      rewardBtn.disabled=
+        !(allViewed && enoughTime);
+
+      if(rewardBtn.disabled){
+
+        var remain=Math.max(
+          0,
+          requiredSeconds-activeSeconds
+        );
+
+        rewardBtn.textContent=
+          "8페이지 확인 · "+
+          remain+
+          "초 후 전자쿠폰 받기";
+
+      }else{
+
+        rewardBtn.textContent=
+          "전자쿠폰 받기";
+
+      }
+    }
+
+
+    /* 이전 */
+
+    prevBtn.addEventListener(
+      "click",
+      function(){
+        goTo(current-1);
+      }
+    );
+
+
+    /* 다음 */
+
+    nextBtn.addEventListener(
+      "click",
+      function(){
+        goTo(current+1);
+      }
+    );
+
+
+    /* 모바일 스와이프 */
+
+    root.addEventListener(
+      "touchstart",
+      function(event){
+
+        if(!event.touches.length)return;
+
+        startX=
+          event.touches[0].clientX;
+
+        moveX=startX;
+
+        markActivity();
+
+      },
+      {passive:true}
+    );
+
+
+    root.addEventListener(
+      "touchmove",
+      function(event){
+
+        if(!event.touches.length)return;
+
+        moveX=
+          event.touches[0].clientX;
+
+        markActivity();
+
+      },
+      {passive:true}
+    );
+
+
+    root.addEventListener(
+      "touchend",
+      function(){
+
+        var distance=
+          moveX-startX;
+
+        if(Math.abs(distance)>45){
+
+          if(distance<0){
+            goTo(current+1);
+          }else{
+            goTo(current-1);
+          }
+
+        }
+
+      }
+    );
+
+
+    /* 사용자 활동 감지 */
+
+    [
+      "click",
+      "mousemove",
+      "keydown",
+      "scroll",
+      "touchstart"
+    ].forEach(function(eventName){
+
+      root.addEventListener(
+        eventName,
+        markActivity,
+        {passive:true}
+      );
+
+    });
+
+
+    /* 활성 이용시간 */
+
+    setInterval(function(){
+
+      var isVisible=
+        document.visibilityState==="visible";
+
+      var isActive=
+        Date.now()-lastActivity
+        <=idleLimit;
+
+      if(isVisible && isActive){
+
+        activeSeconds+=1;
+
+        viewTime.textContent=
+          formatTime(activeSeconds);
+
+        checkReward();
+      }
+
+    },1000);
+
+
+    /* 화면 복귀 */
+
+    document.addEventListener(
+      "visibilitychange",
+      markActivity
+    );
+
+
+    /* 방문예약 */
+
+    visitBtn.addEventListener(
+      "click",
+      function(){
+
+        alert(
+          "방문예약 기능은 분양사 관리자와 연결할 예정입니다."
+        );
+
+      }
+    );
+
+
+    /* 전자쿠폰 이동 */
+
+    rewardBtn.addEventListener(
+      "click",
+      function(){
+
+        if(rewardBtn.disabled){
+          return;
+        }
+
+        rewardBtn.disabled=true;
+
+        rewardBtn.textContent=
+          "전자쿠폰 이동 중...";
+
+        window.location.href=
+          "https://presale-platform.vercel.app/electronic-coupon.html";
+
+      }
+    );
+
+
+    update();
+  }
+
+
+  if(document.readyState==="loading"){
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      initAptCatalog
+    );
+
+  }else{
+
+    initAptCatalog();
+
+  }
+
+})();
+</script>
