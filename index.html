@@ -1,29 +1,268 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#1165d7">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#1165d7">
 
-  <title>우리아파트 분양 플랫폼</title>
+<title>우리아파트 분양 플랫폼</title>
 
-  <meta
-    name="description"
-    content="우리아파트 분양 플랫폼"
-  >
+<style>
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  width:100%;
+  min-height:100%;
+}
+
+body{
+  background:#f4f6f8;
+  color:#172b3d;
+  font-family:-apple-system,BlinkMacSystemFont,
+  "Segoe UI","Noto Sans KR",Arial,sans-serif;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+.wrap{
+  width:100%;
+  max-width:720px;
+  margin:0 auto;
+  padding:0 14px 50px;
+}
+
+/* 상단 */
+.header{
+  min-height:76px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.brand{
+  font-size:21px;
+  font-weight:900;
+  color:#1165d7;
+}
+
+.admin{
+  font-size:13px;
+  color:#64748b;
+}
+
+/* 메인 안내 */
+.hero{
+  background:#1165d7;
+  color:#fff;
+  border-radius:18px;
+  padding:27px 22px;
+  margin-bottom:18px;
+}
+
+.hero h1{
+  margin:0 0 10px;
+  font-size:25px;
+  line-height:1.35;
+}
+
+.hero p{
+  margin:0;
+  font-size:15px;
+  line-height:1.7;
+  opacity:.95;
+}
+
+/* 메뉴 */
+.section-title{
+  margin:25px 2px 12px;
+  font-size:18px;
+  font-weight:900;
+}
+
+.menu-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.card{
+  background:#fff;
+  border:1px solid #e3e8ee;
+  border-radius:15px;
+  padding:19px 16px;
+  min-height:120px;
+  box-shadow:0 3px 12px rgba(0,0,0,.04);
+  transition:.15s;
+}
+
+.card:active{
+  transform:scale(.98);
+}
+
+.icon{
+  font-size:25px;
+  margin-bottom:11px;
+}
+
+.card strong{
+  display:block;
+  font-size:16px;
+  margin-bottom:6px;
+}
+
+.card span{
+  display:block;
+  color:#64748b;
+  font-size:13px;
+  line-height:1.5;
+}
+
+/* 전체폭 메뉴 */
+.full{
+  grid-column:1 / -1;
+}
+
+/* 하단 */
+.footer{
+  text-align:center;
+  margin-top:32px;
+  color:#8a97a6;
+  font-size:12px;
+  line-height:1.7;
+}
+
+@media(max-width:420px){
+  .hero h1{
+    font-size:22px;
+  }
+
+  .card{
+    padding:17px 13px;
+  }
+}
+</style>
 </head>
 
 <body>
 
-  <main>
-    <h1>우리아파트 분양 플랫폼</h1>
+<div class="wrap">
 
-    <nav>
-      <a href="/catalog-timer.html">
-        분양 카탈로그
-      </a>
-    </nav>
-  </main>
+  <header class="header">
+    <div class="brand">우리아파트 분양 플랫폼</div>
+    <div class="admin">분양사</div>
+  </header>
+
+
+  <section class="hero">
+    <h1>분양 현장을<br>한 곳에서 관리하세요.</h1>
+
+    <p>
+      분양 카탈로그부터 전자쿠폰,
+      충전금 및 운영 현황까지
+      통합 관리할 수 있습니다.
+    </p>
+  </section>
+
+
+  <div class="section-title">
+    분양사 메뉴
+  </div>
+
+
+  <div class="menu-grid">
+
+    <!-- 분양 카탈로그 -->
+    <a class="card"
+       href="/catalog-timer.html">
+
+      <div class="icon">🏢</div>
+
+      <strong>분양 카탈로그</strong>
+
+      <span>
+        분양 현장 및 카탈로그를
+        확인합니다.
+      </span>
+
+    </a>
+
+
+    <!-- 전자쿠폰 -->
+    <a class="card"
+       href="/coupon.html">
+
+      <div class="icon">🎫</div>
+
+      <strong>전자쿠폰</strong>
+
+      <span>
+        고객 전자쿠폰 발행 및
+        사용현황을 관리합니다.
+      </span>
+
+    </a>
+
+
+    <!-- 충전금 -->
+    <a class="card"
+       href="/charge.html">
+
+      <div class="icon">💳</div>
+
+      <strong>충전금 관리</strong>
+
+      <span>
+        분양 현장별 충전금
+        등록 및 현황을 확인합니다.
+      </span>
+
+    </a>
+
+
+    <!-- 포인트 정산 -->
+    <a class="card"
+       href="/point-settlement.html">
+
+      <div class="icon">📊</div>
+
+      <strong>포인트 정산관리</strong>
+
+      <span>
+        마트 포인트 사용 및
+        정산내역을 관리합니다.
+      </span>
+
+    </a>
+
+
+    <!-- 시스템 설정 -->
+    <a class="card full"
+       href="/settings.html">
+
+      <div class="icon">⚙️</div>
+
+      <strong>시스템 설정</strong>
+
+      <span>
+        분양 현장 및 플랫폼 운영 설정을
+        관리합니다.
+      </span>
+
+    </a>
+
+  </div>
+
+
+  <div class="footer">
+    우리아파트 분양 플랫폼<br>
+    분양사 통합 관리 시스템
+  </div>
+
+</div>
 
 </body>
 </html>
