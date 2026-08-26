@@ -282,6 +282,22 @@
     font-size:23px;
   }
 }
+
+#saleMain .area-empty{
+  display:none;
+  margin:14px 0 18px;
+  padding:28px 16px;
+  border:1px solid #dfe5ea;
+  border-radius:14px;
+  background:#fff;
+  color:#71808d;
+  font-size:14px;
+  font-weight:700;
+  text-align:center;
+  line-height:1.6;
+  word-break:keep-all;
+}
+
 </style>
 
 
@@ -523,6 +539,10 @@ button,input,select,textarea{
 
   </section>
 
+  <div id="areaEmpty" class="area-empty">
+    현재 선택한 지역에 등록된 분양단지가 없습니다.
+  </div>
+
   <section class="guide-box">
     <h3>이용 방법</h3>
 
@@ -572,6 +592,8 @@ button,input,select,textarea{
 
           target.classList.add("active");
 
+          var visibleCount = 0;
+
           for (var j = 0; j < cards.length; j++) {
 
             var cardArea =
@@ -579,8 +601,22 @@ button,input,select,textarea{
 
             if (area === "all" || cardArea === area) {
               cards[j].style.display = "block";
+              visibleCount++;
             } else {
               cards[j].style.display = "none";
+            }
+          }
+
+          var emptyBox = root.querySelector("#areaEmpty");
+
+          if (emptyBox) {
+            if (visibleCount === 0) {
+              var label = target.textContent.trim();
+              emptyBox.textContent =
+                "현재 " + label + "에 등록된 분양단지가 없습니다.";
+              emptyBox.style.display = "block";
+            } else {
+              emptyBox.style.display = "none";
             }
           }
 
