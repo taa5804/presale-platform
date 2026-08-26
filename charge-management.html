@@ -1,356 +1,442 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#12394d">
+<title>충전금 관리 | 우리아파트 분양</title>
 <style>
-#chargeAdmin{
-  font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",Arial,sans-serif;
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;min-height:100%}
+body{
   background:#f5f7f9;
   color:#172b3d;
-  padding:18px;
+  font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR","Segoe UI",Arial,sans-serif;
+  overflow-x:hidden;
 }
-
-#chargeAdmin *{
-  box-sizing:border-box;
+#chargeApp{
+  width:100%;
+  max-width:1200px;
+  margin:0 auto;
+  padding:clamp(10px,2.4vw,18px);
 }
-
-#chargeAdmin .admin-head{
-  margin-bottom:16px;
-}
-
-#chargeAdmin h2{
+#chargeApp .head{margin-bottom:16px}
+#chargeApp .head h2{
   margin:0 0 5px;
-  font-size:24px;
+  font-size:clamp(21px,3vw,24px);
 }
-
-#chargeAdmin .admin-head p{
+#chargeApp .head p{
   margin:0;
-  font-size:13px;
   color:#71808d;
+  font-size:13px;
+  line-height:1.5;
 }
-
-#chargeAdmin .summary{
+#chargeApp .summary{
   display:grid;
-  grid-template-columns:repeat(4,1fr);
+  grid-template-columns:repeat(3,minmax(0,1fr));
   gap:10px;
   margin-bottom:14px;
 }
-
-#chargeAdmin .summary-box{
-  background:#fff;
-  border:1px solid #dfe5ea;
-  border-radius:10px;
+#chargeApp .summary-box{
+  min-width:0;
   padding:15px;
-}
-
-#chargeAdmin .summary-box span{
-  display:block;
-  font-size:12px;
-  color:#71808d;
-  margin-bottom:7px;
-}
-
-#chargeAdmin .summary-box strong{
-  font-size:21px;
-}
-
-#chargeAdmin .search-box{
-  background:#fff;
   border:1px solid #dfe5ea;
   border-radius:10px;
-  overflow:hidden;
+  background:#fff;
 }
-
-#chargeAdmin .search-title{
+#chargeApp .summary-box span{
+  display:block;
+  margin-bottom:7px;
+  color:#71808d;
+  font-size:12px;
+}
+#chargeApp .summary-box strong{
+  display:block;
+  font-size:clamp(18px,2.5vw,21px);
+  overflow-wrap:anywhere;
+}
+#chargeApp .panel{
+  margin-bottom:14px;
+  overflow:hidden;
+  border:1px solid #dfe5ea;
+  border-radius:10px;
+  background:#fff;
+}
+#chargeApp .panel-title{
   padding:14px 15px;
+  border-bottom:1px solid #e4e9ed;
   font-size:16px;
   font-weight:800;
-  border-bottom:1px solid #e4e9ed;
 }
-
-#chargeAdmin .filters{
+#chargeApp .form{
   display:grid;
-  grid-template-columns:1.3fr 1fr 1.5fr auto;
-  gap:7px;
+  grid-template-columns:1fr 1.2fr 1.4fr 1fr 1fr;
+  gap:9px;
   padding:12px;
 }
-
-#chargeAdmin input,
-#chargeAdmin select,
-#chargeAdmin button{
-  height:38px;
+#chargeApp .field{min-width:0}
+#chargeApp label{
+  display:block;
+  margin-bottom:6px;
+  color:#5e6f7c;
+  font-size:12px;
+  font-weight:700;
+}
+#chargeApp input,
+#chargeApp textarea,
+#chargeApp button{
+  width:100%;
+  min-width:0;
   border:1px solid #cad4dc;
   border-radius:6px;
-  padding:0 9px;
-  font-size:12px;
   background:#fff;
+  font:inherit;
+  font-size:13px;
 }
-
-#chargeAdmin button{
+#chargeApp input{
+  height:42px;
+  padding:0 10px;
+}
+#chargeApp textarea{
+  min-height:80px;
+  padding:10px;
+  resize:vertical;
+}
+#chargeApp .memo-field{
+  grid-column:1 / -1;
+}
+#chargeApp .actions{
+  grid-column:1 / -1;
+  display:flex;
+  gap:8px;
+  justify-content:flex-end;
+}
+#chargeApp button{
+  width:auto;
+  min-height:42px;
+  padding:0 18px;
+  border:0;
   background:#12394d;
   color:#fff;
-  border:0;
-  font-weight:700;
+  font-weight:800;
   cursor:pointer;
-  padding:0 14px;
 }
-
-#chargeAdmin .table-tools{
+#chargeApp button.secondary{
+  background:#e9eef2;
+  color:#314555;
+}
+#chargeApp .filters{
+  display:grid;
+  grid-template-columns:1fr 1fr 1.6fr auto;
+  gap:8px;
+  padding:12px;
+}
+#chargeApp .table-tools{
   padding:10px 12px;
   border-top:1px solid #e5eaee;
 }
-
-#chargeAdmin .table-wrap{
-  overflow:auto;
-}
-
-#chargeAdmin table{
+#chargeApp .table-wrap{
   width:100%;
-  min-width:1000px;
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+}
+#chargeApp table{
+  width:100%;
+  min-width:980px;
   border-collapse:collapse;
 }
-
-#chargeAdmin th{
+#chargeApp th{
+  padding:11px 7px;
+  border-bottom:1px solid #dfe5ea;
   background:#f6f8fa;
   color:#536575;
   font-size:12px;
-  padding:11px 7px;
-  border-bottom:1px solid #dfe5ea;
+  white-space:nowrap;
 }
-
-#chargeAdmin td{
-  font-size:12px;
+#chargeApp td{
   padding:12px 7px;
-  text-align:center;
   border-bottom:1px solid #edf0f2;
-}
-
-#chargeAdmin #empty{
+  font-size:12px;
   text-align:center;
-  padding:55px 10px;
-  color:#8b98a3;
+  white-space:nowrap;
 }
-
-@media(max-width:750px){
-  #chargeAdmin{
-    padding:10px;
-  }
-
-  #chargeAdmin .summary{
-    grid-template-columns:1fr 1fr;
-  }
-
-  #chargeAdmin .filters{
-    grid-template-columns:1fr 1fr;
-  }
-
-  #chargeAdmin h2{
-    font-size:21px;
-  }
+#chargeApp .amount{
+  color:#0a7659;
+  font-weight:800;
+}
+#chargeApp #empty{
+  padding:50px 10px;
+  color:#8b98a3;
+  text-align:center;
+  font-size:13px;
+}
+@media(max-width:900px){
+  #chargeApp .summary{grid-template-columns:repeat(3,minmax(0,1fr))}
+  #chargeApp .form{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #chargeApp .filters{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #chargeApp .filters button{width:100%}
+}
+@media(max-width:560px){
+  #chargeApp{padding:10px}
+  #chargeApp .summary{grid-template-columns:1fr}
+  #chargeApp .form,
+  #chargeApp .filters{grid-template-columns:1fr}
+  #chargeApp .memo-field,
+  #chargeApp .actions{grid-column:auto}
+  #chargeApp .actions{display:grid;grid-template-columns:1fr 1fr}
+  #chargeApp button{width:100%;min-height:44px}
 }
 </style>
+</head>
+<body>
 
-<div id="chargeAdmin">
+<div id="chargeApp">
 
-  <div class="admin-head">
+  <div class="head">
     <h2>충전금 관리</h2>
-    <p>전국 분양사의 충전금 충전·사용·잔액 현황을 통합 관리합니다.</p>
+    <p>분양현장별 충전금 등록 및 충전내역을 관리합니다.</p>
   </div>
 
   <div class="summary">
     <div class="summary-box">
+      <span>등록 현장</span>
+      <strong id="s1">0곳</strong>
+    </div>
+    <div class="summary-box">
       <span>총 충전금</span>
-      <strong id="c1">0원</strong>
+      <strong id="s2">0원</strong>
     </div>
-
     <div class="summary-box">
-      <span>총 사용금액</span>
-      <strong id="c2">0원</strong>
-    </div>
-
-    <div class="summary-box">
-      <span>총 잔액</span>
-      <strong id="c3">0원</strong>
-    </div>
-
-    <div class="summary-box">
-      <span>등록 분양사</span>
-      <strong id="c4">0곳</strong>
+      <span>등록 건수</span>
+      <strong id="s3">0건</strong>
     </div>
   </div>
 
-  <div class="search-box">
+  <section class="panel">
+    <div class="panel-title">충전금 등록</div>
 
-    <div class="search-title">분양사 충전금 조회</div>
+    <div class="form">
+      <div class="field">
+        <label for="siteCode">분양현장코드</label>
+        <input id="siteCode" type="text" placeholder="예: APT001">
+      </div>
+
+      <div class="field">
+        <label for="company">분양사명</label>
+        <input id="company" type="text" placeholder="분양사명">
+      </div>
+
+      <div class="field">
+        <label for="siteName">현장명</label>
+        <input id="siteName" type="text" placeholder="현장명">
+      </div>
+
+      <div class="field">
+        <label for="amount">금액</label>
+        <input id="amount" type="number" min="0" step="1000" placeholder="0">
+      </div>
+
+      <div class="field">
+        <label for="chargeDate">일자</label>
+        <input id="chargeDate" type="date">
+      </div>
+
+      <div class="field memo-field">
+        <label for="memo">메모</label>
+        <textarea id="memo" placeholder="메모를 입력하세요."></textarea>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="secondary" id="copyBtn">내용 복사</button>
+        <button type="button" id="saveBtn">충전금 등록</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-title">충전금 등록내역</div>
 
     <div class="filters">
-
-      <select id="rg">
-        <option value="">전체 지역</option>
-        <option>서울특별시</option>
-        <option>부산광역시</option>
-        <option>대구광역시</option>
-        <option>인천광역시</option>
-        <option>대전광역시</option>
-        <option>울산광역시</option>
-        <option>세종특별자치시</option>
-        <option>경기도</option>
-        <option>강원특별자치도</option>
-        <option>충청북도</option>
-        <option>충청남도</option>
-        <option>전북특별자치도</option>
-        <option>전남광주통합특별시</option>
-        <option>경상북도</option>
-        <option>경상남도</option>
-        <option>제주특별자치도</option>
-      </select>
-
-      <select id="st">
-        <option value="">전체 상태</option>
-        <option>정상</option>
-        <option>잔액부족</option>
-        <option>사용중지</option>
-      </select>
-
-      <input
-        type="text"
-        id="kw"
-        placeholder="분양사·아파트명 검색"
-      >
-
-      <button type="button" id="searchBtn">
-        조회
-      </button>
-
+      <input type="date" id="sd">
+      <input type="date" id="ed">
+      <input type="text" id="kw" placeholder="현장코드·분양사·현장명 검색">
+      <button type="button" id="searchBtn">조회</button>
     </div>
 
     <div class="table-tools">
-      <span>
-        총 <strong id="cnt">0</strong>개 분양사
-      </span>
+      총 <strong id="cnt">0</strong>건
     </div>
 
     <div class="table-wrap">
-
       <table>
         <thead>
           <tr>
-            <th>지역</th>
-            <th>분양사</th>
-            <th>아파트</th>
-            <th>총 충전금</th>
-            <th>사용금액</th>
-            <th>현재잔액</th>
-            <th>상태</th>
-            <th>최근 충전일</th>
-            <th>관리</th>
+            <th>일자</th>
+            <th>분양현장코드</th>
+            <th>분양사명</th>
+            <th>현장명</th>
+            <th>충전금액</th>
+            <th>메모</th>
           </tr>
         </thead>
-
         <tbody id="rows"></tbody>
       </table>
 
-      <div id="empty">
-        등록된 분양사 충전금 내역이 없습니다.
-      </div>
-
+      <div id="empty">등록된 충전금 내역이 없습니다.</div>
     </div>
-
-  </div>
+  </section>
 
 </div>
 
 <script>
 (function(){
+"use strict";
 
-  var root=document.getElementById("chargeAdmin");
-  if(!root)return;
+var root=document.getElementById("chargeApp");
+if(!root)return;
 
-  var D=[];
+var D=[];
 
-  function el(id){
-    return root.querySelector("#"+id);
-  }
+function el(id){return root.querySelector("#"+id)}
+function n(v){return Number(v||0).toLocaleString("ko-KR")}
 
-  function n(v){
-    return Number(v||0).toLocaleString("ko-KR");
-  }
+function render(A){
+  var rows=el("rows");
+  rows.innerHTML="";
 
-  function show(A){
-    var charged=0;
-    var used=0;
-    var balance=0;
+  el("cnt").textContent=A.length;
+  el("empty").style.display=A.length?"none":"block";
 
-    el("rows").innerHTML="";
-    el("cnt").textContent=A.length;
-    el("empty").style.display=A.length ? "none" : "block";
+  var sites={};
+  var total=0;
 
-    A.forEach(function(x){
-      charged+=Number(x.charged||0);
-      used+=Number(x.used||0);
-      balance+=Number(x.balance||0);
-
-      var tr=document.createElement("tr");
-
-      tr.innerHTML=
-        "<td>"+(x.region||"-")+"</td>"+
-        "<td>"+(x.company||"-")+"</td>"+
-        "<td>"+(x.apt||"-")+"</td>"+
-        "<td>"+n(x.charged)+"원</td>"+
-        "<td>"+n(x.used)+"원</td>"+
-        "<td>"+n(x.balance)+"원</td>"+
-        "<td>"+(x.status||"정상")+"</td>"+
-        "<td>"+(x.lastCharge||"-")+"</td>"+
-        "<td>"+
-          "<button type='button' class='manageBtn' data-id='"+x.id+"'>"+
-            "관리"+
-          "</button>"+
-        "</td>";
-
-      el("rows").appendChild(tr);
-    });
-
-    el("c1").textContent=n(charged)+"원";
-    el("c2").textContent=n(used)+"원";
-    el("c3").textContent=n(balance)+"원";
-    el("c4").textContent=A.length+"곳";
-  }
-
-  function search(){
-    var r=el("rg").value;
-    var s=el("st").value;
-    var q=el("kw").value.trim().toLowerCase();
-
-    var result=D.filter(function(x){
-
-      if(r && x.region!==r){
-        return false;
-      }
-
-      if(s && x.status!==s){
-        return false;
-      }
-
-      var text=(
-        (x.company||"")+" "+
-        (x.apt||"")
-      ).toLowerCase();
-
-      if(q && !text.includes(q)){
-        return false;
-      }
-
-      return true;
-    });
-
-    show(result);
-  }
-
-  el("searchBtn").addEventListener("click",search);
-
-  el("kw").addEventListener("keydown",function(e){
-    if(e.key==="Enter"){
-      search();
-    }
+  D.forEach(function(x){
+    if(x.siteCode)sites[x.siteCode]=true;
+    total+=Number(x.amount||0);
   });
 
-  show(D);
+  el("s1").textContent=Object.keys(sites).length+"곳";
+  el("s2").textContent=n(total)+"원";
+  el("s3").textContent=D.length+"건";
+
+  A.forEach(function(x){
+    var tr=document.createElement("tr");
+    tr.innerHTML=
+      "<td>"+(x.date||"-")+"</td>"+
+      "<td>"+(x.siteCode||"-")+"</td>"+
+      "<td>"+(x.company||"-")+"</td>"+
+      "<td>"+(x.siteName||"-")+"</td>"+
+      "<td class='amount'>"+n(x.amount)+"원</td>"+
+      "<td>"+(x.memo||"-")+"</td>";
+    rows.appendChild(tr);
+  });
+}
+
+function save(){
+  var data={
+    siteCode:el("siteCode").value.trim(),
+    company:el("company").value.trim(),
+    siteName:el("siteName").value.trim(),
+    amount:Number(el("amount").value||0),
+    date:el("chargeDate").value,
+    memo:el("memo").value.trim()
+  };
+
+  if(!data.siteCode){
+    alert("분양현장코드를 입력해 주세요.");
+    el("siteCode").focus();
+    return;
+  }
+  if(!data.company){
+    alert("분양사명을 입력해 주세요.");
+    el("company").focus();
+    return;
+  }
+  if(!data.siteName){
+    alert("현장명을 입력해 주세요.");
+    el("siteName").focus();
+    return;
+  }
+  if(!data.amount){
+    alert("충전금액을 입력해 주세요.");
+    el("amount").focus();
+    return;
+  }
+  if(!data.date){
+    alert("일자를 선택해 주세요.");
+    el("chargeDate").focus();
+    return;
+  }
+
+  D.unshift(data);
+  render(D);
+  alert("충전금이 등록되었습니다.");
+
+  el("amount").value="";
+  el("memo").value="";
+}
+
+function search(){
+  var sd=el("sd").value;
+  var ed=el("ed").value;
+  var kw=el("kw").value.trim().toLowerCase();
+
+  var A=D.filter(function(x){
+    if(sd && x.date<sd)return false;
+    if(ed && x.date>ed)return false;
+
+    var text=(
+      (x.siteCode||"")+" "+
+      (x.company||"")+" "+
+      (x.siteName||"")
+    ).toLowerCase();
+
+    if(kw && !text.includes(kw))return false;
+    return true;
+  });
+
+  render(A);
+}
+
+function copyCurrent(){
+  var text=[
+    "분양현장코드: "+el("siteCode").value,
+    "분양사명: "+el("company").value,
+    "현장명: "+el("siteName").value,
+    "금액: "+el("amount").value,
+    "일자: "+el("chargeDate").value,
+    "메모: "+el("memo").value
+  ].join("\n");
+
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){
+      alert("입력 내용이 복사되었습니다.");
+    });
+  }else{
+    alert("이 브라우저에서는 자동 복사가 지원되지 않습니다.");
+  }
+}
+
+el("saveBtn").onclick=save;
+el("searchBtn").onclick=search;
+el("copyBtn").onclick=copyCurrent;
+
+el("kw").addEventListener("keydown",function(e){
+  if(e.key==="Enter")search();
+});
+
+var today=new Date();
+var iso=today.toISOString().slice(0,10);
+el("chargeDate").value=iso;
+el("ed").value=iso;
+
+today.setDate(1);
+el("sd").value=today.toISOString().slice(0,10);
+
+render(D);
 
 })();
 </script>
+
+</body>
+</html>
