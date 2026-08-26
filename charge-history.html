@@ -1,238 +1,470 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#12394d">
+<title>충전금 사용내역 | 우리아파트 분양</title>
+
 <style>
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;min-height:100%}
+
+body{
+  background:#f5f7f9;
+  color:#172b3d;
+  font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR","Segoe UI",Arial,sans-serif;
+  overflow-x:hidden;
+}
+
 #chargeHistoryApp{
   width:100%;
-  background:#f5f7f9;
-  padding:24px;
-  box-sizing:border-box;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",
-              Roboto,"Noto Sans KR",Arial,sans-serif;
-  color:#17212b;
-}
-
-#chargeHistoryApp *{
-  box-sizing:border-box;
-}
-
-#chargeHistoryApp .wrap{
-  max-width:1100px;
+  max-width:1200px;
   margin:0 auto;
+  padding:clamp(10px,2.4vw,18px);
 }
 
-#chargeHistoryApp .hero{
-  background:#123248;
-  border-radius:18px;
-  padding:28px 30px;
-  color:#fff;
-  margin-bottom:18px;
-  box-shadow:0 8px 24px rgba(0,0,0,.08);
+#chargeHistoryApp .head{
+  margin-bottom:16px;
 }
 
-#chargeHistoryApp .hero small{
-  display:block;
-  color:#d3a34a;
-  font-size:12px;
-  font-weight:800;
-  letter-spacing:1.2px;
-  margin-bottom:7px;
+#chargeHistoryApp .head h2{
+  margin:0 0 5px;
+  font-size:clamp(21px,3vw,24px);
 }
 
-#chargeHistoryApp .hero h2{
-  margin:0 0 7px;
-  font-size:28px;
-  font-weight:800;
-}
-
-#chargeHistoryApp .hero p{
+#chargeHistoryApp .head p{
   margin:0;
-  color:#d7e1e7;
-  font-size:14px;
+  color:#71808d;
+  font-size:13px;
+  line-height:1.5;
 }
 
 #chargeHistoryApp .summary{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:14px;
-  margin-bottom:18px;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+  margin-bottom:14px;
 }
 
-#chargeHistoryApp .summary-card{
+#chargeHistoryApp .summary-box{
+  min-width:0;
+  padding:15px;
+  border:1px solid #dfe5ea;
+  border-radius:10px;
   background:#fff;
-  border:1px solid #e2e7eb;
-  border-radius:14px;
-  padding:20px;
 }
 
-#chargeHistoryApp .summary-card span{
+#chargeHistoryApp .summary-box span{
   display:block;
-  color:#77838e;
-  font-size:13px;
-  margin-bottom:9px;
+  margin-bottom:7px;
+  color:#71808d;
+  font-size:12px;
 }
 
-#chargeHistoryApp .summary-card strong{
+#chargeHistoryApp .summary-box strong{
   display:block;
-  font-size:25px;
-  color:#142d3e;
-}
-
-#chargeHistoryApp .summary-card.balance strong{
-  color:#b27a20;
+  font-size:clamp(18px,2.5vw,21px);
+  overflow-wrap:anywhere;
 }
 
 #chargeHistoryApp .panel{
-  background:#fff;
-  border:1px solid #e2e7eb;
-  border-radius:14px;
   overflow:hidden;
+  border:1px solid #dfe5ea;
+  border-radius:10px;
+  background:#fff;
 }
 
-#chargeHistoryApp .panel-head{
-  padding:20px 22px;
-  border-bottom:1px solid #e8ecef;
+#chargeHistoryApp .panel-title{
+  padding:14px 15px;
+  border-bottom:1px solid #e4e9ed;
+  font-size:16px;
+  font-weight:800;
+}
+
+#chargeHistoryApp .filters{
+  display:grid;
+  grid-template-columns:1fr 1fr 1.3fr 1.6fr auto;
+  gap:8px;
+  padding:12px;
+}
+
+#chargeHistoryApp input,
+#chargeHistoryApp select,
+#chargeHistoryApp button{
+  width:100%;
+  min-width:0;
+  height:40px;
+  padding:0 9px;
+  border:1px solid #cad4dc;
+  border-radius:6px;
+  background:#fff;
+  font:inherit;
+  font-size:12px;
+}
+
+#chargeHistoryApp button{
+  border:0;
+  background:#12394d;
+  color:#fff;
+  font-weight:800;
+  cursor:pointer;
+}
+
+#chargeHistoryApp .table-tools{
   display:flex;
   justify-content:space-between;
+  gap:10px;
   align-items:center;
-}
-
-#chargeHistoryApp .panel-head h3{
-  margin:0;
-  font-size:18px;
-}
-
-#chargeHistoryApp .panel-head span{
-  font-size:12px;
-  color:#8a959d;
+  padding:10px 12px;
+  border-top:1px solid #e5eaee;
+  font-size:13px;
 }
 
 #chargeHistoryApp .table-wrap{
   width:100%;
   overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
 }
 
 #chargeHistoryApp table{
   width:100%;
+  min-width:1120px;
   border-collapse:collapse;
-  min-width:780px;
 }
 
 #chargeHistoryApp th{
-  background:#f7f8f9;
-  color:#59656f;
-  font-size:13px;
-  font-weight:700;
-  padding:14px 12px;
-  border-bottom:1px solid #e4e8eb;
-  text-align:center;
+  padding:11px 7px;
+  border-bottom:1px solid #dfe5ea;
+  background:#f6f8fa;
+  color:#536575;
+  font-size:12px;
   white-space:nowrap;
 }
 
 #chargeHistoryApp td{
-  padding:15px 12px;
+  padding:12px 7px;
   border-bottom:1px solid #edf0f2;
+  font-size:12px;
   text-align:center;
-  font-size:14px;
   white-space:nowrap;
 }
 
-#chargeHistoryApp tbody tr:last-child td{
-  border-bottom:0;
-}
-
 #chargeHistoryApp .minus{
-  color:#c0392b;
-  font-weight:700;
+  color:#c34b45;
+  font-weight:800;
 }
 
-#chargeHistoryApp .empty{
-  padding:55px 20px;
+#chargeHistoryApp .plus{
+  color:#17804b;
+  font-weight:800;
+}
+
+#chargeHistoryApp #empty{
+  padding:55px 10px;
+  color:#8b98a3;
   text-align:center;
-  color:#8a959d;
-  display:none;
+  font-size:13px;
 }
 
-@media(max-width:700px){
+@media(max-width:900px){
+  #chargeHistoryApp .summary{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  #chargeHistoryApp .filters{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  #chargeHistoryApp .filters #searchBtn{
+    grid-column:1 / -1;
+  }
+}
+
+@media(max-width:560px){
   #chargeHistoryApp{
-    padding:14px;
-  }
-
-  #chargeHistoryApp .hero{
-    padding:22px 20px;
-  }
-
-  #chargeHistoryApp .hero h2{
-    font-size:23px;
+    padding:10px;
   }
 
   #chargeHistoryApp .summary{
+    gap:8px;
+  }
+
+  #chargeHistoryApp .summary-box{
+    padding:12px;
+  }
+
+  #chargeHistoryApp .filters{
     grid-template-columns:1fr;
-    gap:9px;
   }
 
-  #chargeHistoryApp .summary-card{
-    padding:16px;
+  #chargeHistoryApp .filters #searchBtn{
+    grid-column:auto;
   }
 
-  #chargeHistoryApp .summary-card strong{
-    font-size:22px;
+  #chargeHistoryApp input,
+  #chargeHistoryApp select,
+  #chargeHistoryApp button{
+    height:44px;
+    font-size:13px;
+  }
+
+  #chargeHistoryApp .table-tools{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+}
+
+@media(max-width:360px){
+  #chargeHistoryApp .summary{
+    grid-template-columns:1fr;
   }
 }
 </style>
+</head>
+
+<body>
 
 <div id="chargeHistoryApp">
 
-  <div class="hero">
-    <small>AD BALANCE HISTORY</small>
+  <div class="head">
     <h2>충전금 사용내역</h2>
-    <p>분양 광고 유효조회에 따른 충전금 차감내역을 확인합니다.</p>
+    <p>분양현장별 충전금 충전·차감 및 잔액 변동 내역을 확인합니다.</p>
   </div>
 
   <div class="summary">
 
-    <div class="summary-card">
+    <div class="summary-box">
       <span>총 충전금</span>
-      <strong id="totalCharge">0원</strong>
+      <strong id="s1">0원</strong>
     </div>
 
-    <div class="summary-card">
-      <span>누적 사용금액</span>
-      <strong id="totalUsed">0원</strong>
+    <div class="summary-box">
+      <span>총 사용금액</span>
+      <strong id="s2">0원</strong>
     </div>
 
-    <div class="summary-card balance">
+    <div class="summary-box">
       <span>현재 잔액</span>
-      <strong id="currentBalance">0원</strong>
+      <strong id="s3">0원</strong>
+    </div>
+
+    <div class="summary-box">
+      <span>사용 건수</span>
+      <strong id="s4">0건</strong>
     </div>
 
   </div>
 
   <div class="panel">
 
-    <div class="panel-head">
-      <h3>사용내역</h3>
-      <span>유효조회 완료 기준</span>
+    <div class="panel-title">
+      충전금 사용내역
+    </div>
+
+    <div class="filters">
+
+      <input type="date" id="sd">
+      <input type="date" id="ed">
+
+      <select id="type">
+        <option value="">전체 구분</option>
+        <option value="CHARGE">충전</option>
+        <option value="USE">사용</option>
+      </select>
+
+      <input
+        type="text"
+        id="kw"
+        placeholder="현장코드·분양사·현장명 검색"
+      >
+
+      <button type="button" id="searchBtn">
+        조회
+      </button>
+
+    </div>
+
+    <div class="table-tools">
+      <div>총 <strong id="cnt">0</strong>건</div>
+      <div>조회 사용금액 <strong id="sumUse">0원</strong></div>
     </div>
 
     <div class="table-wrap">
+
       <table>
         <thead>
           <tr>
-            <th>날짜</th>
-            <th>분양현장</th>
-            <th>유효조회</th>
-            <th>건당 차감액</th>
-            <th>차감금액</th>
-            <th>사용 후 잔액</th>
+            <th>일시</th>
+            <th>분양현장코드</th>
+            <th>분양사명</th>
+            <th>현장명</th>
+            <th>구분</th>
+            <th>충전금액</th>
+            <th>사용금액</th>
+            <th>잔액</th>
+            <th>내용</th>
           </tr>
         </thead>
 
-        <tbody id="historyBody"></tbody>
+        <tbody id="rows"></tbody>
       </table>
-    </div>
 
-    <div id="emptyHistory" class="empty">
-      아직 충전금 사용내역이 없습니다.
+      <div id="empty">
+        충전금 사용내역이 없습니다.
+      </div>
+
     </div>
 
   </div>
 
 </div>
+
+<script>
+(function(){
+"use strict";
+
+var root=document.getElementById("chargeHistoryApp");
+if(!root)return;
+
+var D=[];
+
+function el(id){
+  return root.querySelector("#"+id);
+}
+
+function n(v){
+  return Number(v||0).toLocaleString("ko-KR");
+}
+
+function render(A){
+
+  var rows=el("rows");
+  rows.innerHTML="";
+
+  var totalCharge=0;
+  var totalUse=0;
+  var useCount=0;
+
+  D.forEach(function(x){
+
+    if(x.type==="CHARGE"){
+      totalCharge+=Number(x.amount||0);
+    }
+
+    if(x.type==="USE"){
+      totalUse+=Number(x.amount||0);
+      useCount++;
+    }
+  });
+
+  el("s1").textContent=n(totalCharge)+"원";
+  el("s2").textContent=n(totalUse)+"원";
+  el("s3").textContent=n(totalCharge-totalUse)+"원";
+  el("s4").textContent=n(useCount)+"건";
+
+  el("cnt").textContent=A.length;
+
+  var viewUse=0;
+
+  A.forEach(function(x){
+
+    if(x.type==="USE"){
+      viewUse+=Number(x.amount||0);
+    }
+
+    var chargeAmount=
+      x.type==="CHARGE" ? n(x.amount)+"원" : "-";
+
+    var useAmount=
+      x.type==="USE" ? n(x.amount)+"원" : "-";
+
+    var tr=document.createElement("tr");
+
+    tr.innerHTML=
+      "<td>"+(x.date||"-")+"</td>"+
+      "<td>"+(x.siteCode||"-")+"</td>"+
+      "<td>"+(x.company||"-")+"</td>"+
+      "<td>"+(x.siteName||"-")+"</td>"+
+      "<td class='"+(x.type==="CHARGE"?"plus":"minus")+"'>"+
+        (x.type==="CHARGE"?"충전":"사용")+
+      "</td>"+
+      "<td class='plus'>"+chargeAmount+"</td>"+
+      "<td class='minus'>"+useAmount+"</td>"+
+      "<td>"+n(x.balance)+"원</td>"+
+      "<td>"+(x.memo||"-")+"</td>";
+
+    rows.appendChild(tr);
+  });
+
+  el("sumUse").textContent=n(viewUse)+"원";
+  el("empty").style.display=A.length?"none":"block";
+}
+
+function search(){
+
+  var sd=el("sd").value;
+  var ed=el("ed").value;
+  var type=el("type").value;
+  var kw=el("kw").value.trim().toLowerCase();
+
+  var result=D.filter(function(x){
+
+    var date=String(x.date||"").slice(0,10);
+
+    if(sd && date<sd){
+      return false;
+    }
+
+    if(ed && date>ed){
+      return false;
+    }
+
+    if(type && x.type!==type){
+      return false;
+    }
+
+    var text=(
+      (x.siteCode||"")+" "+
+      (x.company||"")+" "+
+      (x.siteName||"")
+    ).toLowerCase();
+
+    if(kw && !text.includes(kw)){
+      return false;
+    }
+
+    return true;
+  });
+
+  render(result);
+}
+
+el("searchBtn").onclick=search;
+
+el("kw").addEventListener(
+  "keydown",
+  function(e){
+    if(e.key==="Enter"){
+      search();
+    }
+  }
+);
+
+var today=new Date();
+
+el("ed").value=
+  today.toISOString().slice(0,10);
+
+today.setDate(1);
+
+el("sd").value=
+  today.toISOString().slice(0,10);
+
+render(D);
+
+})();
+</script>
+
+</body>
+</html>
