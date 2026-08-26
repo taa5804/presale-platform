@@ -1,0 +1,547 @@
+<style>
+#pointAdmin{
+  font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",Arial,sans-serif;
+  background:#f5f7f9;
+  color:#172b3d;
+  padding:18px;
+}
+
+#pointAdmin *{
+  box-sizing:border-box;
+}
+
+#pointAdmin .admin-head{
+  margin-bottom:16px;
+}
+
+#pointAdmin h2{
+  margin:0 0 5px;
+  font-size:24px;
+}
+
+#pointAdmin .admin-head p{
+  margin:0;
+  font-size:13px;
+  color:#71808d;
+}
+
+#pointAdmin .summary{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+  margin-bottom:14px;
+}
+
+#pointAdmin .summary-box{
+  background:#fff;
+  border:1px solid #dfe5ea;
+  border-radius:10px;
+  padding:15px;
+}
+
+#pointAdmin .summary-box span{
+  display:block;
+  font-size:12px;
+  color:#71808d;
+  margin-bottom:7px;
+}
+
+#pointAdmin .summary-box strong{
+  font-size:21px;
+}
+
+#pointAdmin .search-box{
+  background:#fff;
+  border:1px solid #dfe5ea;
+  border-radius:10px;
+  overflow:hidden;
+}
+
+#pointAdmin .search-title{
+  padding:14px 15px;
+  font-size:16px;
+  font-weight:800;
+  border-bottom:1px solid #e4e9ed;
+}
+
+#pointAdmin .filters{
+  display:grid;
+  grid-template-columns:1fr 1fr 1.3fr 1fr 1.5fr auto;
+  gap:7px;
+  padding:12px;
+}
+
+#pointAdmin input,
+#pointAdmin select,
+#pointAdmin button{
+  height:38px;
+  border:1px solid #cad4dc;
+  border-radius:6px;
+  padding:0 9px;
+  font-size:12px;
+  background:#fff;
+}
+
+#pointAdmin button{
+  background:#12394d;
+  color:#fff;
+  border:0;
+  font-weight:700;
+  cursor:pointer;
+  padding:0 14px;
+}
+
+#pointAdmin .table-tools{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px 12px;
+  border-top:1px solid #e5eaee;
+}
+
+#pointAdmin .table-tools label{
+  margin-right:12px;
+}
+
+#pointAdmin #settleBtn{
+  background:#1769df;
+}
+
+#pointAdmin .table-wrap{
+  overflow:auto;
+}
+
+#pointAdmin table{
+  width:100%;
+  min-width:1050px;
+  border-collapse:collapse;
+}
+
+#pointAdmin th{
+  background:#f6f8fa;
+  color:#536575;
+  font-size:12px;
+  padding:11px 7px;
+  border-bottom:1px solid #dfe5ea;
+}
+
+#pointAdmin td{
+  font-size:12px;
+  padding:12px 7px;
+  text-align:center;
+  border-bottom:1px solid #edf0f2;
+}
+
+#pointAdmin #empty{
+  text-align:center;
+  padding:55px 10px;
+  color:#8b98a3;
+}
+
+@media(max-width:750px){
+
+  #pointAdmin{
+    padding:10px;
+  }
+
+  #pointAdmin .summary{
+    grid-template-columns:1fr 1fr;
+  }
+
+  #pointAdmin .filters{
+    grid-template-columns:1fr 1fr;
+  }
+
+  #pointAdmin h2{
+    font-size:21px;
+  }
+}
+</style>
+
+
+<div id="pointAdmin">
+
+  <div class="admin-head">
+    <h2>포인트 정산관리</h2>
+    <p>전국 분양사 포인트 사용 및 마트 정산현황을 통합 관리합니다.</p>
+  </div>
+
+  <div class="summary">
+
+    <div class="summary-box">
+      <span>총 지급 포인트</span>
+      <strong id="p1">0 P</strong>
+    </div>
+
+    <div class="summary-box">
+      <span>총 사용 포인트</span>
+      <strong id="p2">0 P</strong>
+    </div>
+
+    <div class="summary-box">
+      <span>정산대기 금액</span>
+      <strong id="p3">0원</strong>
+    </div>
+
+    <div class="summary-box">
+      <span>정산완료 금액</span>
+      <strong id="p4">0원</strong>
+    </div>
+
+  </div>
+
+  <div class="search-box">
+
+    <div class="search-title">
+      포인트 정산 조회
+    </div>
+
+    <div class="filters">
+
+      <input type="date" id="sd">
+
+      <input type="date" id="ed">
+
+      <select id="rg">
+        <option value="">전체 지역</option>
+        <option>서울특별시</option>
+        <option>부산광역시</option>
+        <option>대구광역시</option>
+        <option>인천광역시</option>
+        <option>대전광역시</option>
+        <option>울산광역시</option>
+        <option>세종특별자치시</option>
+        <option>경기도</option>
+        <option>강원특별자치도</option>
+        <option>충청북도</option>
+        <option>충청남도</option>
+        <option>전북특별자치도</option>
+        <option>전남광주통합특별시</option>
+        <option>경상북도</option>
+        <option>경상남도</option>
+        <option>제주특별자치도</option>
+      </select>
+
+      <select id="ss">
+        <option value="">전체 상태</option>
+        <option>정산대기</option>
+        <option>정산완료</option>
+      </select>
+
+      <input
+        type="text"
+        id="kw"
+        placeholder="분양사·아파트·마트명 검색"
+      >
+
+      <button type="button" id="searchBtn">
+        조회
+      </button>
+
+    </div>
+
+    <div class="table-tools">
+
+      <div>
+        <label>
+          <input type="checkbox" id="allCheck">
+          전체선택
+        </label>
+
+        <span>
+          총 <strong id="cnt">0</strong>건
+        </span>
+      </div>
+
+      <button type="button" id="settleBtn">
+        선택 정산완료
+      </button>
+
+    </div>
+
+    <div class="table-wrap">
+
+      <table>
+        <thead>
+          <tr>
+            <th>선택</th>
+            <th>사용일</th>
+            <th>지역</th>
+            <th>분양사</th>
+            <th>아파트</th>
+            <th>마트명</th>
+            <th>사용건수</th>
+            <th>사용포인트</th>
+            <th>정산금액</th>
+            <th>상태</th>
+            <th>정산일</th>
+          </tr>
+        </thead>
+
+        <tbody id="rows"></tbody>
+
+      </table>
+
+      <div id="empty">
+        조회된 포인트 정산내역이 없습니다.
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+(function(){
+
+  var root=document.getElementById("pointAdmin");
+  if(!root)return;
+
+  var D=[];
+
+  function el(id){
+    return root.querySelector("#"+id);
+  }
+
+  function n(v){
+    return Number(v||0).toLocaleString("ko-KR");
+  }
+
+
+  function show(A){
+
+    var give=0;
+    var use=0;
+    var wait=0;
+    var done=0;
+
+    el("rows").innerHTML="";
+    el("cnt").textContent=A.length;
+
+    el("empty").style.display=
+      A.length ? "none" : "block";
+
+
+    A.forEach(function(x){
+
+      give+=Number(x.give||0);
+      use+=Number(x.use||0);
+
+      if(x.status==="정산완료"){
+
+        done+=Number(x.money||0);
+
+      }else{
+
+        wait+=Number(x.money||0);
+
+      }
+
+
+      var tr=document.createElement("tr");
+
+      tr.innerHTML=
+        '<td>'+
+          '<input type="checkbox" class="ck" data-id="'+x.id+'">'+
+        '</td>'+
+        '<td>'+(x.date||"-")+'</td>'+
+        '<td>'+(x.region||"-")+'</td>'+
+        '<td>'+(x.company||"-")+'</td>'+
+        '<td>'+(x.apt||"-")+'</td>'+
+        '<td>'+(x.mart||"-")+'</td>'+
+        '<td>'+n(x.count)+'건</td>'+
+        '<td>'+n(x.use)+' P</td>'+
+        '<td>'+n(x.money)+'원</td>'+
+        '<td>'+(x.status||"정산대기")+'</td>'+
+        '<td>'+(x.settle||"-")+'</td>';
+
+      el("rows").appendChild(tr);
+
+    });
+
+
+    el("p1").textContent=
+      n(give)+" P";
+
+    el("p2").textContent=
+      n(use)+" P";
+
+    el("p3").textContent=
+      n(wait)+"원";
+
+    el("p4").textContent=
+      n(done)+"원";
+  }
+
+
+  function search(){
+
+    var a=el("sd").value;
+    var b=el("ed").value;
+    var r=el("rg").value;
+    var s=el("ss").value;
+
+    var q=
+      el("kw")
+      .value
+      .trim()
+      .toLowerCase();
+
+
+    var result=D.filter(function(x){
+
+      if(a && x.date<a){
+        return false;
+      }
+
+      if(b && x.date>b){
+        return false;
+      }
+
+      if(r && x.region!==r){
+        return false;
+      }
+
+      if(s && x.status!==s){
+        return false;
+      }
+
+
+      var text=(
+        (x.company||"")+" "+
+        (x.apt||"")+" "+
+        (x.mart||"")
+      ).toLowerCase();
+
+
+      if(q && !text.includes(q)){
+        return false;
+      }
+
+      return true;
+
+    });
+
+
+    show(result);
+  }
+
+
+  el("searchBtn")
+    .addEventListener(
+      "click",
+      search
+    );
+
+
+  el("kw")
+    .addEventListener(
+      "keydown",
+      function(e){
+
+        if(e.key==="Enter"){
+          search();
+        }
+
+      }
+    );
+
+
+  el("allCheck")
+    .addEventListener(
+      "change",
+      function(){
+
+        root
+          .querySelectorAll(".ck")
+          .forEach(function(x){
+
+            x.checked=
+              el("allCheck").checked;
+
+          });
+
+      }
+    );
+
+
+  el("settleBtn")
+    .addEventListener(
+      "click",
+      function(){
+
+        var ids=
+          Array.from(
+            root.querySelectorAll(
+              ".ck:checked"
+            )
+          ).map(function(x){
+            return x.dataset.id;
+          });
+
+
+        if(!ids.length){
+
+          alert(
+            "정산할 내역을 선택해주세요."
+          );
+
+          return;
+        }
+
+
+        if(
+          !confirm(
+            "선택한 내역을 정산완료 처리하시겠습니까?"
+          )
+        ){
+          return;
+        }
+
+
+        var today=
+          new Date()
+          .toISOString()
+          .slice(0,10);
+
+
+        D.forEach(function(x){
+
+          if(
+            ids.includes(String(x.id)) &&
+            x.status!=="정산완료"
+          ){
+
+            x.status="정산완료";
+            x.settle=today;
+
+          }
+
+        });
+
+
+        el("allCheck").checked=false;
+
+        search();
+
+      }
+    );
+
+
+  var d=new Date();
+
+  el("ed").value=
+    d.toISOString().slice(0,10);
+
+  d.setDate(1);
+
+  el("sd").value=
+    d.toISOString().slice(0,10);
+
+
+  show(D);
+
+})();
+</script>
