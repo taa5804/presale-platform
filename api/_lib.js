@@ -3,12 +3,16 @@ const DEFAULT_SUPABASE_KEY = "sb_publishable_RZBX7u1v8MLBCfEJT0-eRg_jPcIulG2";
 
 const SUPABASE_URL = String(
   process.env.SUPABASE_URL || DEFAULT_SUPABASE_URL
-).replace(/\/+$/, "");
+)
+  .trim()
+  .replace(/\/rest\/v1\/?$/i, "")
+  .replace(/\/+$/, "");
 
-const SUPABASE_SERVICE_ROLE_KEY =
+const SUPABASE_SERVICE_ROLE_KEY = String(
   process.env.SUPABASE_SERVICE_ROLE_KEY ||
-  process.env.SUPABASE_ANON_KEY ||
-  DEFAULT_SUPABASE_KEY;
+    process.env.SUPABASE_ANON_KEY ||
+    DEFAULT_SUPABASE_KEY
+).trim();
 
 function envReady() {
   return !!(SUPABASE_URL && SUPABASE_SERVICE_ROLE_KEY);
