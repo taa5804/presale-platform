@@ -4,10 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#071a2c">
-<title>분양 상세 | 우리 아파트 분양</title>
+<title>분양 상세 카탈로그 (1분 스크롤 시 3,000원 모바일 바코드카드 지급) | 우리 아파트 분양</title>
 <style>
 #aptCatalog,
 #aptCatalog *{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  width:100%;
+  min-height:100%;
+  background:#0b1d2d;
+  font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Noto Sans KR","Segoe UI",sans-serif;
+}
 
 #aptCatalog.apt-catalog{
   --navy:#071a2c;
@@ -16,34 +24,80 @@
   --ivory:#f6f2e9;
   --text:#132238;
   position:relative;
-  width:100%;
-  max-width:430px;
-  height:min(820px,100dvh);
-  min-height:620px;
+  width:min(100%,460px);
+  max-width:460px;
   margin:0 auto;
-  overflow:hidden;
+  padding-bottom:130px;
   background:#0b1d2d;
   color:#fff;
-  font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR","Segoe UI",sans-serif;
-  box-shadow:0 18px 55px rgba(0,0,0,.22)
+  box-shadow:0 18px 55px rgba(0,0,0,.32);
 }
 
+/* 상단 고정 스크롤 진행 헤더 */
+.sticky-scroll-bar{
+  position:sticky;
+  top:0;
+  z-index:50;
+  background:rgba(7,26,44,.95);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid rgba(200,163,95,.4);
+  padding:10px 14px;
+}
+.sticky-top-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:6px;
+}
+.back-btn{
+  color:#fff;
+  text-decoration:none;
+  font-size:12px;
+  font-weight:800;
+  padding:5px 10px;
+  border-radius:8px;
+  background:rgba(255,255,255,.12);
+}
+.timer-pill{
+  font-size:12.5px;
+  font-weight:900;
+  color:#fde68a;
+  background:rgba(245,158,11,.2);
+  border:1px solid rgba(251,191,36,.45);
+  padding:5px 11px;
+  border-radius:999px;
+}
+.progress-track{
+  width:100%;
+  height:6px;
+  background:rgba(255,255,255,.15);
+  border-radius:999px;
+  overflow:hidden;
+}
+.progress-fill{
+  width:0%;
+  height:100%;
+  background:linear-gradient(90deg,#f59e0b,#fde047);
+  transition:width .3s ease;
+}
+
+/* 8페이지 수직 스크롤 카탈로그 */
 #aptCatalog .apt-track{
   display:flex;
-  width:800%;
-  height:100%;
-  transition:transform .55s cubic-bezier(.22,.8,.28,1)
+  flex-direction:column;
+  gap:14px;
+  width:100%;
 }
 
 #aptCatalog .apt-page{
   position:relative;
-  flex:0 0 12.5%;
-  width:12.5%;
-  height:100%;
+  width:100%;
+  min-height:660px;
   overflow:hidden;
-  padding:34px 26px 90px;
+  padding:34px 24px 44px;
   background:#fff;
-  color:var(--text)
+  color:var(--text);
 }
 
 #aptCatalog .page-no{
@@ -52,33 +106,41 @@
   left:20px;
   z-index:5;
   font-size:12px;
-  font-weight:700;
+  font-weight:800;
   letter-spacing:1.5px;
-  color:#fff
+  color:#fff;
+  background:rgba(0,0,0,.35);
+  padding:4px 9px;
+  border-radius:999px;
 }
 
-#aptCatalog .page-no.dark{color:var(--text)}
+#aptCatalog .page-no.dark{
+  color:var(--text);
+  background:rgba(19,34,56,.08);
+}
 
 #aptCatalog .shade{
   position:absolute;
   inset:0;
   z-index:1;
-  background:linear-gradient(180deg,rgba(2,14,27,.14),rgba(3,15,29,.3) 45%,rgba(2,12,24,.9))
+  background:linear-gradient(180deg,rgba(2,14,27,.14),rgba(3,15,29,.3) 45%,rgba(2,12,24,.9));
 }
 
 #aptCatalog .cover{
+  min-height:700px;
   background:
     linear-gradient(180deg,rgba(4,20,36,.05),rgba(4,20,36,.15)),
     url("https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1000&q=85")
-    center/cover no-repeat
+    center/cover no-repeat;
+  color:#fff;
 }
 
 #aptCatalog .cover-copy{
   position:absolute;
   z-index:2;
-  left:28px;
-  right:28px;
-  bottom:165px
+  left:26px;
+  right:26px;
+  bottom:110px;
 }
 
 #aptCatalog .eyebrow,
@@ -91,16 +153,16 @@
   color:var(--gold);
   font-size:11px;
   font-weight:800;
-  letter-spacing:2px
+  letter-spacing:2px;
 }
 
 #aptCatalog .cover h1,
 #aptCatalog .contact h2{
   margin:0 0 14px;
   font-family:Georgia,"Noto Serif KR",serif;
-  font-size:34px;
+  font-size:32px;
   line-height:1.25;
-  font-weight:500
+  font-weight:600;
 }
 
 #aptCatalog .cover p,
@@ -108,18 +170,18 @@
   margin:0;
   font-size:14px;
   line-height:1.75;
-  color:rgba(255,255,255,.82)
+  color:rgba(255,255,255,.88);
 }
 
 #aptCatalog .cover-logo{
   position:absolute;
   z-index:2;
-  bottom:100px;
-  left:28px;
+  bottom:45px;
+  left:26px;
   color:var(--gold);
   font-family:Georgia,serif;
-  font-size:16px;
-  letter-spacing:2px
+  font-size:15px;
+  letter-spacing:2px;
 }
 
 #aptCatalog .section-title{padding-top:24px}
@@ -128,16 +190,16 @@
 #aptCatalog .section-title h2{
   margin:0 0 10px;
   font-family:Georgia,"Noto Serif KR",serif;
-  font-size:27px;
+  font-size:26px;
   line-height:1.35;
-  font-weight:500
+  font-weight:600;
 }
 
 #aptCatalog .section-title p{
   margin:0;
   color:#687485;
   font-size:13px;
-  line-height:1.65
+  line-height:1.65;
 }
 
 #aptCatalog .location-photo,
@@ -148,13 +210,13 @@
 #aptCatalog .gallery>div{
   position:relative;
   overflow:hidden;
-  background:#d8dee2
+  background:#d8dee2;
 }
 
 #aptCatalog .location-photo{
-  height:38%;
-  margin:24px -26px 0;
-  background:url("https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=1000&q=85") center/cover
+  height:250px;
+  margin:22px -24px 0;
+  background:url("https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=1000&q=85") center/cover;
 }
 
 #aptCatalog .image-label{
@@ -164,61 +226,62 @@
   bottom:14px;
   padding:10px 12px;
   border:1px solid rgba(255,255,255,.45);
-  background:rgba(6,24,40,.48);
+  background:rgba(6,24,40,.58);
   color:#fff;
   font-size:11px;
-  backdrop-filter:blur(7px)
+  backdrop-filter:blur(7px);
 }
 
 #aptCatalog .info-list{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:10px;
-  margin-top:18px
+  margin-top:18px;
 }
 
 #aptCatalog .info-list div,
 #aptCatalog .feature-grid div{
-  padding:12px;
+  padding:14px;
   border:1px solid #e5e8eb;
-  background:#fff
+  background:#fff;
+  border-radius:10px;
 }
 
 #aptCatalog .info-list b,
 #aptCatalog .feature-grid b{
   display:block;
   margin-bottom:5px;
-  font-size:12px
+  font-size:13px;
 }
 
 #aptCatalog .info-list span,
 #aptCatalog .feature-grid span{
   color:#7a8490;
-  font-size:10px;
-  line-height:1.5
+  font-size:11.5px;
+  line-height:1.5;
 }
 
 #aptCatalog .premium{
   display:grid;
-  grid-template-columns:43% 57%;
-  padding:0 0 82px;
+  grid-template-columns:42% 58%;
+  padding:0;
   background:var(--navy);
-  color:#fff
+  color:#fff;
 }
 
 #aptCatalog .premium-photo{
-  height:100%;
-  background:url("https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=800&q=85") center/cover
+  min-height:660px;
+  background:url("https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=800&q=85") center/cover;
 }
 
-#aptCatalog .premium-copy{padding:68px 20px 20px}
+#aptCatalog .premium-copy{padding:58px 18px 30px}
 
 #aptCatalog .premium-copy h2{
   margin:0 0 22px;
   font-family:Georgia,"Noto Serif KR",serif;
-  font-size:25px;
+  font-size:24px;
   line-height:1.35;
-  font-weight:500
+  font-weight:600;
 }
 
 #aptCatalog .premium-copy ul{list-style:none;margin:0;padding:0}
@@ -227,7 +290,7 @@
   position:relative;
   padding:0 0 12px 18px;
   margin-bottom:11px;
-  border-bottom:1px solid rgba(255,255,255,.13)
+  border-bottom:1px solid rgba(255,255,255,.13);
 }
 
 #aptCatalog .premium-copy li:before{
@@ -238,41 +301,41 @@
   width:7px;
   height:7px;
   border:1px solid var(--gold);
-  transform:rotate(45deg)
+  transform:rotate(45deg);
 }
 
 #aptCatalog .premium-copy b{
   display:block;
-  font-size:12px;
-  color:var(--gold)
+  font-size:13px;
+  color:var(--gold);
 }
 
 #aptCatalog .premium-copy small{
   display:block;
   margin-top:3px;
   color:#bdc7d1;
-  font-size:9px;
-  line-height:1.4
+  font-size:11px;
+  line-height:1.4;
 }
 
 #aptCatalog .complex{background:var(--ivory)}
 
 #aptCatalog .complex-photo{
-  height:48%;
-  margin:22px -26px 0;
-  background:url("https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1000&q=85") center/cover
+  height:280px;
+  margin:22px -24px 0;
+  background:url("https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1000&q=85") center/cover;
 }
 
 #aptCatalog .feature-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:8px;
-  margin-top:14px
+  margin-top:14px;
 }
 
 #aptCatalog .unit{
   background:linear-gradient(150deg,#07192b,#102b44);
-  color:#fff
+  color:#fff;
 }
 
 #aptCatalog .unit-head{padding-top:24px}
@@ -281,8 +344,8 @@
   margin:0;
   color:var(--gold);
   font-family:Georgia,serif;
-  font-size:35px;
-  font-weight:400
+  font-size:34px;
+  font-weight:500;
 }
 
 #aptCatalog .unit-head h2 small{font-size:13px}
@@ -290,53 +353,53 @@
 #aptCatalog .unit-head p{
   margin:5px 0 0;
   color:#c9d0d8;
-  font-size:11px
+  font-size:12px;
 }
 
 #aptCatalog .floorplan{
-  height:47%;
+  height:280px;
   margin:20px 0 14px;
   border:1px solid rgba(255,255,255,.18);
-  background:#edf0ed
+  background:#edf0ed;
 }
 
 #aptCatalog .unit-info{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   border-top:1px solid rgba(255,255,255,.18);
-  border-bottom:1px solid rgba(255,255,255,.18)
+  border-bottom:1px solid rgba(255,255,255,.18);
 }
 
 #aptCatalog .unit-info div{
-  padding:10px 4px;
-  text-align:center
+  padding:12px 4px;
+  text-align:center;
 }
 
 #aptCatalog .unit-info b{
   display:block;
   color:#9eadba;
-  font-size:9px
+  font-size:10px;
 }
 
 #aptCatalog .unit-info span{
   display:block;
   margin-top:4px;
-  font-size:10px
+  font-size:12px;
 }
 
 #aptCatalog .unit-features{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:6px;
-  margin-top:14px
+  margin-top:14px;
 }
 
 #aptCatalog .unit-features span{
   padding:10px 4px;
   border:1px solid rgba(200,163,95,.45);
   color:var(--gold);
-  font-size:9px;
-  text-align:center
+  font-size:11px;
+  text-align:center;
 }
 
 #aptCatalog .lifestyle{background:#f8f6f1}
@@ -344,36 +407,30 @@
 #aptCatalog .gallery{
   display:grid;
   grid-template-columns:1fr 1fr;
-  grid-template-rows:1.35fr 1fr 1fr;
+  grid-template-rows:170px 130px 130px;
   gap:7px;
-  height:68%;
-  margin-top:22px
+  margin-top:22px;
 }
 
 #aptCatalog .gallery .wide{grid-column:1/3}
 
 #aptCatalog .gallery>div:nth-child(1){
-  background:url("https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=900&q=80") center/cover
+  background:url("https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=900&q=80") center/cover;
 }
-
 #aptCatalog .gallery>div:nth-child(2){
-  background:url("https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=600&q=80") center/cover
+  background:url("https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=600&q=80") center/cover;
 }
-
 #aptCatalog .gallery>div:nth-child(3){
-  background:url("https://images.unsplash.com/photo-1535131749006-b7f58c99034b?auto=format&fit=crop&w=600&q=80") center/cover
+  background:url("https://images.unsplash.com/photo-1535131749006-b7f58c99034b?auto=format&fit=crop&w=600&q=80") center/cover;
 }
-
 #aptCatalog .gallery>div:nth-child(4){
-  background:url("https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=600&q=80") center/cover
+  background:url("https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=600&q=80") center/cover;
 }
-
 #aptCatalog .gallery>div:nth-child(5){
-  background:url("https://images.unsplash.com/photo-1560785496-3c9d27877182?auto=format&fit=crop&w=600&q=80") center/cover
+  background:url("https://images.unsplash.com/photo-1560785496-3c9d27877182?auto=format&fit=crop&w=600&q=80") center/cover;
 }
-
 #aptCatalog .gallery>div:nth-child(6){
-  background:url("https://images.unsplash.com/photo-1560185127-6ed189bf02f4?auto=format&fit=crop&w=600&q=80") center/cover
+  background:url("https://images.unsplash.com/photo-1560185127-6ed189bf02f4?auto=format&fit=crop&w=600&q=80") center/cover;
 }
 
 #aptCatalog .gallery span{
@@ -384,7 +441,7 @@
   padding:8px;
   background:linear-gradient(transparent,rgba(0,0,0,.78));
   color:#fff;
-  font-size:10px
+  font-size:11px;
 }
 
 #aptCatalog .contact{
@@ -392,22 +449,22 @@
     linear-gradient(180deg,rgba(4,18,34,.08),rgba(3,15,29,.42)),
     url("https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1000&q=85")
     center/cover;
-  color:#fff
+  color:#fff;
 }
 
 #aptCatalog .contact-copy{
   position:relative;
   z-index:2;
-  padding-top:40px;
-  text-align:center
+  padding-top:30px;
+  text-align:center;
 }
 
 #aptCatalog .modelhouse{
   z-index:2;
-  height:33%;
-  margin-top:28px;
+  height:210px;
+  margin-top:24px;
   border:1px solid rgba(255,255,255,.35);
-  background:rgba(255,255,255,.14)
+  background:rgba(255,255,255,.14);
 }
 
 #aptCatalog .contact-actions{
@@ -416,264 +473,112 @@
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:9px;
-  margin-top:16px
+  margin-top:16px;
 }
 
 #aptCatalog .contact-actions button,
-#aptCatalog .contact-actions a,
-#aptCatalog #rewardBtn{
-  min-height:47px;
+#aptCatalog .contact-actions a{
+  min-height:48px;
   border:1px solid var(--gold);
-  background:rgba(4,20,36,.7);
+  background:rgba(4,20,36,.75);
   color:#fff;
-  font-size:11px;
+  font-size:13px;
+  font-weight:800;
+  border-radius:10px;
   text-decoration:none;
   display:flex;
   align-items:center;
-  justify-content:center
-}
-
-#aptCatalog #rewardBtn{
-  position:relative;
-  z-index:2;
-  width:100%;
-  margin-top:10px;
-  background:var(--gold);
-  color:#07192b;
-  font-weight:800
-}
-
-#aptCatalog #rewardBtn:disabled{opacity:.5}
-
-#aptCatalog .nav{
-  position:absolute;
-  z-index:15;
-  top:50%;
-  width:34px;
-  height:56px;
-  border:0;
-  background:rgba(3,16,28,.5);
-  color:#fff;
-  font-size:32px;
-  transform:translateY(-50%);
-  cursor:pointer
-}
-
-#aptCatalog .nav.prev{left:0}
-#aptCatalog .nav.next{right:0}
-
-#aptCatalog .catalog-bottom{
-  position:absolute;
-  z-index:20;
-  left:0;
-  right:0;
-  bottom:0;
-  min-height:70px;
-  padding:13px 18px;
-  background:linear-gradient(transparent,rgba(2,12,23,.94));
-  color:#fff
-}
-
-#aptCatalog .dots{
-  display:flex;
   justify-content:center;
-  gap:7px
+  cursor:pointer;
 }
 
-#aptCatalog .dots button{
-  width:7px;
-  height:7px;
-  padding:0;
-  border:1px solid rgba(255,255,255,.75);
-  border-radius:50%;
-  background:transparent
+/* 하단 고정 모바일 바코드카드 카카오톡 발급 바 */
+.fixed-bottom-reward{
+  position:fixed;
+  left:50%;
+  transform:translateX(-50%);
+  bottom:0;
+  width:min(100%,460px);
+  z-index:60;
+  padding:12px 16px 16px;
+  background:rgba(7,26,44,.96);
+  border-top:1.5px solid rgba(251,191,36,.55);
+  backdrop-filter:blur(10px);
+  box-shadow:0 -8px 25px rgba(0,0,0,.35);
 }
-
-#aptCatalog .dots button.active{background:#fff}
-
-#aptCatalog .timer{
-  margin-top:10px;
+.reward-guide-txt{
+  font-size:11.5px;
+  color:#e2e8f0;
   text-align:center;
-  font-size:10px;
-  color:#cbd3da
+  margin-bottom:8px;
+  font-weight:700;
 }
-
-#aptCatalog .timer b{color:var(--gold)}
-
-@media(max-width:380px){
-  #aptCatalog .apt-page{
-    padding-left:21px;
-    padding-right:21px
-  }
-
-  #aptCatalog .cover h1,
-  #aptCatalog .contact h2{
-    font-size:29px
-  }
-
-  #aptCatalog .section-title h2{
-    font-size:24px
-  }
-
-  #aptCatalog .premium-copy{
-    padding-left:16px;
-    padding-right:14px
-  }
+.reward-guide-txt strong{
+  color:#fde047;
 }
-
-#aptCatalog .coupon-guide{
-  position:absolute;
-  z-index:18;
-  left:12px;
-  right:12px;
-  bottom:70px;
-  padding:10px 12px;
-  border:1px solid rgba(200,163,95,.55);
-  border-radius:10px;
-  background:rgba(4,20,36,.90);
-  color:#fff;
-  text-align:center;
-  line-height:1.45;
-  backdrop-filter:blur(6px);
-}
-#aptCatalog .coupon-guide strong{
-  display:block;
-  margin-bottom:3px;
-  color:var(--gold);
-  font-size:11px;
-}
-#aptCatalog .coupon-guide span{
-  display:block;
-  font-size:10px;
-  word-break:keep-all;
-}
-
-</style>
-
-
-
-
-<style>
-html,body{
-  margin:0;
+#rewardBtn{
   width:100%;
-  min-height:100%;
-  background:#0b1d2d;
+  min-height:52px;
+  border:0;
+  border-radius:14px;
+  background:#FEE500;
+  color:#191919;
+  font-size:15px;
+  font-weight:900;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  box-shadow:0 6px 18px rgba(254,229,0,.3);
+  transition:all .2s;
 }
-body{
-  overflow-x:hidden;
-  font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR","Segoe UI",sans-serif;
-}
-
-/* 상세 카탈로그 전체 가변형 */
-#aptCatalog.apt-catalog{
-  width:min(100%,430px);
-  max-width:430px;
-  height:min(820px,100dvh);
-  min-height:min(620px,100dvh);
-}
-
-@media (min-width:431px){
-  body{
-    display:flex;
-    justify-content:center;
-    align-items:flex-start;
-    padding:20px 0;
-  }
-
-  #aptCatalog.apt-catalog{
-    width:min(430px,100%);
-  }
-}
-
-@media (max-width:430px){
-  #aptCatalog.apt-catalog{
-    max-width:none;
-    width:100vw;
-    height:100dvh;
-    min-height:100dvh;
-    margin:0;
-    box-shadow:none;
-  }
-
-  #aptCatalog .apt-page{
-    padding-top:clamp(28px,7vw,34px);
-    padding-left:clamp(18px,6vw,26px);
-    padding-right:clamp(18px,6vw,26px);
-    padding-bottom:90px;
-  }
-
-  #aptCatalog .cover-copy{
-    left:clamp(20px,6vw,28px);
-    right:clamp(20px,6vw,28px);
-    bottom:clamp(130px,22vh,165px);
-  }
-
-  #aptCatalog .cover h1,
-  #aptCatalog .contact h2{
-    font-size:clamp(28px,8vw,34px);
-  }
-
-  #aptCatalog .section-title h2{
-    font-size:clamp(23px,6.5vw,27px);
-  }
-
-  #aptCatalog .premium{
-    grid-template-columns:42% 58%;
-  }
-
-  #aptCatalog .premium-copy{
-    padding-top:clamp(52px,14vw,68px);
-  }
-}
-
-@media (max-width:360px){
-  #aptCatalog .info-list,
-  #aptCatalog .feature-grid{
-    gap:7px;
-  }
-
-  #aptCatalog .contact-actions{
-    grid-template-columns:1fr;
-  }
-
-  #aptCatalog .nav{
-    width:30px;
-    height:50px;
-    font-size:28px;
-  }
+#rewardBtn:disabled{
+  background:#334155;
+  color:#94a3b8;
+  box-shadow:none;
+  cursor:not-allowed;
 }
 </style>
-
 </head>
 <body>
 <div id="aptCatalog" class="apt-catalog">
 
+  <!-- 상단 고정 1분 스크롤 타이머 & 진행률 -->
+  <div class="sticky-scroll-bar">
+    <div class="sticky-top-row">
+      <a href="/presale.html" class="back-btn">‹ 분양 메인화면</a>
+      <div class="timer-pill">⏱️ 스크롤 열람 <b id="viewTime">00:00</b> / 01:00</div>
+    </div>
+    <div class="progress-track">
+      <div id="scrollProgressFill" class="progress-fill"></div>
+    </div>
+  </div>
+
   <div class="apt-track">
 
     <!-- PAGE 01 -->
-    <section class="apt-page cover">
+    <section class="apt-page cover" data-page="0">
       <div class="shade"></div>
       <div class="page-no">01 / 08</div>
 
       <div class="cover-copy">
         <span class="eyebrow">PREMIUM RESIDENCE</span>
         <h1>단지명을 입력해 주세요</h1>
-        <p>일상이 작품이 되는 새로운 주거의 시작</p>
+        <p>일상이 예술이 되는 새로운 주거의 시작<br><strong style="color:#fde047;">아래로 1분(60초)간 천천히 스크롤하시면 카카오톡으로 3,000원 모바일 바코드카드가 지급됩니다.</strong></p>
       </div>
 
       <div class="cover-logo">THE FIRST LIFE</div>
     </section>
 
-
     <!-- PAGE 02 -->
-    <section class="apt-page location">
+    <section class="apt-page location" data-page="1">
       <div class="page-no dark">02 / 08</div>
 
       <div class="section-title">
         <span>LOCATION</span>
         <h2>모든 가치가 하나로 모이는<br>완벽한 입지</h2>
-        <p>교통·교육·생활·자연을 가까이 누리는 특별한 자리</p>
+        <p>교통·교육·생활·자연의 가치를 누리는 특별한 자리</p>
       </div>
 
       <div class="location-photo">
@@ -685,17 +590,14 @@ body{
           <b>교통환경</b>
           <span>주요 도로와 대중교통 접근성</span>
         </div>
-
         <div>
           <b>교육환경</b>
-          <span>학교와 교육시설을 가까이</span>
+          <span>학교와 교육시설의 가치</span>
         </div>
-
         <div>
           <b>생활환경</b>
           <span>쇼핑·의료·문화시설 이용</span>
         </div>
-
         <div>
           <b>자연환경</b>
           <span>공원과 녹지의 쾌적한 생활</span>
@@ -703,13 +605,12 @@ body{
       </div>
     </section>
 
-
     <!-- PAGE 03 -->
-    <section class="apt-page premium">
+    <section class="apt-page premium" data-page="2">
       <div class="page-no">03 / 08</div>
 
       <div class="premium-photo">
-        <div class="image-label">대표 실내 이미지</div>
+        <div class="image-label">대표 외관 이미지</div>
       </div>
 
       <div class="premium-copy">
@@ -719,7 +620,7 @@ body{
         <ul>
           <li>
             <b>원스톱 라이프</b>
-            <small>생활에 필요한 모든 것을 가깝게</small>
+            <small>생활에 필요한 모든 것을 가까이</small>
           </li>
           <li>
             <b>브랜드 프리미엄</b>
@@ -730,7 +631,7 @@ body{
             <small>공간 활용을 높인 평면</small>
           </li>
           <li>
-            <b>특화 커뮤니티</b>
+            <b>대형 커뮤니티</b>
             <small>입주민을 위한 다양한 시설</small>
           </li>
           <li>
@@ -745,9 +646,8 @@ body{
       </div>
     </section>
 
-
     <!-- PAGE 04 -->
-    <section class="apt-page complex">
+    <section class="apt-page complex" data-page="3">
       <div class="page-no dark">04 / 08</div>
 
       <div class="section-title center">
@@ -762,7 +662,7 @@ body{
       <div class="feature-grid">
         <div>
           <b>쾌적한 조경</b>
-          <span>자연을 품은 단지</span>
+          <span>자연을 담은 단지</span>
         </div>
         <div>
           <b>보행 중심</b>
@@ -779,9 +679,8 @@ body{
       </div>
     </section>
 
-
     <!-- PAGE 05 -->
-    <section class="apt-page unit">
+    <section class="apt-page unit" data-page="4">
       <div class="page-no">05 / 08</div>
 
       <div class="unit-head">
@@ -816,9 +715,8 @@ body{
       </div>
     </section>
 
-
     <!-- PAGE 06 -->
-    <section class="apt-page unit">
+    <section class="apt-page unit" data-page="5">
       <div class="page-no">06 / 08</div>
 
       <div class="unit-head">
@@ -853,9 +751,8 @@ body{
       </div>
     </section>
 
-
     <!-- PAGE 07 -->
-    <section class="apt-page lifestyle">
+    <section class="apt-page lifestyle" data-page="6">
       <div class="page-no dark">07 / 08</div>
 
       <div class="section-title center">
@@ -873,9 +770,8 @@ body{
       </div>
     </section>
 
-
     <!-- PAGE 08 -->
-    <section class="apt-page contact">
+    <section class="apt-page contact" data-page="7">
       <div class="shade"></div>
       <div class="page-no">08 / 08</div>
 
@@ -891,451 +787,158 @@ body{
 
       <div class="contact-actions">
         <button type="button" id="visitBtn">
-          방문예약 신청
+          📅 방문예약 신청
         </button>
 
         <a href="tel:0212345678">
-          상담전화 02-1234-5678
+          📞 상담전화 02-1234-5678
         </a>
       </div>
-
-      <button type="button" id="rewardBtn" disabled>
-        8페이지 확인 후 포인트 받기
-      </button>
     </section>
 
   </div>
 
-
-  <button type="button" class="nav prev" aria-label="이전 페이지">
-    ‹
-  </button>
-
-  <button type="button" class="nav next" aria-label="다음 페이지">
-    ›
-  </button>
-
-
-
-  <div class="coupon-guide" role="note" aria-live="polite">
-    <strong>전자쿠폰 발급 안내</strong>
-    <span>8페이지를 모두 확인하고 유효조회 60초를 끝까지 완료해야 전자쿠폰이 발급됩니다.</span>
-  </div>
-
-  <div class="catalog-bottom">
-
-    <div class="dots"></div>
-
-    <div class="timer">
-      유효조회 <b id="viewTime">00:00</b>
+  <!-- 하단 고정 모바일 바코드카드 카카오톡 수령 바 -->
+  <div class="fixed-bottom-reward">
+    <div id="rewardGuideTxt" class="reward-guide-txt">
+      분양정보를 스크롤하며 <strong>1분(60초)</strong>을 채우시면 <strong>3,000원 모바일 바코드카드</strong>가 카카오톡으로 지급됩니다!
     </div>
-
+    <button type="button" id="rewardBtn" disabled>
+      ⏱️ 1분 스크롤 열람 중 · 60초 후 카카오톡 바코드카드 받기
+    </button>
   </div>
 
 </div>
-
 
 <script>
 (function(){
 
   function initAptCatalog(){
+    var root = document.getElementById("aptCatalog");
+    if (!root) return;
 
-    var root=document.getElementById("aptCatalog");
-    if(!root)return;
+    var viewTime = document.getElementById("viewTime");
+    var progressFill = document.getElementById("scrollProgressFill");
+    var rewardBtn = document.getElementById("rewardBtn");
+    var rewardGuideTxt = document.getElementById("rewardGuideTxt");
+    var visitBtn = document.getElementById("visitBtn");
 
-    var track=root.querySelector(".apt-track");
-    var pages=Array.prototype.slice.call(
-      root.querySelectorAll(".apt-page")
-    );
-
-    var prevBtn=root.querySelector(".prev");
-    var nextBtn=root.querySelector(".next");
-    var dotsBox=root.querySelector(".dots");
-    var viewTime=root.querySelector("#viewTime");
-    var rewardBtn=root.querySelector("#rewardBtn");
-    var visitBtn=root.querySelector("#visitBtn");
-
-    if(
-      !track ||
-      !pages.length ||
-      !prevBtn ||
-      !nextBtn ||
-      !dotsBox ||
-      !viewTime ||
-      !rewardBtn ||
-      !visitBtn
-    ){
-      return;
-    }
-
-    var current=0;
-    var startX=0;
-    var moveX=0;
-    var activeSeconds=0;
-    var lastActivity=Date.now();
-
-    var viewed={0:true};
-
-    var requiredSeconds=60;
-    var idleLimit=10000;
-
-
-    /* 페이지 점 생성 */
-
-    dotsBox.innerHTML="";
-
-    pages.forEach(function(_,index){
-
-      var dot=document.createElement("button");
-
-      dot.type="button";
-
-      dot.setAttribute(
-        "aria-label",
-        (index+1)+"페이지"
-      );
-
-      dot.addEventListener(
-        "click",
-        function(){
-          goTo(index);
-        }
-      );
-
-      dotsBox.appendChild(dot);
-
-    });
-
-    var dots=Array.prototype.slice.call(
-      dotsBox.children
-    );
-
-
-    /* 화면 업데이트 */
-
-    function update(){
-
-      track.style.transform=
-        "translateX(-"+(current*12.5)+"%)";
-
-      dots.forEach(function(dot,index){
-
-        if(index===current){
-          dot.classList.add("active");
-        }else{
-          dot.classList.remove("active");
-        }
-
-      });
-
-      prevBtn.style.display=
-        current===0
-        ?"none"
-        :"block";
-
-      nextBtn.style.display=
-        current===pages.length-1
-        ?"none"
-        :"block";
-
-      viewed[current]=true;
-
-      checkReward();
-    }
-
-
-    /* 페이지 이동 */
-
-    function goTo(index){
-
-      current=Math.max(
-        0,
-        Math.min(
-          index,
-          pages.length-1
-        )
-      );
-
-      markActivity();
-
-      update();
-    }
-
-
-    /* 활동 갱신 */
+    var activeSeconds = 0;
+    var requiredSeconds = 60;
+    var lastActivity = Date.now();
+    var idleLimit = 15000;
+    var maxScrollReached = false;
 
     function markActivity(){
-      lastActivity=Date.now();
+      lastActivity = Date.now();
+      var scrollBottom = window.innerHeight + window.scrollY;
+      var docHeight = document.documentElement.scrollHeight;
+      if (scrollBottom >= docHeight * 0.45) {
+        maxScrollReached = true;
+      }
     }
-
-
-    /* 시간 표시 */
 
     function formatTime(seconds){
-
-      var min=String(
-        Math.floor(seconds/60)
-      ).padStart(2,"0");
-
-      var sec=String(
-        seconds%60
-      ).padStart(2,"0");
-
-      return min+":"+sec;
+      var min = String(Math.floor(seconds / 60)).padStart(2, "0");
+      var sec = String(seconds % 60).padStart(2, "0");
+      return min + ":" + sec;
     }
-
-
-    /* 8페이지 + 60초 조건 */
 
     function checkReward(){
+      var pct = Math.min(100, Math.round((activeSeconds / requiredSeconds) * 100));
+      if (progressFill) progressFill.style.width = pct + "%";
 
-      var viewedCount=
-        Object.keys(viewed).length;
+      var enoughTime = activeSeconds >= requiredSeconds;
+      rewardBtn.disabled = !enoughTime;
 
-      var allViewed=
-        viewedCount===pages.length;
-
-      var enoughTime=
-        activeSeconds>=requiredSeconds;
-
-      rewardBtn.disabled=
-        !(allViewed && enoughTime);
-
-      if(rewardBtn.disabled){
-
-        var remain=Math.max(
-          0,
-          requiredSeconds-activeSeconds
-        );
-
-        rewardBtn.textContent=
-          "8페이지 확인 · "+
-          remain+
-          "초 후 전자쿠폰 받기";
-
-      }else{
-
-        rewardBtn.textContent=
-          "전자쿠폰 받기";
-
+      if (rewardBtn.disabled) {
+        var remain = Math.max(0, requiredSeconds - activeSeconds);
+        rewardBtn.innerHTML = "⏱️ 1분 스크롤 열람 중 · " + remain + "초 후 3,000원 바코드카드 받기";
+      } else {
+        if (rewardGuideTxt) {
+          rewardGuideTxt.innerHTML = "🎉 <strong>1분 스크롤 완료!</strong> 아래 버튼을 눌러 <strong>카카오톡으로 3,000원 모바일 바코드카드</strong>를 받으세요!";
+        }
+        rewardBtn.innerHTML = "💬 카카오톡으로 3,000원 모바일 바코드카드 즉시 받기 ›";
       }
     }
 
-
-    /* 이전 */
-
-    prevBtn.addEventListener(
-      "click",
-      function(){
-        goTo(current-1);
-      }
-    );
-
-
-    /* 다음 */
-
-    nextBtn.addEventListener(
-      "click",
-      function(){
-        goTo(current+1);
-      }
-    );
-
-
-    /* 모바일 스와이프 */
-
-    root.addEventListener(
-      "touchstart",
-      function(event){
-
-        if(!event.touches.length)return;
-
-        startX=
-          event.touches[0].clientX;
-
-        moveX=startX;
-
-        markActivity();
-
-      },
-      {passive:true}
-    );
-
-
-    root.addEventListener(
-      "touchmove",
-      function(event){
-
-        if(!event.touches.length)return;
-
-        moveX=
-          event.touches[0].clientX;
-
-        markActivity();
-
-      },
-      {passive:true}
-    );
-
-
-    root.addEventListener(
-      "touchend",
-      function(){
-
-        var distance=
-          moveX-startX;
-
-        if(Math.abs(distance)>45){
-
-          if(distance<0){
-            goTo(current+1);
-          }else{
-            goTo(current-1);
-          }
-
-        }
-
-      }
-    );
-
-
-    /* 사용자 활동 감지 */
-
-    [
-      "click",
-      "mousemove",
-      "keydown",
-      "scroll",
-      "touchstart"
-    ].forEach(function(eventName){
-
-      root.addEventListener(
-        eventName,
-        markActivity,
-        {passive:true}
-      );
-
+    ["scroll", "touchstart", "touchmove", "wheel", "mousemove", "click", "keydown"].forEach(function(evt){
+      window.addEventListener(evt, markActivity, { passive: true });
     });
 
-
-    /* 활성 이용시간 */
-
     setInterval(function(){
+      var isVisible = document.visibilityState === "visible";
+      var isActive = (Date.now() - lastActivity) <= idleLimit;
 
-      var isVisible=
-        document.visibilityState==="visible";
-
-      var isActive=
-        Date.now()-lastActivity
-        <=idleLimit;
-
-      if(isVisible && isActive){
-
-        activeSeconds+=1;
-
-        viewTime.textContent=
-          formatTime(activeSeconds);
-
+      if (isVisible && isActive) {
+        activeSeconds += 1;
+        if (viewTime) viewTime.textContent = formatTime(activeSeconds);
         checkReward();
       }
+    }, 1000);
 
-    },1000);
+    if (visitBtn) {
+      visitBtn.addEventListener("click", function(){
+        alert("방문예약 신청이 접수되었습니다. 담당 상담사가 곧 안내해 드립니다.");
+      });
+    }
 
+    rewardBtn.addEventListener("click", function(){
+      if (rewardBtn.disabled) return;
 
-    /* 화면 복귀 */
+      var now = new Date();
+      function pad(v){ return String(v).padStart(2, "0"); }
 
-    document.addEventListener(
-      "visibilitychange",
-      markActivity
-    );
+      var couponNo =
+        "APT-" +
+        now.getFullYear() +
+        pad(now.getMonth() + 1) +
+        pad(now.getDate()) +
+        "-" +
+        Math.random().toString(36).slice(2, 8).toUpperCase();
 
+      var expires = new Date(now);
+      expires.setDate(expires.getDate() + 30);
 
-    /* 방문예약 */
+      var couponData = {
+        couponNo: couponNo,
+        issuedAt:
+          now.getFullYear() + "-" +
+          pad(now.getMonth() + 1) + "-" +
+          pad(now.getDate()) + " " +
+          pad(now.getHours()) + ":" +
+          pad(now.getMinutes()),
+        expiresAt:
+          expires.getFullYear() + "-" +
+          pad(expires.getMonth() + 1) + "-" +
+          pad(expires.getDate()),
+        status: "사용 가능 (현금 동일 결제)",
+        point: 3000
+      };
 
-    visitBtn.addEventListener(
-      "click",
-      function(){
+      try {
+        localStorage.setItem("presaleIssuedCoupon", JSON.stringify(couponData));
+      } catch(e) {}
 
-        alert(
-          "방문예약 기능은 분양사 관리자와 연결할 예정입니다."
-        );
+      rewardBtn.disabled = true;
+      rewardBtn.textContent = "모바일 바코드카드 발급 완료 · 이동 중...";
 
-      }
-    );
+      var query =
+        "?code=" + encodeURIComponent(couponData.couponNo) +
+        "&issued=" + encodeURIComponent(couponData.issuedAt) +
+        "&expires=" + encodeURIComponent(couponData.expiresAt) +
+        "&point=3000";
 
+      window.location.href = "/sale-coupon.html" + query;
+    });
 
-    /* 전자쿠폰 자동 발급 및 이동 */
-
-    rewardBtn.addEventListener(
-      "click",
-      function(){
-
-        if(rewardBtn.disabled){
-          return;
-        }
-
-        var now=new Date();
-
-        function pad(v){
-          return String(v).padStart(2,"0");
-        }
-
-        var couponNo=
-          "APT-"+
-          now.getFullYear()+
-          pad(now.getMonth()+1)+
-          pad(now.getDate())+
-          "-"+
-          Math.random().toString(36).slice(2,8).toUpperCase();
-
-        var expires=new Date(now);
-        expires.setDate(expires.getDate()+30);
-
-        var couponData={
-          couponNo:couponNo,
-          issuedAt:
-            now.getFullYear()+"-"+
-            pad(now.getMonth()+1)+"-"+
-            pad(now.getDate())+" "+
-            pad(now.getHours())+":"+
-            pad(now.getMinutes()),
-          expiresAt:
-            expires.getFullYear()+"-"+
-            pad(expires.getMonth()+1)+"-"+
-            pad(expires.getDate()),
-          status:"사용 가능",
-          point:3000
-        };
-
-        try{
-          localStorage.setItem(
-            "presaleIssuedCoupon",
-            JSON.stringify(couponData)
-          );
-        }catch(e){}
-
-        rewardBtn.disabled=true;
-        rewardBtn.textContent="전자쿠폰 발급 완료";
-
-        window.location.href="/sale-coupon.html";
-      }
-    );
-
-update();
+    checkReward();
   }
 
-
-  if(document.readyState==="loading"){
-
-    document.addEventListener(
-      "DOMContentLoaded",
-      initAptCatalog
-    );
-
-  }else{
-
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initAptCatalog);
+  } else {
     initAptCatalog();
-
   }
 
 })();
