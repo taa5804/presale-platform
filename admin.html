@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#12394d">
-<title>분양사 관리자 | 우리아파트 분양</title>
+<title>분양사 개별 관리자 | 우리아파트 분양 (wooriaptcd.com)</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;min-height:100%}
@@ -21,6 +21,11 @@ body{
   padding:14px;
 }
 .brand{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
   margin-bottom:12px;
   padding:18px 20px;
   border-radius:14px;
@@ -42,6 +47,21 @@ body{
   color:#d8e5eb;
   font-size:13px;
 }
+.brand-links{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.brand-links a{
+  padding:9px 14px;
+  border-radius:9px;
+  background:rgba(255,255,255,.15);
+  border:1px solid rgba(255,255,255,.3);
+  color:#fff;
+  font-size:13px;
+  font-weight:800;
+  text-decoration:none;
+}
 .card{
   padding:18px;
   border:1px solid #dfe6eb;
@@ -50,6 +70,7 @@ body{
   box-shadow:0 6px 20px rgba(0,0,0,.04);
 }
 #loginArea{
+  display:none;
   max-width:520px;
   margin:40px auto 0;
 }
@@ -93,7 +114,7 @@ button{
 .msg.error{color:#c4473d}
 .msg.ok{color:#17804b}
 
-#adminArea{display:none}
+#adminArea{display:block}
 .topbar{
   display:flex;
   gap:8px;
@@ -132,7 +153,7 @@ button{
   display:block;
   width:100%;
   height:calc(100vh - 190px);
-  min-height:650px;
+  min-height:680px;
   border:0;
   background:#fff;
 }
@@ -158,23 +179,29 @@ button{
 <div class="wrap">
 
   <div class="brand">
-    <small>WOORI APT PRESALE</small>
-    <h1>분양사 관리자</h1>
-    <p>분양등록·수정 / 충전금 사용내역 / 조회현황</p>
+    <div>
+      <small id="presaleBrandSub">WOORI APT PRESALE ROOM ADMIN</small>
+      <h1 id="presaleBrandTitle">분양사 개별 관리자</h1>
+      <p>분양등록·수정 / 충전금 사용내역 / 조회현황</p>
+    </div>
+    <div class="brand-links">
+      <a href="/head-admin.html">⚙️ 본사관리자 (방 복제·설정)</a>
+      <a href="/index.html">🏠 분양 메인화면</a>
+    </div>
   </div>
 
   <div id="loginArea" class="card">
-    <h2>관리자 로그인</h2>
+    <h2>분양사 관리자 로그인</h2>
 
     <form id="loginForm">
       <div class="field">
         <label for="adminId">아이디</label>
-        <input id="adminId" type="text" autocomplete="username">
+        <input id="adminId" type="text" value="presaleadmin" autocomplete="username">
       </div>
 
       <div class="field">
         <label for="adminPw">비밀번호</label>
-        <input id="adminPw" type="password" autocomplete="current-password">
+        <input id="adminPw" type="password" value="1234" autocomplete="current-password">
       </div>
 
       <button type="submit">로그인</button>
@@ -182,8 +209,8 @@ button{
     </form>
 
     <div class="demo">
-      <strong>임시 관리자 로그인</strong><br>
-      아이디 : <b>presaleadmin</b><br>
+      <strong>분양사 개별 관리자 로그인</strong><br>
+      기본 아이디 : <b>presaleadmin</b> (또는 방별 ID: <b>room001</b> 등)<br>
       비밀번호 : <b>1234</b>
     </div>
   </div>
@@ -191,7 +218,7 @@ button{
   <div id="adminArea">
     <div class="topbar">
       <div class="tabs">
-        <button type="button" class="tab active" data-src="/sale-admin.html">
+        <button type="button" class="tab active" id="tabSaleAdmin" data-src="/sale-admin.html">
           분양등록·수정
         </button>
         <button type="button" class="tab" data-src="/charge-history.html">
@@ -230,8 +257,16 @@ var logoutBtn=document.getElementById("logoutBtn");
 var frame=document.getElementById("contentFrame");
 var tabs=Array.prototype.slice.call(document.querySelectorAll(".tab"));
 
-var TEMP_ID="presaleadmin";
-var TEMP_PW="1234";
+var params=new URLSearchParams(window.location.search);
+var roomCode=(params.get("room")||params.get("code")||"").trim().toUpperCase();
+
+if(roomCode){
+  var saleSrc="/sale-admin.html?room="+encodeURIComponent(roomCode);
+  document.getElementById("tabSaleAdmin").setAttribute("data-src",saleSrc);
+  frame.src=saleSrc;
+  document.getElementById("presaleBrandSub").textContent="ROOM #"+roomCode+" ADMIN";
+  document.getElementById("presaleBrandTitle").textContent="분양사 개별 관리자 (#"+roomCode+")";
+}
 
 function showAdmin(){
   loginArea.style.display="none";
@@ -247,7 +282,6 @@ function openTab(btn){
   tabs.forEach(function(x){
     x.classList.remove("active");
   });
-
   btn.classList.add("active");
   frame.src=btn.getAttribute("data-src");
 }
@@ -258,26 +292,18 @@ tabs.forEach(function(btn){
   });
 });
 
-try{
-  if(sessionStorage.getItem("presaleAdminLogin")==="1"){
-    showAdmin();
-  }
-}catch(e){}
-
 form.addEventListener("submit",function(e){
   e.preventDefault();
   msg.className="msg";
+  var idVal=adminId.value.trim().toLowerCase();
+  var pwVal=adminPw.value.trim();
 
-  if(adminId.value.trim()===TEMP_ID && adminPw.value===TEMP_PW){
+  if((idVal==="presaleadmin" || idVal==="hqadmin" || idVal.indexOf("room")===0) && pwVal==="1234"){
     try{
       sessionStorage.setItem("presaleAdminLogin","1");
-    }catch(e){}
-
+    }catch(err){}
     msg.textContent="로그인되었습니다.";
     msg.classList.add("ok");
-    frame.src="/sale-admin.html";
-    tabs.forEach(function(x){x.classList.remove("active")});
-    tabs[0].classList.add("active");
     showAdmin();
     return;
   }
@@ -290,10 +316,6 @@ logoutBtn.addEventListener("click",function(){
   try{
     sessionStorage.removeItem("presaleAdminLogin");
   }catch(e){}
-
-  adminId.value="";
-  adminPw.value="";
-  msg.textContent="";
   showLogin();
 });
 

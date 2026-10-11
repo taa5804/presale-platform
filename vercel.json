@@ -1,6 +1,34 @@
 {
   "rewrites": [
     {
+      "source": "/head-admin",
+      "destination": "/head-admin.html"
+    },
+    {
+      "source": "/room-manager",
+      "destination": "/room-manager.html"
+    },
+    {
+      "source": "/admin",
+      "destination": "/admin.html"
+    },
+    {
+      "source": "/price",
+      "destination": "/price.html"
+    },
+    {
+      "source": "/presale",
+      "destination": "/presale.html"
+    },
+    {
+      "source": "/sale-detail",
+      "destination": "/sale-detail.html"
+    },
+    {
+      "source": "/sale-coupon",
+      "destination": "/sale-coupon.html"
+    },
+    {
       "source": "/mart-search/:code/:mart",
       "destination": "/api/mart-page?code=:code&mart=:mart"
     },
