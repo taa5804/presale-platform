@@ -1,12 +1,7 @@
 const DEFAULT_SUPABASE_URL = "https://dcysjuxyjqtvkihdsjvv.supabase.co";
 const DEFAULT_SUPABASE_KEY = "sb_publishable_RZBX7u1v8MLBCfEJT0-eRg_jPcIulG2";
 
-const SUPABASE_URL = String(
-  process.env.SUPABASE_URL || DEFAULT_SUPABASE_URL
-)
-  .trim()
-  .replace(/\/rest\/v1\/?$/i, "")
-  .replace(/\/+$/, "");
+const SUPABASE_URL = DEFAULT_SUPABASE_URL;
 
 const SUPABASE_SERVICE_ROLE_KEY = String(
   process.env.SUPABASE_SERVICE_ROLE_KEY ||
