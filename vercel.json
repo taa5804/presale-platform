@@ -1,6 +1,10 @@
 {
   "rewrites": [
     {
+      "source": "/app-install",
+      "destination": "/app-install.html"
+    },
+    {
       "source": "/head-admin",
       "destination": "/head-admin.html"
     },
