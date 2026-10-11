@@ -1,9 +1,4 @@
-let sb = null;
-try {
-  sb = require("./_lib").sb;
-} catch (e) {
-  sb = null;
-}
+const { sb } = require("./_lib");
 
 function cors(res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -14,45 +9,11 @@ function cors(res) {
   );
 }
 
-const IS_PRESALE_DB =
-  Boolean(sb) &&
-  String(process.env.SUPABASE_URL || "dcysjuxyjqtvkihdsjvv").includes(
-    "dcysjuxyjqtvkihdsjvv"
-  );
-
 module.exports = async function (req, res) {
   cors(res);
 
   if (req.method === "OPTIONS") {
     return res.status(204).end();
-  }
-
-  /* 다른 도메인(wooriapt.app / ansimdeal.com)에서 호출된 경우 본사 서버(wooriaptcd.com)로 프록시 */
-  if (!IS_PRESALE_DB) {
-    try {
-      const qs = req.url.includes("?") ? req.url.slice(req.url.indexOf("?")) : "";
-      const targetUrl = `https://wooriaptcd.com/api/sale-save${qs}`;
-      const fetchOpts = {
-        method: req.method,
-        headers: {
-          "Content-Type": "application/json",
-          "X-Admin-Key": req.headers["x-admin-key"] || "1234"
-        }
-      };
-      if (req.method !== "GET" && req.method !== "HEAD" && req.body) {
-        fetchOpts.body =
-          typeof req.body === "string" ? req.body : JSON.stringify(req.body);
-      }
-      const upstream = await fetch(targetUrl, fetchOpts);
-      const data = await upstream.json();
-      return res.status(upstream.status).json(data);
-    } catch (err) {
-      return res.status(502).json({
-        ok: false,
-        message: "본사 분양사 방 서버 연동 오류",
-        error: err.message
-      });
-    }
   }
 
   /* =========================================
