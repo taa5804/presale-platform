@@ -414,7 +414,7 @@ function collect(){
   };
 }
 
-function save(){
+async function save(){
   var data=collect();
 
   try{
@@ -422,6 +422,17 @@ function save(){
       "presaleSystemSettings",
       JSON.stringify(data)
     );
+  }catch(e){}
+
+  try{
+    await fetch("/api/sale-save",{
+      method:"POST",
+      headers:{"Content-Type":"application/json","X-Admin-Key":"1234"},
+      body:JSON.stringify({
+        action:"save_settings",
+        pointAmount:data.pointAmount
+      })
+    });
   }catch(e){}
 
   el("message").style.display="block";

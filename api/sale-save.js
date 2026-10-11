@@ -10,90 +10,125 @@ function cors(res) {
 }
 
 const BUCKET_ID = "presale-rooms";
-const OBJECT_PATH = "rooms.json";
+const OBJECT_PATH = "rooms-v2.json";
+
+const SIDO_ORDER = [
+  "seoul",
+  "gyeonggi",
+  "incheon",
+  "busan",
+  "daegu",
+  "daejeon",
+  "ulsan",
+  "sejong",
+  "gangwon",
+  "chungbuk",
+  "chungnam",
+  "jeonbuk",
+  "jg",
+  "gyeongbuk",
+  "gyeongnam",
+  "jeju"
+];
+
+function sortRoomsByRegion(rooms) {
+  return (Array.isArray(rooms) ? rooms.slice() : []).sort((a, b) => {
+    const sa = (a.catalog_data && a.catalog_data.sido) || "seoul";
+    const sb = (b.catalog_data && b.catalog_data.sido) || "seoul";
+    const ia = SIDO_ORDER.indexOf(sa);
+    const ib = SIDO_ORDER.indexOf(sb);
+    const orderA = ia === -1 ? 999 : ia;
+    const orderB = ib === -1 ? 999 : ib;
+    if (orderA !== orderB) return orderA - orderB;
+    return String(a.project_code || "").localeCompare(String(b.project_code || ""));
+  });
+}
 
 function getSeedRooms() {
   const now = new Date().toISOString();
   return [
     {
       project_code: "ROOM-001",
-      project_name: "첨단 센트럴파크 1차",
-      sale_status: "선착순 동·호 지정 계약 중",
-      area: "전용 84㎡ A·B타입",
-      move_in_date: "2027년 10월 예정",
-      contact_phone: "1588-0001",
-      modelhouse_address: "광주광역시 북구 첨단과기로 208번길 모델하우스",
+      project_name: "더 퍼스트 센트럴파크",
+      sale_status: "분양 중",
+      area: "서울특별시 강남구 역삼동",
+      move_in_date: "2029년 8월",
+      contact_phone: "02-1588-0001",
+      modelhouse_address: "서울특별시 강남구 역삼동 모델하우스",
       is_active: true,
       catalog_data: {
-        companyName: "첨단 센트럴파크 분양사업단",
+        companyName: "더 퍼스트 분양사업단",
         channelType: "daangn",
-        targetRegion: "광주 북구 신용동 · 연제동 · 오룡동 · 쌍암동",
-        rewardType: "카카오톡 모바일 바코드카드",
+        sido: "seoul",
+        targetDong: "서울특별시 강남구 역삼동·대치동",
+        targetRegion: "서울특별시 강남구 역삼동·대치동",
+        households: "1,520세대",
+        types: "84A · 84B",
+        rewardType: "모바일 바코드카드",
         rewardAmount: 3000,
         chargeBudget: 1500000,
         issueQty: 500,
         issuedCount: 0,
-        badge: "인기 분양 · 당근비즈 1번방",
-        region: "광주 북구 · 첨단 84㎡",
-        priceText: "분양가 5억 2,800만~ · 중도금 무이자",
-        benefit1: "1차 계약금 1,000만원 정액제 (중도금 60% 전액 무이자)",
-        benefit2: "발코니 확장 무상 + 시스템에어컨 4대 무상 제공",
-        benefit3: "1분 스크롤 열람 시 3,000원 모바일 바코드카드 즉시 지급"
+        partnerName: "모바일 바코드카드",
+        coverEyebrow: "PREMIUM RESIDENCE",
+        coverDescription: "일상이 작품이 되는 새로운 주거의 시작"
       },
       updated_at: now
     },
     {
       project_code: "ROOM-002",
-      project_name: "봉선 더퍼스트 스카이",
-      sale_status: "로얄층 마감 임박 · 선착순 분양",
-      area: "전용 84㎡ · 114㎡ 중대형",
-      move_in_date: "2028년 03월 예정",
-      contact_phone: "1588-0002",
-      modelhouse_address: "광주광역시 남구 봉선중앙로 모델하우스",
+      project_name: "판교 레이크뷰 프레스티지",
+      sale_status: "분양 중",
+      area: "경기도 성남시 분당구",
+      move_in_date: "2030년 1월",
+      contact_phone: "031-1588-0002",
+      modelhouse_address: "경기도 성남시 분당구 판교역로 모델하우스",
       is_active: true,
       catalog_data: {
-        companyName: "봉선 더퍼스트 분양대행사",
+        companyName: "레이크뷰 분양본부",
         channelType: "daangn",
-        targetRegion: "광주 남구 봉선동 · 주월동 · 진월동 · 노대동",
-        rewardType: "카카오톡 모바일 바코드카드",
+        sido: "gyeonggi",
+        targetDong: "경기도 성남시 분당구 판교동·백현동",
+        targetRegion: "경기도 성남시 분당구 판교동·백현동",
+        households: "1,180세대",
+        types: "74 · 84 · 101",
+        rewardType: "모바일 바코드카드",
         rewardAmount: 3000,
         chargeBudget: 1500000,
         issueQty: 500,
         issuedCount: 0,
-        badge: "명문학군 · 당근비즈 2번방",
-        region: "광주 남구 · 봉선 84㎡·114㎡",
-        priceText: "분양가 6억 4,500만~ · 명문학군 중심",
-        benefit1: "봉선동 핵심 명문학군 도보 통학권 프리미엄 단지",
-        benefit2: "전 세대 남향 위주 4Bay 혁신 평면 + 대형 팬트리",
-        benefit3: "1분 스크롤 열람 시 3,000원 모바일 바코드카드 즉시 지급"
+        partnerName: "모바일 바코드카드",
+        coverEyebrow: "NEW LIFESTYLE",
+        coverDescription: "교통·교육·생활·자연을 가까이 누리는 특별한 자리"
       },
       updated_at: now
     },
     {
       project_code: "ROOM-003",
-      project_name: "수완 레이크뷰 프레스티지",
-      sale_status: "마트 제휴 · 잔여세대 특별분양",
-      area: "전용 59㎡ · 84㎡",
-      move_in_date: "2027년 12월 예정",
-      contact_phone: "1588-0003",
-      modelhouse_address: "광주광역시 광산구 수완로 모델하우스",
+      project_name: "양산택지지구 프리미엄 대단지",
+      sale_status: "분양 중",
+      area: "광주광역시 광산구 하남산단8번로 176",
+      move_in_date: "2029년 3월",
+      contact_phone: "062-952-4150",
+      modelhouse_address: "광주광역시 광산구 하남산단8번로 176",
       is_active: true,
       catalog_data: {
-        companyName: "수완 레이크뷰 분양본부",
+        companyName: "양산택지지구 분양사업단",
         channelType: "mart",
-        targetRegion: "광주 광산구 수완동 · 장덕동 · 신창동 · 운남동",
-        rewardType: "마트 전용 전자쿠폰",
-        rewardAmount: 3000,
+        sido: "jg",
+        targetDong: "광주 광산구 양산동·하남동",
+        targetRegion: "광주 광산구 양산동·하남동",
+        households: "1,520세대",
+        types: "84A · 84B",
+        rewardType: "전자쿠폰",
+        rewardAmount: 5000,
         chargeBudget: 1500000,
-        issueQty: 500,
+        issueQty: 300,
         issuedCount: 0,
-        martPartnerName: "수완 로컬푸드 직매장 마트",
-        badge: "마트 제휴 · 전자쿠폰 3번방",
-        region: "광주 광산구 · 수완 59㎡·84㎡",
-        priceText: "분양가 4억 8,900만~ · 호수공원 특급조망",
-        benefit1: "수완호수공원 도보 3분 쾌적한 힐링 주거환경",
-        benefit2: "제휴 마트 방문 고객 특별 사은품 + 계약 축하금 지원",
-        benefit3: "1분 스크롤 열람 시 마트 전용 3,000원 전자쿠폰 즉시 발급"
+        partnerName: "에너젠마트",
+        martPartnerName: "에너젠마트",
+        coverEyebrow: "PREMIUM RESIDENCE",
+        coverDescription: "자연과 건축이 어우러진 프리미엄 대단지"
       },
       updated_at: now
     }
@@ -126,6 +161,7 @@ async function ensureBucket() {
 
 async function writeAllRooms(rooms) {
   await ensureBucket();
+  const sorted = sortRoomsByRegion(rooms);
   const res = await fetch(
     `${SUPABASE_URL}/storage/v1/object/${BUCKET_ID}/${OBJECT_PATH}`,
     {
@@ -135,14 +171,14 @@ async function writeAllRooms(rooms) {
         "x-upsert": "true",
         "Cache-Control": "no-cache"
       }),
-      body: JSON.stringify(rooms)
+      body: JSON.stringify(sorted)
     }
   );
   if (!res.ok) {
     const errText = await res.text();
     throw new Error(`Storage write error (${res.status}): ${errText}`);
   }
-  return rooms;
+  return sorted;
 }
 
 async function readAllRooms() {
@@ -156,7 +192,7 @@ async function readAllRooms() {
   if (res.ok) {
     const data = await res.json().catch(() => null);
     if (Array.isArray(data) && data.length > 0) {
-      return data;
+      return sortRoomsByRegion(data);
     }
   }
   const seeded = getSeedRooms();
@@ -226,7 +262,31 @@ module.exports = async function (req, res) {
 
     const allRooms = await readAllRooms();
 
-    /* 1. 고객 1분 스크롤 완료 후 모바일 바코드카드/쿠폰 발급 차감 */
+    /* 0. 본사관리자 시스템 설정에서 기본 지급 금액/채널 일괄 변경 시 */
+    if (action === "save_settings") {
+      const nextAmount = Number(body.pointAmount || body.rewardAmount || 0);
+      const nextChannel = body.channelType || "";
+      if (nextAmount > 0) {
+        for (let i = 0; i < allRooms.length; i++) {
+          const c = allRooms[i].catalog_data || {};
+          c.rewardAmount = nextAmount;
+          if (nextChannel === "mart" || nextChannel === "daangn") {
+            c.channelType = nextChannel;
+            c.rewardType = nextChannel === "mart" ? "전자쿠폰" : "모바일 바코드카드";
+          }
+          allRooms[i].catalog_data = c;
+          allRooms[i].updated_at = new Date().toISOString();
+        }
+        const saved = await writeAllRooms(allRooms);
+        return res.status(200).json({
+          ok: true,
+          message: "본사관리자 지급 금액 설정이 전체 반영되었습니다.",
+          rooms: saved
+        });
+      }
+    }
+
+    /* 1. 고객 1분 스크롤 완료 후 모바일 바코드카드/전자쿠폰 발급 차감 */
     if (action === "issue_barcode") {
       if (!projectCode) {
         return res.status(400).json({
@@ -247,6 +307,8 @@ module.exports = async function (req, res) {
 
       const room = allRooms[idx];
       const cData = room.catalog_data || {};
+      const isMart = cData.channelType === "mart";
+      const rewardLabel = isMart ? "전자쿠폰" : "모바일 바코드카드";
       const phone = String(body.phone || "").replace(/[^0-9]/g, "");
       const issuedPhones = Array.isArray(cData.issuedPhones)
         ? cData.issuedPhones
@@ -256,8 +318,7 @@ module.exports = async function (req, res) {
         return res.status(409).json({
           ok: false,
           reason: "duplicate_phone",
-          message:
-            "이미 해당 휴대폰 번호로 모바일 바코드카드가 지급되었습니다. (1인 1회 한정)"
+          message: `이미 해당 휴대폰 번호로 ${rewardLabel}이(가) 지급되었습니다. (1인 1회 한정)`
         });
       }
 
@@ -268,8 +329,7 @@ module.exports = async function (req, res) {
         return res.status(409).json({
           ok: false,
           reason: "exhausted",
-          message:
-            "해당 분양사의 준비된 모바일 바코드카드 수량이 모두 소진되었습니다."
+          message: `해당 분양사의 준비된 ${rewardLabel} 수량이 모두 소진되었습니다.`
         });
       }
 
@@ -283,7 +343,7 @@ module.exports = async function (req, res) {
         couponNo: body.coupon_no || "",
         phone: phone
           ? phone.slice(0, 3) + "-****-" + phone.slice(-4)
-          : "카카오톡발송",
+          : "발급완료",
         rawPhone: phone || "",
         rewardAmount: Number(cData.rewardAmount || 3000),
         channelType: cData.channelType || "daangn",
@@ -306,14 +366,14 @@ module.exports = async function (req, res) {
 
       return res.status(200).json({
         ok: true,
-        message: "모바일 바코드카드 지급 및 수량 차감이 반영되었습니다.",
+        message: `${rewardLabel} 지급 및 수량 차감이 반영되었습니다.`,
         issuedCount: nextIssuedCount,
         remainCount: Math.max(0, issueQty - nextIssuedCount),
         project: updatedRoom
       });
     }
 
-    /* 관리자 인증 확인 (본사관리자 hqadmin / 1234 및 환경변수 SALE_ADMIN_KEY 모두 허용) */
+    /* 관리자 인증 확인 */
     const adminKey = process.env.SALE_ADMIN_KEY || "1234";
     const requestKey = String(
       req.headers["x-admin-key"] || body.admin_key || "1234"
@@ -346,12 +406,12 @@ module.exports = async function (req, res) {
       const nextRooms = allRooms.filter(
         (r) => String(r.project_code || "").toUpperCase() !== projectCode
       );
-      await writeAllRooms(nextRooms);
+      const saved = await writeAllRooms(nextRooms);
 
       return res.status(200).json({
         ok: true,
         message: `방(${projectCode})이 삭제되었습니다.`,
-        rooms: nextRooms
+        rooms: saved
       });
     }
 
@@ -385,6 +445,9 @@ module.exports = async function (req, res) {
     );
     const prevCatalog =
       existingIdx !== -1 ? allRooms[existingIdx].catalog_data || {} : {};
+    const incomingCatalog = body.catalog_data || {};
+    const mergedChannel =
+      incomingCatalog.channelType || prevCatalog.channelType || "daangn";
 
     const saveData = {
       project_code: projectCode,
@@ -396,7 +459,9 @@ module.exports = async function (req, res) {
       modelhouse_address: body.modelhouse_address || "",
       catalog_data: {
         ...prevCatalog,
-        ...(body.catalog_data || {})
+        ...incomingCatalog,
+        channelType: mergedChannel,
+        rewardType: mergedChannel === "mart" ? "전자쿠폰" : "모바일 바코드카드"
       },
       is_active: body.is_active !== false,
       updated_at: new Date().toISOString()
@@ -408,13 +473,13 @@ module.exports = async function (req, res) {
       allRooms.push(saveData);
     }
 
-    await writeAllRooms(allRooms);
+    const saved = await writeAllRooms(allRooms);
 
     return res.status(200).json({
       ok: true,
       message: "분양사 전용 방 설정이 저장·복제되었습니다.",
       project: saveData,
-      rooms: allRooms
+      rooms: saved
     });
   } catch (error) {
     console.error("sale-save error:", error);
