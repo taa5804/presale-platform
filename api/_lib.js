@@ -1,7 +1,18 @@
 const DEFAULT_SUPABASE_URL = "https://dcysjuxyjqtvkihdsjvv.supabase.co";
 const DEFAULT_SUPABASE_KEY = "sb_publishable_RZBX7u1v8MLBCfEJT0-eRg_jPcIulG2";
 
-const SUPABASE_URL = DEFAULT_SUPABASE_URL;
+function resolveSupabaseOrigin(raw) {
+  const s = String(raw || DEFAULT_SUPABASE_URL).trim();
+  try {
+    const u = new URL(s);
+    return u.origin;
+  } catch (e) {
+    const m = s.match(/https?:\/\/[^/\s]+/i);
+    return m ? m[0] : DEFAULT_SUPABASE_URL;
+  }
+}
+
+const SUPABASE_URL = resolveSupabaseOrigin(process.env.SUPABASE_URL);
 
 const SUPABASE_SERVICE_ROLE_KEY = String(
   process.env.SUPABASE_SERVICE_ROLE_KEY ||
