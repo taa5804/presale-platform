@@ -1,6 +1,10 @@
 {
   "rewrites": [
     {
+      "source": "/presale-list",
+      "destination": "/presale-list.html"
+    },
+    {
       "source": "/app-install",
       "destination": "/app-install.html"
     },
