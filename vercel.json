@@ -69,6 +69,15 @@
       ]
     },
     {
+      "source": "/broker-landing.png",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    },
+    {
       "source": "/presale-list.xlsx",
       "headers": [
         {
