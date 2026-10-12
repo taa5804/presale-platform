@@ -392,6 +392,71 @@ module.exports = async function (req, res) {
       });
     }
 
+    /* 1-2. 모델하우스 방문예약 신청 저장 */
+    if (action === "visit_reserve") {
+      if (!projectCode) {
+        return res.status(400).json({
+          ok: false,
+          message: "방 코드(project_code)가 필요합니다."
+        });
+      }
+      const idx = allRooms.findIndex(
+        (r) => String(r.project_code || "").toUpperCase() === projectCode
+      );
+      if (idx === -1) {
+        return res.status(404).json({
+          ok: false,
+          message: "해당 분양사 방을 찾을 수 없습니다."
+        });
+      }
+      const room = allRooms[idx];
+      const cData = room.catalog_data || {};
+      const phone = String(body.phone || "").replace(/[^0-9]/g, "");
+      const formattedPhone =
+        phone.length === 11
+          ? phone.slice(0, 3) + "-" + phone.slice(3, 7) + "-" + phone.slice(7)
+          : phone.length === 10
+          ? phone.slice(0, 3) + "-" + phone.slice(3, 6) + "-" + phone.slice(6)
+          : String(body.phone || "").trim();
+      const dong = String(
+        body.dong || cData.targetDong || cData.targetRegion || room.area || "지역미지정"
+      ).trim();
+
+      const visitReservations = Array.isArray(cData.visitReservations)
+        ? cData.visitReservations
+        : [];
+      visitReservations.unshift({
+        dong: dong,
+        phone: phone
+          ? phone.slice(0, 3) + "-****-" + phone.slice(-4)
+          : "접수완료",
+        rawPhone: formattedPhone || phone || "",
+        visitDate: String(body.visit_date || "").trim() || "-",
+        projectCode: room.project_code,
+        projectName: room.project_name || "",
+        companyName: cData.companyName || "",
+        status: "방문예약 접수",
+        createdAt: new Date().toISOString()
+      });
+
+      const updatedRoom = {
+        ...room,
+        catalog_data: {
+          ...cData,
+          visitReservations: visitReservations.slice(0, 500)
+        },
+        updated_at: new Date().toISOString()
+      };
+      allRooms[idx] = updatedRoom;
+      await writeAllRooms(allRooms);
+
+      return res.status(200).json({
+        ok: true,
+        message: "모델하우스 방문예약 신청이 접수되었습니다.",
+        project: updatedRoom
+      });
+    }
+
     /* 관리자 인증 확인 */
     const adminKey = process.env.SALE_ADMIN_KEY || "1234";
     const requestKey = String(

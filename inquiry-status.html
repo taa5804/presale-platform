@@ -280,13 +280,13 @@ body{
       <select id="rg">
         <option value="">전체 지역</option>
         <option>서울특별시</option>
+        <option>경기도</option>
+        <option>인천광역시</option>
         <option>부산광역시</option>
         <option>대구광역시</option>
-        <option>인천광역시</option>
         <option>대전광역시</option>
         <option>울산광역시</option>
         <option>세종특별자치시</option>
-        <option>경기도</option>
         <option>강원특별자치도</option>
         <option>충청북도</option>
         <option>충청남도</option>
@@ -300,17 +300,17 @@ body{
       <input
         type="text"
         id="kw"
-        placeholder="분양사·아파트명 검색"
+        placeholder="분양사·아파트명·유입동네 검색"
       >
 
       <button type="button" id="searchBtn">
-        조회
+        새로고침 · 조회
       </button>
 
     </div>
 
     <div class="table-tools">
-      총 <strong id="cnt">0</strong>건
+      총 <strong id="cnt">0</strong>건 (60초 유효열람 및 방문예약 실시간 연동 · 고객 연락처 안심 마스킹 적용)
     </div>
 
     <div class="table-wrap">
@@ -319,13 +319,13 @@ body{
         <thead>
           <tr>
             <th>조회일시</th>
-            <th>지역</th>
+            <th>지역 / 유입동네</th>
             <th>분양사</th>
             <th>아파트</th>
             <th>확인 페이지</th>
-            <th>조회시간</th>
+            <th>조회시간 / 구분</th>
             <th>유효조회</th>
-            <th>지급 포인트</th>
+            <th>지급 혜택</th>
             <th>충전금 차감</th>
           </tr>
         </thead>
@@ -350,6 +350,25 @@ body{
 var root=document.getElementById("viewStatusApp");
 if(!root)return;
 
+var SIDO_MAP = {
+  seoul: "서울특별시",
+  gyeonggi: "경기도",
+  incheon: "인천광역시",
+  busan: "부산광역시",
+  daegu: "대구광역시",
+  daejeon: "대전광역시",
+  ulsan: "울산광역시",
+  sejong: "세종특별자치시",
+  gangwon: "강원특별자치도",
+  chungbuk: "충청북도",
+  chungnam: "충청남도",
+  jeonbuk: "전북특별자치도",
+  jg: "전남광주통합특별시",
+  gyeongbuk: "경상북도",
+  gyeongnam: "경상남도",
+  jeju: "제주특별자치도"
+};
+
 var D=[];
 
 function el(id){
@@ -358,6 +377,12 @@ function el(id){
 
 function n(v){
   return Number(v||0).toLocaleString("ko-KR");
+}
+
+function fmtDate(iso){
+  if(!iso) return "-";
+  var s = String(iso).replace("T", " ").slice(0, 16);
+  return s;
 }
 
 function show(A){
@@ -386,15 +411,15 @@ function show(A){
 
     tr.innerHTML=
       "<td>"+(x.date||"-")+"</td>"+
-      "<td>"+(x.region||"-")+"</td>"+
+      "<td>"+(x.regionLabel||x.region||"-")+"</td>"+
       "<td>"+(x.company||"-")+"</td>"+
-      "<td>"+(x.apt||"-")+"</td>"+
-      "<td>"+(x.pages||0)+"/8</td>"+
-      "<td>"+(x.time||"00:00")+"</td>"+
+      "<td><strong>"+(x.apt||"-")+"</strong></td>"+
+      "<td>"+(x.pages||8)+"/8</td>"+
+      "<td>"+(x.time||"01:00")+"</td>"+
       "<td class='"+(x.valid?"valid":"waiting")+"'>"+
-        (x.valid?"유효":"미완료")+
+        (x.statusText || (x.valid?"유효열람 완료":"방문예약 접수"))+
       "</td>"+
-      "<td>"+n(x.point)+" P</td>"+
+      "<td>"+n(x.point)+"원 ("+(x.maskedPhone||"-")+")</td>"+
       "<td>"+n(x.charge)+"원</td>";
 
     el("rows").appendChild(tr);
@@ -430,13 +455,14 @@ function search(){
       return false;
     }
 
-    if(rg && x.region!==rg){
+    if(rg && x.region!==rg && String(x.regionLabel||"").indexOf(rg)===-1){
       return false;
     }
 
     var text=(
       (x.company||"")+" "+
-      (x.apt||"")
+      (x.apt||"")+" "+
+      (x.regionLabel||"")
     ).toLowerCase();
 
     if(kw && !text.includes(kw)){
@@ -449,7 +475,79 @@ function search(){
   show(result);
 }
 
-el("searchBtn").onclick=search;
+async function loadLiveInquiries(){
+  var params = new URLSearchParams(window.location.search);
+  var roomFilter = (params.get("room") || params.get("code") || "").trim().toUpperCase();
+  var rooms = [];
+
+  try {
+    var res = await fetch("/api/sale-save");
+    var data = await res.json();
+    if(res.ok && data.ok && Array.isArray(data.rooms)){
+      rooms = data.rooms;
+    }
+  } catch(e){}
+
+  if(rooms.length === 0){
+    try {
+      rooms = JSON.parse(localStorage.getItem("wooriapt_replicated_rooms_v2") || "[]");
+    } catch(e){}
+  }
+
+  var list = [];
+  rooms.forEach(function(r){
+    if(roomFilter && String(r.project_code || "").toUpperCase() !== roomFilter) return;
+    var c = r.catalog_data || {};
+    var sidoName = SIDO_MAP[c.sido || "seoul"] || "서울특별시";
+    var hist = Array.isArray(c.issuedHistory) ? c.issuedHistory : [];
+    hist.forEach(function(h){
+      var amt = Number(h.rewardAmount || c.rewardAmount || 3000);
+      list.push({
+        date: fmtDate(h.issuedAt),
+        region: sidoName,
+        regionLabel: sidoName + (h.dong ? " · " + h.dong : ""),
+        company: h.companyName || c.companyName || "-",
+        apt: h.projectName || r.project_name || "-",
+        pages: 8,
+        time: "01:00 완료",
+        valid: true,
+        statusText: "60초 유효열람",
+        maskedPhone: h.phone || "010-****-****",
+        point: amt,
+        charge: amt
+      });
+    });
+
+    var visits = Array.isArray(c.visitReservations) ? c.visitReservations : [];
+    visits.forEach(function(v){
+      list.push({
+        date: fmtDate(v.createdAt),
+        region: sidoName,
+        regionLabel: sidoName + (v.dong ? " · " + v.dong : ""),
+        company: v.companyName || c.companyName || "-",
+        apt: v.projectName || r.project_name || "-",
+        pages: 8,
+        time: "희망일: " + (v.visitDate || "-"),
+        valid: true,
+        statusText: "방문예약 신청",
+        maskedPhone: v.phone || "010-****-****",
+        point: 0,
+        charge: 0
+      });
+    });
+  });
+
+  list.sort(function(a, b){
+    return String(b.date || "").localeCompare(String(a.date || ""));
+  });
+
+  D = list;
+  search();
+}
+
+el("searchBtn").onclick=function(){
+  loadLiveInquiries();
+};
 
 el("kw").addEventListener(
   "keydown",
@@ -465,12 +563,11 @@ var today=new Date();
 el("ed").value=
   today.toISOString().slice(0,10);
 
-today.setDate(1);
-
+var firstDay = new Date(today.getFullYear(), today.getMonth() - 1, 1);
 el("sd").value=
-  today.toISOString().slice(0,10);
+  firstDay.toISOString().slice(0,10);
 
-show(D);
+loadLiveInquiries();
 
 })();
 </script>

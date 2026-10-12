@@ -440,7 +440,76 @@ function search(){
   render(result);
 }
 
-el("searchBtn").onclick=search;
+async function loadLiveChargeHistory(){
+  var params = new URLSearchParams(window.location.search);
+  var roomFilter = (params.get("room") || params.get("code") || "").trim().toUpperCase();
+  var rooms = [];
+
+  try {
+    var res = await fetch("/api/sale-save");
+    var data = await res.json();
+    if(res.ok && data.ok && Array.isArray(data.rooms)){
+      rooms = data.rooms;
+    }
+  } catch(e){}
+
+  if(rooms.length === 0){
+    try {
+      rooms = JSON.parse(localStorage.getItem("wooriapt_replicated_rooms_v2") || "[]");
+    } catch(e){}
+  }
+
+  var ledger = [];
+  rooms.forEach(function(r){
+    var code = String(r.project_code || "ROOM-001").toUpperCase();
+    if(roomFilter && code !== roomFilter) return;
+    var c = r.catalog_data || {};
+    var reward = Number(c.rewardAmount || 3000);
+    var qty = Number(c.issueQty || 500);
+    var budget = Number(c.chargeBudget || (reward * qty));
+    var createdDate = String(r.updated_at || new Date().toISOString()).replace("T", " ").slice(0, 16);
+
+    var balance = budget;
+    ledger.push({
+      date: createdDate,
+      siteCode: code,
+      company: c.companyName || "-",
+      siteName: r.project_name || "-",
+      type: "CHARGE",
+      amount: budget,
+      balance: balance,
+      memo: "선불 예치금 충전 (" + n(reward) + "원 × " + n(qty) + "장)"
+    });
+
+    var hist = (Array.isArray(c.issuedHistory) ? c.issuedHistory.slice().reverse() : []);
+    hist.forEach(function(h){
+      var useAmt = Number(h.rewardAmount || reward);
+      balance = Math.max(0, balance - useAmt);
+      var dStr = String(h.issuedAt || "").replace("T", " ").slice(0, 16);
+      ledger.push({
+        date: dStr || createdDate,
+        siteCode: code,
+        company: h.companyName || c.companyName || "-",
+        siteName: h.projectName || r.project_name || "-",
+        type: "USE",
+        amount: useAmt,
+        balance: balance,
+        memo: "60초 유효열람 바코드카드 발급 (" + (h.dong || "-") + " · " + (h.phone || "-") + ")"
+      });
+    });
+  });
+
+  ledger.sort(function(a, b){
+    return String(b.date || "").localeCompare(String(a.date || ""));
+  });
+
+  D = ledger;
+  search();
+}
+
+el("searchBtn").onclick=function(){
+  loadLiveChargeHistory();
+};
 
 el("kw").addEventListener(
   "keydown",
@@ -456,12 +525,11 @@ var today=new Date();
 el("ed").value=
   today.toISOString().slice(0,10);
 
-today.setDate(1);
-
+var firstDay = new Date(today.getFullYear(), today.getMonth() - 1, 1);
 el("sd").value=
-  today.toISOString().slice(0,10);
+  firstDay.toISOString().slice(0,10);
 
-render(D);
+loadLiveChargeHistory();
 
 })();
 </script>
