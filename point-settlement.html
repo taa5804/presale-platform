@@ -238,30 +238,35 @@ body{
 
 <div id="pointSettlementApp">
 
-  <div class="head">
-    <h2>포인트 정산관리</h2>
-    <p>분양 카탈로그 유효조회에 따른 포인트 지급 및 정산내역을 관리합니다.</p>
+  <div class="head" style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;">
+    <div>
+      <h2>🔒 본사 독점 DB (동별 · 휴대폰 번호) 및 바코드·포인트 정산관리</h2>
+      <p>60초 유효열람 후 카카오톡으로 바코드카드·전자쿠폰을 수령한 고객의 <strong>거주 동네(행정동)와 실제 휴대폰 번호 원본(본사 독점)</strong> 및 정산내역입니다.</p>
+    </div>
+    <button type="button" id="dlHqDbBtn" style="width:auto;padding:0 18px;height:44px;background:#10b981;color:#fff;border-radius:10px;font-size:13.5px;font-weight:900;box-shadow:0 4px 12px rgba(16,185,129,0.3);">
+      📥 동별·휴대폰번호 본사 독점 DB 엑셀(CSV) 다운로드
+    </button>
   </div>
 
   <div class="summary">
 
     <div class="summary-box">
-      <span>전체 지급건수</span>
+      <span>전체 수령(DB) 건수</span>
       <strong id="s1">0건</strong>
     </div>
 
     <div class="summary-box">
-      <span>총 지급 포인트</span>
-      <strong id="s2">0 P</strong>
+      <span>총 지급 리워드 금액</span>
+      <strong id="s2">0원</strong>
     </div>
 
     <div class="summary-box">
-      <span>정산완료</span>
+      <span>당근 모바일 바코드카드</span>
       <strong id="s3">0건</strong>
     </div>
 
     <div class="summary-box">
-      <span>정산대기</span>
+      <span>마트 전자쿠폰</span>
       <strong id="s4">0건</strong>
     </div>
 
@@ -270,7 +275,7 @@ body{
   <div class="panel">
 
     <div class="panel-title">
-      포인트 지급·정산내역
+      💬 카카오톡 연동 수령자 동별 · 휴대폰 번호 DB 및 정산내역 (본사 전용 원본 번호 표시)
     </div>
 
     <div class="filters">
@@ -279,15 +284,15 @@ body{
       <input type="date" id="ed">
 
       <select id="status">
-        <option value="">전체 상태</option>
-        <option value="WAITING">정산대기</option>
-        <option value="PAID">정산완료</option>
+        <option value="">전체 채널</option>
+        <option value="daangn">🥕 당근 모바일 바코드카드</option>
+        <option value="mart">🛒 마트 전자쿠폰</option>
       </select>
 
       <input
         type="text"
         id="kw"
-        placeholder="분양사·현장명·쿠폰번호 검색"
+        placeholder="동네(예: 양산동)·휴대폰번호·단지명·바코드번호 검색"
       >
 
       <button type="button" id="searchBtn">
@@ -297,8 +302,8 @@ body{
     </div>
 
     <div class="table-tools">
-      <div>총 <strong id="cnt">0</strong>건</div>
-      <div>조회 포인트 <strong id="sumPoint">0 P</strong></div>
+      <div>조회된 본사 독점 DB <strong id="cnt">0</strong>건</div>
+      <div>합계 금액 <strong id="sumPoint">0원</strong></div>
     </div>
 
     <div class="table-wrap">
@@ -306,15 +311,15 @@ body{
       <table>
         <thead>
           <tr>
-            <th>지급일시</th>
-            <th>분양현장코드</th>
-            <th>분양사명</th>
-            <th>현장명</th>
-            <th>쿠폰번호</th>
-            <th>유효조회</th>
-            <th>지급 포인트</th>
-            <th>정산상태</th>
-            <th>정산일</th>
+            <th>수령일시</th>
+            <th>유입채널</th>
+            <th>거주 동네 (유입지역)</th>
+            <th>휴대폰 번호 (본사 독점 원본)</th>
+            <th>분양사/분양현장</th>
+            <th>발급 바코드/쿠폰번호</th>
+            <th>60초 유효열람</th>
+            <th>지급 금액</th>
+            <th>카카오톡 연동</th>
           </tr>
         </thead>
 
@@ -322,7 +327,8 @@ body{
       </table>
 
       <div id="empty">
-        포인트 지급·정산 내역이 없습니다.
+        아직 수집된 동별·휴대폰번호 내역이 없습니다.<br>
+        분양 카탈로그에서 60초 열람 후 카카오톡 바코드카드를 수령하면 이곳에 실시간으로 기록됩니다.
       </div>
 
     </div>
@@ -339,6 +345,7 @@ var root=document.getElementById("pointSettlementApp");
 if(!root)return;
 
 var D=[];
+var currentFiltered=[];
 
 function el(id){
   return root.querySelector("#"+id);
@@ -348,84 +355,79 @@ function n(v){
   return Number(v||0).toLocaleString("ko-KR");
 }
 
-function render(A){
+function fmtDate(iso) {
+  if (!iso) return "-";
+  var s = String(iso).replace("T", " ").slice(0, 16);
+  return s;
+}
 
+function render(A){
+  currentFiltered = A;
   var rows=el("rows");
   rows.innerHTML="";
 
   var totalPoint=0;
-  var paid=0;
-  var waiting=0;
+  var daangnCnt=0;
+  var martCnt=0;
 
   D.forEach(function(x){
     totalPoint+=Number(x.point||0);
-
-    if(x.status==="PAID"){
-      paid++;
+    if(x.channelType==="mart"){
+      martCnt++;
     }else{
-      waiting++;
+      daangnCnt++;
     }
   });
 
   el("s1").textContent=n(D.length)+"건";
-  el("s2").textContent=n(totalPoint)+" P";
-  el("s3").textContent=n(paid)+"건";
-  el("s4").textContent=n(waiting)+"건";
+  el("s2").textContent=n(totalPoint)+"원";
+  el("s3").textContent=n(daangnCnt)+"건";
+  el("s4").textContent=n(martCnt)+"건";
 
   el("cnt").textContent=A.length;
 
   var viewPoint=0;
 
   A.forEach(function(x){
-
     viewPoint+=Number(x.point||0);
 
     var tr=document.createElement("tr");
+    var chLabel = x.channelType === "mart" ? "🛒 마트 전자쿠폰" : "🥕 당근 바코드카드";
 
     tr.innerHTML=
-      "<td>"+(x.date||"-")+"</td>"+
-      "<td>"+(x.siteCode||"-")+"</td>"+
-      "<td>"+(x.company||"-")+"</td>"+
-      "<td>"+(x.siteName||"-")+"</td>"+
-      "<td>"+(x.couponNo||"-")+"</td>"+
-      "<td>"+(x.valid?"유효":"미완료")+"</td>"+
-      "<td class='amount'>"+n(x.point)+" P</td>"+
-      "<td class='"+(x.status==="PAID"?"paid":"waiting")+"'>"+
-        (x.status==="PAID"?"정산완료":"정산대기")+
-      "</td>"+
-      "<td>"+(x.settledDate||"-")+"</td>";
+      "<td>"+fmtDate(x.date)+"</td>"+
+      "<td><strong>"+chLabel+"</strong></td>"+
+      "<td style='color:#0f172a;font-weight:800;background:#f0fdf4;'>📍 "+(x.dong||"-")+"</td>"+
+      "<td style='color:#1165d7;font-weight:900;background:#eff6ff;'>📱 "+(x.rawPhone||x.phone||"-")+"</td>"+
+      "<td>"+(x.siteName||"-")+" <small style='color:#64748b;'>("+(x.siteCode||"-")+")</small></td>"+
+      "<td><code>"+(x.couponNo||"-")+"</code></td>"+
+      "<td class='paid'>60초 완료</td>"+
+      "<td class='amount'>"+n(x.point)+"원</td>"+
+      "<td class='paid'>💬 카톡연동·저장</td>";
 
     rows.appendChild(tr);
   });
 
-  el("sumPoint").textContent=n(viewPoint)+" P";
+  el("sumPoint").textContent=n(viewPoint)+"원";
   el("empty").style.display=A.length?"none":"block";
 }
 
 function search(){
-
   var sd=el("sd").value;
   var ed=el("ed").value;
   var status=el("status").value;
   var kw=el("kw").value.trim().toLowerCase();
 
   var result=D.filter(function(x){
-
     var date=String(x.date||"").slice(0,10);
-
-    if(sd && date<sd){
-      return false;
-    }
-
-    if(ed && date>ed){
-      return false;
-    }
-
-    if(status && x.status!==status){
-      return false;
-    }
+    if(sd && date && date<sd) return false;
+    if(ed && date && date>ed) return false;
+    if(status && x.channelType!==status) return false;
 
     var text=(
+      (x.dong||"")+" "+
+      (x.rawPhone||"")+" "+
+      (x.phone||"")+" "+
       (x.company||"")+" "+
       (x.siteName||"")+" "+
       (x.couponNo||"")+" "+
@@ -435,11 +437,109 @@ function search(){
     if(kw && !text.includes(kw)){
       return false;
     }
-
     return true;
   });
 
   render(result);
+}
+
+async function loadHqDatabase() {
+  var merged = [];
+  var seenCodes = new Set();
+
+  /* 1. 로컬 스토리지 즉시 반영분 */
+  try {
+    var localList = JSON.parse(localStorage.getItem("wooriapt_hq_exclusive_db_v1") || "[]");
+    localList.forEach(function(h) {
+      if (!h || !h.couponNo || seenCodes.has(h.couponNo)) return;
+      seenCodes.add(h.couponNo);
+      merged.push({
+        date: h.issuedAt || "",
+        siteCode: h.projectCode || "ROOM-001",
+        company: h.companyName || "",
+        siteName: h.projectName || "",
+        dong: h.dong || "지역미지정",
+        rawPhone: h.rawPhone || h.phone || "",
+        phone: h.maskedPhone || "",
+        couponNo: h.couponNo,
+        channelType: h.channelType || "daangn",
+        point: Number(h.rewardAmount || 3000)
+      });
+    });
+  } catch (e) {}
+
+  /* 2. 서버(Supabase) 전체 분양방 발급 히스토리 통합 조회 */
+  try {
+    var apiOrigin = window.location.hostname.includes("wooriaptcd.com") ? "" : "https://wooriaptcd.com";
+    var res = await fetch(apiOrigin + "/api/sale-save");
+    var json = await res.json();
+    if (res.ok && json.ok && Array.isArray(json.rooms)) {
+      json.rooms.forEach(function(rm) {
+        var c = rm.catalog_data || {};
+        var hist = Array.isArray(c.issuedHistory) ? c.issuedHistory : [];
+        hist.forEach(function(h) {
+          if (!h || !h.couponNo || seenCodes.has(h.couponNo)) return;
+          seenCodes.add(h.couponNo);
+          merged.push({
+            date: h.issuedAt || "",
+            siteCode: rm.project_code || "",
+            company: c.companyName || "",
+            siteName: rm.project_name || "",
+            dong: h.dong || c.targetDong || rm.area || "지역미지정",
+            rawPhone: h.rawPhone || h.phone || "",
+            phone: h.phone || "",
+            couponNo: h.couponNo,
+            channelType: h.channelType || c.channelType || "daangn",
+            point: Number(h.rewardAmount || c.rewardAmount || 3000)
+          });
+        });
+      });
+    }
+  } catch (e) {}
+
+  D = merged;
+  render(D);
+}
+
+var dlBtn = el("dlHqDbBtn");
+if (dlBtn) {
+  dlBtn.addEventListener("click", function() {
+    var target = currentFiltered.length > 0 ? currentFiltered : D;
+    if (target.length === 0) {
+      alert("다운로드할 DB 내역이 없습니다.");
+      return;
+    }
+    function esc(v) {
+      var s = String(v == null ? "" : v).replace(/\r?\n/g, " ").trim();
+      return (s.includes(",") || s.includes('"')) ? '"' + s.replace(/"/g, '""') + '"' : s;
+    }
+    var rows = [
+      ["연번", "수령일시", "유입채널", "거주동네(행정동)", "휴대폰번호(본사독점)", "분양현장코드", "단지명", "발급바코드번호", "지급금액"].map(esc).join(",")
+    ];
+    target.forEach(function(x, i) {
+      rows.push([
+        i + 1,
+        fmtDate(x.date),
+        x.channelType === "mart" ? "마트 전자쿠폰" : "당근 모바일바코드카드",
+        x.dong || "-",
+        x.rawPhone || x.phone || "-",
+        x.siteCode || "-",
+        x.siteName || "-",
+        x.couponNo || "-",
+        Number(x.point || 3000)
+      ].map(esc).join(","));
+    });
+    var csv = "\uFEFF" + rows.join("\r\n");
+    var blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = "본사독점_동별_휴대폰번호_DB_" + new Date().toISOString().slice(0,10) + ".csv";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
 }
 
 el("searchBtn").onclick=search;
@@ -453,17 +553,7 @@ el("kw").addEventListener(
   }
 );
 
-var today=new Date();
-
-el("ed").value=
-  today.toISOString().slice(0,10);
-
-today.setDate(1);
-
-el("sd").value=
-  today.toISOString().slice(0,10);
-
-render(D);
+loadHqDatabase();
 
 })();
 </script>

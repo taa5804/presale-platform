@@ -310,15 +310,29 @@ module.exports = async function (req, res) {
       const isMart = cData.channelType === "mart";
       const rewardLabel = isMart ? "전자쿠폰" : "모바일 바코드카드";
       const phone = String(body.phone || "").replace(/[^0-9]/g, "");
+      const formattedPhone =
+        phone.length === 11
+          ? phone.slice(0, 3) + "-" + phone.slice(3, 7) + "-" + phone.slice(7)
+          : phone.length === 10
+          ? phone.slice(0, 3) + "-" + phone.slice(3, 6) + "-" + phone.slice(6)
+          : String(body.phone || "").trim();
+      const dong = String(
+        body.dong || cData.targetDong || cData.targetRegion || room.area || "지역미지정"
+      ).trim();
+
       const issuedPhones = Array.isArray(cData.issuedPhones)
         ? cData.issuedPhones
         : [];
 
       if (phone && issuedPhones.includes(phone)) {
-        return res.status(409).json({
-          ok: false,
-          reason: "duplicate_phone",
-          message: `이미 해당 휴대폰 번호로 ${rewardLabel}이(가) 지급되었습니다. (1인 1회 한정)`
+        const existingHist = (Array.isArray(cData.issuedHistory) ? cData.issuedHistory : []).find(
+          (h) => String(h.rawPhone || "").replace(/[^0-9]/g, "") === phone
+        );
+        return res.status(200).json({
+          ok: true,
+          alreadyIssued: true,
+          existingCoupon: existingHist || null,
+          message: `이미 해당 휴대폰 번호로 발급된 ${rewardLabel} 내역이 있어 기존 카드를 불러옵니다.`
         });
       }
 
@@ -341,12 +355,17 @@ module.exports = async function (req, res) {
         : [];
       issuedHistory.unshift({
         couponNo: body.coupon_no || "",
+        dong: dong,
         phone: phone
           ? phone.slice(0, 3) + "-****-" + phone.slice(-4)
           : "발급완료",
-        rawPhone: phone || "",
+        rawPhone: formattedPhone || phone || "",
         rewardAmount: Number(cData.rewardAmount || 3000),
         channelType: cData.channelType || "daangn",
+        projectCode: room.project_code,
+        projectName: room.project_name || "",
+        companyName: cData.companyName || "",
+        kakaoLinked: true,
         issuedAt: new Date().toISOString()
       });
 
@@ -356,7 +375,7 @@ module.exports = async function (req, res) {
           ...cData,
           issuedCount: nextIssuedCount,
           issuedPhones,
-          issuedHistory: issuedHistory.slice(0, 500)
+          issuedHistory: issuedHistory.slice(0, 1000)
         },
         updated_at: new Date().toISOString()
       };
@@ -366,7 +385,7 @@ module.exports = async function (req, res) {
 
       return res.status(200).json({
         ok: true,
-        message: `${rewardLabel} 지급 및 수량 차감이 반영되었습니다.`,
+        message: `${rewardLabel} 카카오톡 연동 및 본사 DB 저장이 완료되었습니다.`,
         issuedCount: nextIssuedCount,
         remainCount: Math.max(0, issueQty - nextIssuedCount),
         project: updatedRoom
