@@ -123,5 +123,6 @@
         }
       ]
     }
-  ]
+  ],
+  "cleanUrls": true
 }

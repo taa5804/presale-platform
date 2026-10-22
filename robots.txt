@@ -1,0 +1,28 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /head-admin
+Disallow: /sale-admin
+Disallow: /room-manager
+Disallow: /system-settings
+Disallow: /mart_admin
+Disallow: /mart_hq-dashboard
+Disallow: /mart_hq-store-account
+Disallow: /point-settlement
+Disallow: /charge-history
+Disallow: /charge-management
+Disallow: /inquiry-status
+
+User-agent: Yeti
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Daumoa
+Allow: /
+
+User-agent: bingbot
+Allow: /
+
+Sitemap: https://www.wooriaptcd.com/sitemap.xml
