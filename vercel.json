@@ -67,6 +67,22 @@
     {
       "source": "/mart-sitemap.xml",
       "destination": "/api/mart-sitemap-index"
+    },
+    {
+      "source": "/presale-info/:sido/:gugun/:dong/:apt",
+      "destination": "/api/sale-save?mode=presale-page&sido=:sido&gugun=:gugun&dong=:dong&apt=:apt"
+    },
+    {
+      "source": "/presale-info/:sido/:gugun/:dong",
+      "destination": "/api/sale-save?mode=presale-page&sido=:sido&gugun=:gugun&dong=:dong"
+    },
+    {
+      "source": "/presale-sitemap.xml",
+      "destination": "/api/sale-save?mode=presale-sitemap"
+    },
+    {
+      "source": "/sitemap.xml",
+      "destination": "/api/sale-save?mode=presale-sitemap"
     }
   ],
   "headers": [

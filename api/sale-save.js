@@ -1,4 +1,250 @@
+const fs = require("fs");
+const path = require("path");
 const { SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY } = require("./_lib");
+
+const APT_SUPABASE_URL = "https://dcysjuxyjqtvkihdsjvv.supabase.co";
+const APT_SUPABASE_KEY = "sb_publishable_RZBX7u1v8MLBCfEJT0-eRg_jPcIulG2";
+
+function escHtml(v) {
+  return String(v || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function escXml(v) {
+  return String(v || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+}
+
+function encSeg(v) {
+  return encodeURIComponent(String(v || "").trim());
+}
+
+function loadPresaleDb() {
+  try {
+    const filePath = path.join(process.cwd(), "presale_db.json");
+    const raw = fs.readFileSync(filePath, "utf8");
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (_) {
+    return [];
+  }
+}
+
+async function handlePresaleSeoPage(req, res) {
+  res.setHeader("Content-Type", "text/html; charset=utf-8");
+  res.setHeader("Cache-Control", "public, max-age=0, s-maxage=86400, stale-while-revalidate=604800");
+
+  const sido = String(req.query.sido || "서울특별시").trim();
+  const gugun = String(req.query.gugun || "").trim();
+  const dong = String(req.query.dong || "").trim();
+  const apt = String(req.query.apt || "").trim();
+
+  const db = loadPresaleDb();
+  const matchedItem = apt
+    ? db.find((item) => item.apt_name === apt || (item.sido === sido && item.apt_name.includes(apt)))
+    : null;
+  const regionItems = db
+    .filter((item) => !sido || item.sido === sido || (gugun && item.gugun === gugun))
+    .slice(0, 20);
+
+  const location = [sido, gugun, dong].filter(Boolean).join(" ");
+  const pageSubject = matchedItem ? `${location} ${matchedItem.apt_name}` : `${location} 아파트 신규분양·청약·모델하우스`;
+  const title = `${pageSubject} 분양가·청약일정·모델하우스 방문예약 | 우리아파트 분양`;
+  const description = matchedItem
+    ? `${location} ${matchedItem.apt_name} (${matchedItem.units || ""}, 시공사: ${matchedItem.builder || ""}, 상태: ${matchedItem.status_detail || matchedItem.status || "분양중"}) 분양가, 평면도, 청약일정, 모델하우스 위치(${matchedItem.address || location}) 및 모바일 바코드카드·전자쿠폰 혜택을 확인하세요.`
+    : `${location} 지역 아파트 분양중·분양예정 단지 리스트, 청약 일정, 분양가 비교, 모바일 카탈로그 열람 및 모델하우스 방문예약 혜택을 한눈에 확인하세요.`;
+
+  const canonical =
+    "https://www.wooriaptcd.com/presale-info/" +
+    [sido, gugun || "전체", dong || "전체", apt].filter(Boolean).map(encSeg).join("/");
+
+  const listHtml = regionItems
+    .map((item) => {
+      const itemUrl =
+        "/presale-info/" +
+        [item.sido || sido, item.gugun || "전체", item.dong || "전체", item.apt_name]
+          .map(encSeg)
+          .join("/");
+      return `<li style="padding:13px 15px;border:1px solid #e2e8f0;border-radius:12px;background:#f8fafc;margin-bottom:8px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+          <a href="${escHtml(itemUrl)}" style="font-weight:900;font-size:15.5px;color:#0f172a;text-decoration:none;">🏢 ${escHtml(item.apt_name)}</a>
+          <span style="font-size:11.5px;font-weight:800;padding:3px 9px;border-radius:999px;background:#dcfce7;color:#166534;">${escHtml(item.status || "분양중")}</span>
+        </div>
+        <div style="font-size:13px;color:#475569;margin-top:5px;">
+          📍 ${escHtml(item.address || `${item.sido} ${item.gugun} ${item.dong}`)} | 세대수: ${escHtml(item.units || "-")} | 시공사: ${escHtml(item.builder || "-")}
+        </div>
+      </li>`;
+    })
+    .join("");
+
+  return res.status(200).send(`<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${escHtml(title)}</title>
+<meta name="description" content="${escHtml(description)}">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="${escHtml(canonical)}">
+<meta property="og:type" content="website">
+<meta property="og:title" content="${escHtml(title)}">
+<meta property="og:description" content="${escHtml(description)}">
+<meta property="og:url" content="${escHtml(canonical)}">
+<meta property="og:site_name" content="우리아파트 분양 플랫폼">
+<style>
+body{margin:0;background:#f1f5f9;color:#0f172a;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",sans-serif;}
+.wrap{max-width:820px;margin:0 auto;padding:18px 14px 60px;}
+.card{background:#fff;border-radius:18px;padding:22px;margin-bottom:16px;border:1px solid #e2e8f0;box-shadow:0 8px 24px rgba(15,23,42,0.06);}
+h1{margin:0 0 12px;font-size:24px;line-height:1.38;color:#07192b;}
+h2{margin:0 0 12px;font-size:19px;color:#07192b;}
+p{line-height:1.7;color:#334155;font-size:14.5px;margin:8px 0;}
+.cta{display:block;margin-top:14px;padding:15px;border-radius:12px;background:#07192b;color:#f3d999;text-align:center;text-decoration:none;font-weight:900;font-size:15px;}
+.info-table{width:100%;border-collapse:collapse;margin-top:12px;font-size:14px;}
+.info-table th{width:120px;background:#f8fafc;padding:10px 12px;border:1px solid #e2e8f0;text-align:left;color:#334155;}
+.info-table td{padding:10px 12px;border:1px solid #e2e8f0;color:#0f172a;font-weight:600;}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div style="font-size:12.5px;color:#64748b;margin-bottom:12px;">
+    <a href="https://www.wooriaptcd.com" style="color:#07192b;font-weight:800;text-decoration:none;">🏢 우리아파트 분양 홈</a> &gt;
+    <a href="https://www.wooriaptcd.com/presale-search" style="color:#07192b;font-weight:700;text-decoration:none;">전국 분양현장 검색</a> &gt;
+    <strong>${escHtml(pageSubject)}</strong>
+  </div>
+
+  <section class="card">
+    <h1>🏢 ${escHtml(pageSubject)} 분양가 · 청약일정 · 모델하우스 안내</h1>
+    <p>${escHtml(description)}</p>
+    ${
+      matchedItem
+        ? `<table class="info-table">
+            <tr><th>단지명</th><td>${escHtml(matchedItem.apt_name)}</td></tr>
+            <tr><th>분양상태</th><td>${escHtml(matchedItem.status_detail || matchedItem.status)}</td></tr>
+            <tr><th>현장주소</th><td>${escHtml(matchedItem.address)}</td></tr>
+            <tr><th>총 세대수</th><td>${escHtml(matchedItem.units)}</td></tr>
+            <tr><th>시공사/분양사</th><td>${escHtml(matchedItem.builder)}</td></tr>
+            <tr><th>청약/분양일정</th><td>${escHtml(matchedItem.schedule || "상세 카탈로그 참조")}</td></tr>
+            <tr><th>모델하우스 문의</th><td>${escHtml(matchedItem.modelhouse_tel || matchedItem.director_phone || "-")}</td></tr>
+          </table>`
+        : ""
+    }
+    <a class="cta" href="https://www.wooriaptcd.com/sale-detail?apt=${encSeg(apt || location)}&amp;sido=${encSeg(sido)}">
+      📖 ${escHtml(apt || location)} 모바일 분양 카탈로그 열람 &amp; 3,000원 모바일 쿠폰 받기 ›
+    </a>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;">
+      <a href="https://www.wooriaptcd.com/presale-search" style="display:block;padding:13px 10px;border-radius:12px;background:#1e293b;color:#fff;text-align:center;text-decoration:none;font-weight:800;font-size:13.5px;">🔍 전국 분양단지 전체 검색 ›</a>
+      <a href="https://www.wooriaptcd.com/presale-matcher" style="display:block;padding:13px 10px;border-radius:12px;background:#b88e44;color:#07192b;text-align:center;text-decoration:none;font-weight:900;font-size:13.5px;">🎯 내 조건 맞춤 분양 매칭 ›</a>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>📋 ${escHtml(sido)} 주요 분양중 · 분양예정 아파트 목록</h2>
+    <ul style="list-style:none;padding:0;margin:0;">
+      ${listHtml}
+    </ul>
+  </section>
+</main>
+</body>
+</html>`);
+}
+
+async function handlePresaleSitemap(req, res) {
+  res.setHeader("Content-Type", "application/xml; charset=utf-8");
+  res.setHeader("Cache-Control", "public, max-age=0, s-maxage=86400, stale-while-revalidate=604800");
+
+  const SITE_ORIGIN = "https://www.wooriaptcd.com";
+  const lastmod = new Date().toISOString().split("T")[0];
+  const staticPaths = [
+    "/",
+    "/presale",
+    "/presale-landing",
+    "/presale-search",
+    "/presale-list",
+    "/presale-matcher",
+    "/presale-proposal",
+    "/sale-detail",
+    "/sale-coupon",
+    "/price",
+    "/map",
+    "/tools-center",
+    "/app-install"
+  ];
+
+  const urls = [];
+  for (const p of staticPaths) {
+    urls.push(
+      `  <url><loc>${escXml(SITE_ORIGIN + p)}</loc><lastmod>${lastmod}</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>`
+    );
+  }
+
+  const db = loadPresaleDb();
+  for (const item of db) {
+    if (!item || !item.apt_name) continue;
+    const loc =
+      SITE_ORIGIN +
+      "/presale-info/" +
+      [item.sido || "전국", item.gugun || "전체", item.dong || "전체", item.apt_name]
+        .map(encSeg)
+        .join("/");
+    urls.push(
+      `  <url><loc>${escXml(loc)}</loc><lastmod>${lastmod}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>`
+    );
+  }
+
+  try {
+    const locationSet = new Set();
+    const aptOffsets = Array.from({ length: 22 }, (_, i) => i * 1000);
+    const batches = await Promise.all(
+      aptOffsets.map((start) =>
+        fetch(
+          APT_SUPABASE_URL +
+            "/rest/v1/safe_apartments?select=%EC%8B%9C%EB%8F%84,%EC%8B%9C%EA%B5%B0%EA%B5%AC,%EC%9D%8D%EB%A9%B4,%EB%8F%99%EB%A6%AC&order=%EC%8B%9C%EB%8F%84.asc,%EC%8B%9C%EA%B5%B0%EA%B5%AC.asc,%EB%8F%99%EB%A6%AC.asc",
+          {
+            headers: {
+              apikey: APT_SUPABASE_KEY,
+              Authorization: "Bearer " + APT_SUPABASE_KEY,
+              Range: `${start}-${start + 999}`
+            }
+          }
+        )
+          .then(async (r) => (r.ok ? await r.json() : []))
+          .catch(() => [])
+      )
+    );
+
+    for (const row of batches.flat()) {
+      const rSido = String((row && row["시도"]) || "").trim();
+      const rGugun = String((row && row["시군구"]) || "").trim();
+      const rDong = String((row && (row["동리"] || row["읍면"])) || "").trim();
+      if (rSido && rGugun && rDong) {
+        locationSet.add([rSido, rGugun, rDong].map(encSeg).join("/"));
+      }
+    }
+
+    for (const encodedLoc of locationSet) {
+      const loc = `${SITE_ORIGIN}/presale-info/${encodedLoc}`;
+      urls.push(
+        `  <url><loc>${escXml(loc)}</loc><lastmod>${lastmod}</lastmod><changefreq>weekly</changefreq><priority>0.85</priority></url>`
+      );
+    }
+  } catch (_) {}
+
+  const xml =
+    '<?xml version="1.0" encoding="UTF-8"?>\n' +
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
+    urls.join("\n") +
+    "\n</urlset>";
+
+  return res.status(200).send(xml);
+}
 
 function cors(res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -209,9 +455,17 @@ module.exports = async function (req, res) {
   }
 
   /* =========================================
-     GET: 복제된 분양사 방 목록 또는 개별 방 조회
+     GET: 복제된 분양사 방 목록, 개별 방 조회, 또는 자동 검색페이지/사이트맵
   ========================================= */
   if (req.method === "GET") {
+    const mode = String((req.query && req.query.mode) || "").trim();
+    if (mode === "presale-page") {
+      return handlePresaleSeoPage(req, res);
+    }
+    if (mode === "presale-sitemap") {
+      return handlePresaleSitemap(req, res);
+    }
+
     try {
       const code = String(req.query.code || req.query.room || "")
         .trim()
