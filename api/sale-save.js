@@ -637,6 +637,28 @@ module.exports = async function (req, res) {
       allRooms[idx] = updatedRoom;
       await writeAllRooms(allRooms);
 
+      try {
+        const adminMsg = [
+          `[우리아파트 분양 쿠폰발급 알림]`,
+          `고객이 1분 카탈로그 열람 후 ${rewardLabel}를 발급받았습니다!`,
+          ``,
+          `• 분양단지: ${room.project_name || projectCode}`,
+          `• 고객연락처: ${formattedPhone || phone || "-"}`,
+          `• 거주지역: ${dong}`,
+          `• 발급현황: ${nextIssuedCount} / ${issueQty}건`
+        ].join("\n");
+        await fetch("https://www.wooriapt.app/api/send-sms", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            phone: "01022864150",
+            type: "LMS",
+            subject: `[분양 ${rewardLabel} 발급알림]`,
+            content: adminMsg
+          })
+        });
+      } catch (e) {}
+
       return res.status(200).json({
         ok: true,
         message: `${rewardLabel} 카카오톡 연동 및 본사 DB 저장이 완료되었습니다.`,
@@ -703,6 +725,28 @@ module.exports = async function (req, res) {
       };
       allRooms[idx] = updatedRoom;
       await writeAllRooms(allRooms);
+
+      try {
+        const adminMsg = [
+          `[모델하우스 방문예약 신청 알림]`,
+          `새로운 모델하우스 방문예약이 접수되었습니다!`,
+          ``,
+          `• 분양단지: ${room.project_name || projectCode}`,
+          `• 고객연락처: ${formattedPhone || phone || "-"}`,
+          `• 방문희망일: ${String(body.visit_date || "").trim() || "-"}`,
+          `• 관심지역: ${dong}`
+        ].join("\n");
+        await fetch("https://www.wooriapt.app/api/send-sms", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            phone: "01022864150",
+            type: "LMS",
+            subject: `[모델하우스 방문예약 접수]`,
+            content: adminMsg
+          })
+        });
+      } catch (e) {}
 
       return res.status(200).json({
         ok: true,
