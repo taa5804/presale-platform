@@ -111,6 +111,8 @@ p{line-height:1.7;color:#334155;font-size:14.5px;margin:8px 0;}
 .info-table th{width:120px;background:#f8fafc;padding:10px 12px;border:1px solid #e2e8f0;text-align:left;color:#334155;}
 .info-table td{padding:10px 12px;border:1px solid #e2e8f0;color:#0f172a;font-weight:600;}
 </style>
+
+<script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
 <main class="wrap">
@@ -457,7 +459,7 @@ module.exports = async function (req, res) {
   /* =========================================
      GET: 복제된 분양사 방 목록, 개별 방 조회, 또는 자동 검색페이지/사이트맵
   ========================================= */
-  if (req.method === "GET") {
+  if (req.method === "GET" || req.method === "HEAD") {
     const mode = String((req.query && req.query.mode) || "").trim();
     if (mode === "presale-page") {
       return handlePresaleSeoPage(req, res);
