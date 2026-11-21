@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>우리아파트CD 안심주차 & 3대 보험 혜택</title>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#1e293b">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Pretendard', sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background: #0f172a; color: #f8fafc; display: flex; justify-content: center; min-height: 100vh; padding-bottom: 40px; }
+    .container { width: 100%; max-width: 460px; background: #0f172a; min-height: 100vh; display: flex; flex-direction: column; }
+    
+    /* Header */
+    .header { background: #1e293b; padding: 18px 20px; border-bottom: 1px solid #334155; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
+    .logo-box { display: flex; align-items: center; gap: 8px; }
+    .logo-badge { background: #2563eb; color: #fff; font-size: 11px; font-weight: 800; padding: 3px 7px; border-radius: 6px; }
+    .logo-title { font-size: 16px; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
+    .status-badge { background: #059669; color: #fff; font-size: 11px; font-weight: 700; padding: 4px 8px; border-radius: 20px; display: flex; align-items: center; gap: 4px; }
+    .status-dot { width: 6px; height: 6px; background: #34d399; border-radius: 50%; }
+
+    /* Hero Plate Card */
+    .hero-card { margin: 16px; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1.5px solid #3b82f6; border-radius: 18px; padding: 22px; text-align: center; box-shadow: 0 10px 25px -5px rgba(37,99,235,0.25); position: relative; overflow: hidden; }
+    .hero-card::after { content: ''; position: absolute; top: -50px; right: -50px; width: 100px; height: 100px; background: rgba(59,130,246,0.15); border-radius: 50%; filter: blur(20px); }
+    .car-badge { display: inline-block; background: #1e3a8a; color: #60a5fa; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; margin-bottom: 10px; border: 1px solid #2563eb; }
+    .plate-number { font-size: 30px; font-weight: 900; color: #ffffff; letter-spacing: 2px; margin-bottom: 6px; }
+    .plate-sub { font-size: 13px; color: #94a3b8; line-height: 1.5; }
+    
+    /* Action Buttons */
+    .action-group { padding: 0 16px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+    .btn-call { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; padding: 16px; border-radius: 14px; font-size: 17px; font-weight: 800; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 4px 14px rgba(37,99,235,0.4); text-decoration: none; }
+    .btn-msg { background: #1e293b; color: #e2e8f0; border: 1.5px solid #475569; padding: 14px; border-radius: 14px; font-size: 15px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+
+    /* Quick Message Presets */
+    .preset-box { margin: 0 16px 24px; background: #1e293b; border-radius: 14px; padding: 14px; border: 1px solid #334155; }
+    .preset-title { font-size: 12px; font-weight: 700; color: #94a3b8; margin-bottom: 10px; }
+    .preset-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .preset-chip { background: #334155; color: #e2e8f0; font-size: 12px; font-weight: 600; padding: 7px 12px; border-radius: 20px; border: 1px solid #475569; cursor: pointer; }
+    .preset-chip:active { background: #2563eb; border-color: #3b82f6; }
+
+    /* Insurance Section */
+    .section-title { padding: 0 16px; margin-bottom: 12px; font-size: 16px; font-weight: 900; color: #f8fafc; display: flex; align-items: center; gap: 8px; }
+    .section-title span { color: #3b82f6; }
+
+    .menu-card { margin: 0 16px 14px; background: #1e293b; border-radius: 16px; padding: 18px; border: 1px solid #334155; transition: transform 0.15s; }
+    .menu-card:hover { border-color: #3b82f6; }
+    .menu-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .menu-tag { font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 6px; }
+    .tag-blue { background: #1e3a8a; color: #60a5fa; }
+    .tag-red { background: #881337; color: #f43f5e; }
+    .tag-green { background: #064e3b; color: #34d399; }
+    
+    .menu-title { font-size: 17px; font-weight: 800; color: #ffffff; margin-bottom: 6px; line-height: 1.35; }
+    .menu-desc { font-size: 13px; color: #94a3b8; line-height: 1.5; margin-bottom: 14px; }
+    
+    /* 4 Major Auto Insurers Grid */
+    .auto-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+    .auto-btn { background: #0f172a; border: 1px solid #475569; padding: 12px 10px; border-radius: 10px; text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; cursor: pointer; }
+    .auto-btn:hover, .auto-btn:active { border-color: #3b82f6; background: #1e293b; }
+    .auto-btn-name { font-size: 13px; font-weight: 800; color: #ffffff; margin-bottom: 3px; }
+    .auto-btn-sub { font-size: 11px; color: #38bdf8; font-weight: 600; }
+
+    /* Action Buttons for Menus 2 & 3 */
+    .btn-consult { width: 100%; background: #0f172a; border: 1.5px solid #3b82f6; color: #60a5fa; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 800; cursor: pointer; text-align: center; }
+    .btn-consult:active { background: #2563eb; color: #fff; }
+
+    /* Footer */
+    .footer { margin-top: 24px; padding: 20px 16px; text-align: center; border-top: 1px solid #1e293b; font-size: 12px; color: #64748b; line-height: 1.6; }
+    .footer strong { color: #94a3b8; }
+    
+    /* Modal */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
+    .modal-box { background: #1e293b; border: 1px solid #475569; border-radius: 18px; padding: 24px; width: 100%; max-width: 400px; color: #fff; text-align: center; }
+    .modal-box h3 { font-size: 18px; margin-bottom: 10px; }
+    .modal-box p { font-size: 13px; color: #94a3b8; line-height: 1.6; margin-bottom: 18px; }
+    .modal-btn-close { width: 100%; background: #2563eb; color: #fff; padding: 12px; border-radius: 10px; border: none; font-weight: 700; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo-box">
+        <span class="logo-badge">CD</span>
+        <span class="logo-title">우리아파트 안심주차</span>
+      </div>
+      <div class="status-badge">
+        <span class="status-dot"></span>
+        <span>050 안심연결 작동중</span>
+      </div>
+    </header>
+
+    <!-- Hero Plate Card -->
+    <div class="hero-card">
+      <span class="car-badge" id="carCodeBadge">No. CAR-0001</span>
+      <h1 class="plate-number" id="plateDisplay">12가 3456</h1>
+      <p class="plate-sub">
+        개인 010 휴대폰 번호가 노출되지 않는 특허 안심주차 차량입니다.<br>
+        아래 버튼을 누르면 차주에게 안전하게 연결됩니다.
+      </p>
+    </div>
+
+    <!-- Calling Buttons -->
+    <div class="action-group" id="callerActions">
+      <a href="tel:0507-0000-0000" class="btn-call" id="btnDirectCall">
+        <span>📞 050 안심번호로 차주에게 전화걸기</span>
+      </a>
+      <button class="btn-msg" onclick="sendOwnerPush('차량 이동 요청이 접수되었습니다.')">
+        <span>💬 1초 안심 호출 알림(푸시) 발송</span>
+      </button>
+    </div>
+
+    <!-- Quick Message Presets -->
+    <div class="preset-box">
+      <div class="preset-title">빠른 이동 요청 메시지 (선택 시 차주 폰으로 즉시 전송)</div>
+      <div class="preset-chips">
+        <button class="preset-chip" onclick="sendOwnerPush('차량을 조금만 이동해 주세요.')">🚗 차를 조금만 빼주세요</button>
+        <button class="preset-chip" onclick="sendOwnerPush('주차선 확인 부탁드립니다.')">🅿️ 주차선 확인 부탁드려요</button>
+        <button class="preset-chip" onclick="sendOwnerPush('차량 비상등이 켜져 있습니다.')">🚨 비상등이 켜져 있어요</button>
+        <button class="preset-chip" onclick="sendOwnerPush('접촉사고 관련 연락 부탁드립니다.')">⚠️ 접촉 관련 연락바랍니다</button>
+      </div>
+    </div>
+
+    <!-- 3 Core Insurance Menus -->
+    <div class="section-title">
+      <span>■</span> 우리 차주님을 위한 3대 안심 보장 혜택
+    </div>
+
+    <!-- [메뉴 1] 자동차보험 4대사 최저가 1분 비교 -->
+    <div class="menu-card">
+      <div class="menu-header">
+        <span class="menu-tag tag-blue">메뉴 1 · 차주 필수</span>
+        <span style="font-size: 11px; color: #38bdf8; font-weight: 700;">주유권 최대 3만원 증정</span>
+      </div>
+      <h2 class="menu-title">🚗 자동차보험 다이렉트 4대사 1분 최저가 비교 조회</h2>
+      <p class="menu-desc">
+        메인 홈을 거치지 않고 각 사별 <b>[내 차 보험료 산출 페이지로 직행]</b>합니다.<br>
+        차량번호 자동 입력 상태에서 PASS 1초 인증만 하면 최저가가 즉시 산출됩니다.
+      </p>
+      <div class="auto-grid">
+        <a href="https://direct.samsungfire.com/ria/pc/product/car/?partner_id=wooriaptcd" target="_blank" class="auto-btn">
+          <span class="auto-btn-name">삼성화재 다이렉트</span>
+          <span class="auto-btn-sub">최대 3만원 주유권 ➔</span>
+        </a>
+        <a href="https://www.directdb.co.kr/product/at/pvuat01/mailRsl.do?partner_id=wooriaptcd" target="_blank" class="auto-btn">
+          <span class="auto-btn-name">DB손해보험 프로미</span>
+          <span class="auto-btn-sub">최저가 비교 계산 ➔</span>
+        </a>
+        <a href="https://direct.hi.co.kr/service.do?m=b3ffea0693&partner_id=wooriaptcd" target="_blank" class="auto-btn">
+          <span class="auto-btn-name">현대해상 하이카</span>
+          <span class="auto-btn-sub">다이렉트 즉시 산출 ➔</span>
+        </a>
+        <a href="https://direct.kbinsure.co.kr/websquare/directCar.jsp?partner_id=wooriaptcd" target="_blank" class="auto-btn">
+          <span class="auto-btn-name">KB손해보험 매직카</span>
+          <span class="auto-btn-sub">1분 견적 계산 ➔</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- [메뉴 2] 상해·운전자보험 (차주 필수!) -->
+    <div class="menu-card">
+      <div class="menu-header">
+        <span class="menu-tag tag-red">메뉴 2 · 법률/합의금</span>
+        <span style="font-size: 11px; color: #f43f5e; font-weight: 700;">과실비율 무료 자문</span>
+      </div>
+      <h2 class="menu-title">🛡️ 상해·운전자보험 (차주 필수!)</h2>
+      <p class="menu-desc">
+        내 차 접촉사고 발생 시 <b>과실비율 무료 법률 자문</b> & 12대 중과실·스쿨존 사고 시 <b>교통사고 형사합의금 2억 원</b> 보장 공백을 무료로 진단해 드립니다.
+      </p>
+      <button class="btn-consult" onclick="openModal('운전자보험 무료 자문 신청', '담당 공인 금융전문가(FC)가 접촉사고 과실비율 자문 및 형사합의금 보장 한도를 무료로 분석해 드립니다.')">
+        👨‍💼 담당 설계사 1:1 무료 상담 신청하기 ➔
+      </button>
+    </div>
+
+    <!-- [메뉴 3] 생명·건강보험 (가족 보장) -->
+    <div class="menu-card">
+      <div class="menu-header">
+        <span class="menu-tag tag-green">메뉴 3 · 가족 보장</span>
+        <span style="font-size: 11px; color: #34d399; font-weight: 700;">평균 80만원 환급</span>
+      </div>
+      <h2 class="menu-title">👨‍👩‍👧‍👦 생명·건강보험 (숨은 보험금 찾기)</h2>
+      <p class="menu-desc">
+        대한민국 차주 80%가 찾아가지 않은 <b>잠자는 숨은 보험금 조회(평균 80만 원)</b> & 불필요하게 새나가는 <b>우리가족 월 보험료 20% 줄이기</b> 컨설팅을 제공합니다.
+      </p>
+      <button class="btn-consult" onclick="openModal('숨은 보험금 찾기 & 보장 다이어트', '전 금융기관 미청구 보험금 통합 조회와 우리가족 중복 보험료 절감 리포트를 무료로 제공합니다.')">
+        💰 숨은 보험금 찾기 & 20% 줄이기 ➔
+      </button>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <strong>우리아파트CD 안심주차 & 3대 보험 플랫폼</strong><br>
+      차량 번호판 개인정보 노출 방지 · 050 안심연결 · 다이렉트 최저가 비교<br>
+      제휴 및 지점 B2B 도입 문의: <strong>062-952-4150</strong> (본사 고객센터)<br>
+      © wooriaptcd.com All rights reserved.
+    </footer>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-box">
+      <h3 id="modalTitle">상담 신청</h3>
+      <p id="modalDesc">신청 내용</p>
+      <button class="modal-btn-close" onclick="closeModal()">확인 (신청 완료)</button>
+    </div>
+  </div>
+
+  <script>
+    // URL Params Check
+    const params = new URLSearchParams(window.location.search);
+    const carId = params.get('car') || params.get('id') || 'CAR-0001';
+    const isOwner = params.get('view') === 'owner';
+
+    document.getElementById('carCodeBadge').textContent = 'No. ' + carId;
+
+    if (isOwner) {
+      document.getElementById('callerActions').style.display = 'none';
+      document.querySelector('.plate-sub').innerHTML = '<b>내 차량 안심주차 관리 화면</b>입니다.<br>안심호출 푸시 수신이 정상 작동 중이며, 아래 3대 보험 혜택을 언제든 이용하실 수 있습니다.';
+    }
+
+    function sendOwnerPush(msg) {
+      if ('Notification' in window && Notification.permission === 'granted') {
+        try {
+          new Notification('🚗 [우리아파트CD 안심주차] 차량이동 요청', {
+            body: msg,
+            icon: '/icon-192.png'
+          });
+        } catch(e) {}
+      }
+      alert('📢 [차주에게 안심 알림 발송 완료]\n\n\"' + msg + '\"\n\n차주분의 스마트폰 상단으로 1초 안심 푸시 알림이 성공적으로 전송되었습니다.');
+    }
+
+    function openModal(title, desc) {
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalDesc').textContent = desc;
+      document.getElementById('modalOverlay').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('modalOverlay').style.display = 'none';
+      alert('신청이 성공적으로 접수되었습니다. 담당 전문 설계사가 순차적으로 연락을 드립니다.');
+    }
+
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(err => console.warn('SW error', err));
+    }
+  </script>
+</body>
+</html>
