@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover"
+>
+<meta name="theme-color" content="#16a34a">
+<link rel="preconnect" href="https://dcysjuxyjqtvkihdsjvv.supabase.co" crossorigin>
+<link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+<link rel="dns-prefetch" href="https://dcysjuxyjqtvkihdsjvv.supabase.co">
+<link rel="dns-prefetch" href="https://www.gstatic.com">
+
+
+<title>자동차 안심주차 QR 등록</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  width:100%;
+  min-height:100%;
+  margin:0;
+}
+
+body{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:#f4f7fb;
+  color:#111827;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Arial,
+    sans-serif;
+}
+
+.card{
+  display:none;
+  width:100%;
+  max-width:420px;
+  padding:28px 22px;
+  background:#fff;
+  border-radius:18px;
+  text-align:center;
+  box-shadow:0 10px 35px rgba(15,23,42,.1);
+}
+
+.card.active{
+  display:block;
+}
+
+h1{
+  margin:0 0 14px;
+  font-size:24px;
+}
+
+p,
+.guide{
+  color:#64748b;
+  line-height:1.7;
+}
+
+input{
+  width:100%;
+  height:54px;
+  margin:10px 0;
+  border:1px solid #cbd5e1;
+  border-radius:11px;
+  font-size:17px;
+  text-align:center;
+}
+
+button{
+  width:100%;
+  min-height:54px;
+  margin-top:10px;
+  border:0;
+  border-radius:11px;
+  background:#16a34a;
+  color:#fff;
+  font-size:17px;
+  font-weight:800;
+}
+
+button:disabled{
+  background:#cbd5e1;
+  color:#64748b;
+}
+
+.status{
+  margin-top:14px;
+  font-weight:700;
+  line-height:1.6;
+  white-space:pre-line;
+}
+
+.error{
+  color:#dc2626;
+}
+
+.waiting{
+  color:#1d4ed8;
+}
+
+.success{
+  color:#15803d;
+}
+</style>
+
+  <!-- Vercel Web Analytics -->
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
+</head>
+
+<body>
+
+<section id="registerCard" class="card active">
+  <h1>자동차 QR 등록</h1>
+
+  <p>
+    차량이동 요청을 받을<br>
+    차량번호와 휴대전화번호를 입력해 주세요.
+  </p>
+
+  <input
+    id="carPlate"
+    type="text"
+    placeholder="차량번호 입력 (예: 12가 3456)"
+    style="text-transform:uppercase;font-weight:700;"
+  >
+
+  <input
+    id="phone"
+    type="tel"
+    inputmode="numeric"
+    maxlength="13"
+    placeholder="010-0000-0000"
+  >
+
+  <!-- [필수] 자동차 안심주차 및 보험 만기알림 이용 동의 -->
+  <div style="margin:14px 0 10px;text-align:left;background:#f8fafc;padding:12px;border:1px solid #cbd5e1;border-radius:10px;font-size:13px;line-height:1.5;">
+    <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-weight:bold;color:#0f172a;margin-bottom:8px;">
+      <input type="checkbox" id="agreePrivacy" checked style="width:18px;height:18px;margin-top:2px;accent-color:#16a34a;">
+      <span>[필수] 안심주차 알림을 위한 개인정보 수집 및 서비스 이용 동의</span>
+    </label>
+    <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-weight:bold;color:#15803d;">
+      <input type="checkbox" id="agreeMarketing" checked style="width:18px;height:18px;margin-top:2px;accent-color:#16a34a;">
+      <span>[필수] 자동차보험 만기 최저가 비교 및 안심 혜택 알림 수신 동의</span>
+    </label>
+    <div style="margin-top:6px;font-size:11.5px;color:#64748b;padding-left:26px;">
+      🔒 수집된 정보는 안심주차 호출 및 자동차보험 만기 안내 외 용도로 사용되지 않습니다.
+    </div>
+  </div>
+
+  <button id="registerBtn" type="button" style="background:#16a34a;font-weight:900;">
+    동의하고 1초 등록하기
+  </button>
+
+  <div id="registerStatus" class="status"></div>
+</section>
+
+
+<!-- installCard removed: 앱 설치 없이 순수 웹 알림 동의만 진행 -->
+
+
+<section id="pushCard" class="card">
+  <h1>푸시 알림 승인</h1>
+
+  <div class="guide">
+    차량이동 요청을 받기 위해<br>
+    푸시 알림을 허용해 주세요.
+  </div>
+
+  <button id="pushBtn" type="button" disabled>
+    푸시 알림 허용
+  </button>
+
+  <div id="pushStatus" class="status"></div>
+</section>
+
+
+<section id="completeCard" class="card">
+  <h1>자동차 QR 등록 완료</h1>
+
+  <p>
+    스마트폰 알림 등록이<br>
+    완료되었습니다.
+  </p>
+
+  <div class="status success" style="line-height:1.6;">
+    이제 주차 중 차량이동 요청이 오면 스마트폰 상단 푸시 알림으로 즉시 안내받으실 수 있습니다.
+  </div>
+</section>
+
+
+<section id="errorCard" class="card">
+  <h1>등록할 수 없습니다</h1>
+  <p id="errorText"></p>
+</section>
+
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js"></script>
+
+<script>
+"use strict";
+
+
+/*
+ * 서버 설정
+ */
+
+const API_URL =
+  "https://dcysjuxyjqtvkihdsjvv.supabase.co/functions/v1/send-vehicle-push";
+
+const SUPABASE_KEY =
+  "sb_publishable_RZBX7u1v8MLBCfEJT0-eRg_jPcIulG2";
+
+const VAPID_KEY =
+  "BDtVeUPEh-pooMUUtj4Bd2f5x7EHuWyx4TeunbaQvR8WQs65qwNxryhhORYoS5mxxWMn0GogdgDs1Qod93Vj0jM";
+
+const STORE_ID_KEY =
+  "wooriapt_store_id";
+
+
+/*
+ * Firebase 현재 설정
+ */
+
+const FIREBASE_CONFIG = {
+  apiKey:
+    "AIzaSyB3nZdmUrj2wsKPQpOV8dlso7iI7fZo0Hc",
+
+  authDomain:
+    "wooriapt-carqr.firebaseapp.com",
+
+  projectId:
+    "wooriapt-carqr",
+
+  storageBucket:
+    "wooriapt-carqr.firebasestorage.app",
+
+  messagingSenderId:
+    "101299637796",
+
+  appId:
+    "1:101299637796:web:cb69372592026b7aa192b1",
+
+  measurementId:
+    "G-11E955VBX3"
+};
+
+
+/*
+ * QR 번호
+ */
+
+const params =
+  new URLSearchParams(
+    window.location.search
+  );
+
+const qrCode =
+  String(
+    params.get("qr") || ""
+  )
+    .trim()
+    .toUpperCase()
+    .replace(
+      /[^A-Z0-9_-]/g,
+      ""
+    );
+
+
+/*
+ * 화면
+ */
+
+const registerCard =
+  document.getElementById("registerCard");
+
+
+
+const pushCard =
+  document.getElementById("pushCard");
+
+const completeCard =
+  document.getElementById("completeCard");
+
+const errorCard =
+  document.getElementById("errorCard");
+
+const phoneInput =
+  document.getElementById("phone");
+
+const registerBtn =
+  document.getElementById("registerBtn");
+
+const pushBtn =
+  document.getElementById("pushBtn");
+
+const registerStatus =
+  document.getElementById("registerStatus");
+
+const pushStatus =
+  document.getElementById("pushStatus");
+
+const errorText =
+  document.getElementById("errorText");
+
+const cards = [
+  registerCard,
+  
+  pushCard,
+  completeCard,
+  errorCard
+];
+
+
+/*
+ * 필요한 상태값만 사용
+ */
+
+let ownerPhone = "";
+/* app install variables removed */
+let processing = false;
+let serviceWorkerRegistration = null;
+
+
+/*
+ * 화면 표시
+ */
+
+function showCard(card){
+
+  cards.forEach(
+    item => {
+      item.classList.remove("active");
+    }
+  );
+
+  card.classList.add("active");
+
+  window.scrollTo(0, 0);
+}
+
+
+function setStatus(
+  element,
+  message,
+  type
+){
+
+  element.textContent =
+    message || "";
+
+  element.className =
+    type
+      ? "status " + type
+      : "status";
+}
+
+
+/*
+ * 전화번호
+ */
+
+function normalizePhone(value){
+
+  return String(
+    value || ""
+  ).replace(
+    /[^0-9]/g,
+    ""
+  );
+}
+
+
+function validPhone(value){
+
+  return /^01[016789][0-9]{7,8}$/
+    .test(value);
+}
+
+
+function formatPhone(value){
+
+  const number =
+    normalizePhone(value)
+      .slice(0, 11);
+
+  if(
+    number.length <= 3
+  ){
+    return number;
+  }
+
+  if(
+    number.length <= 7
+  ){
+    return (
+      number.slice(0, 3) +
+      "-" +
+      number.slice(3)
+    );
+  }
+
+  return (
+    number.slice(0, 3) +
+    "-" +
+    number.slice(3, 7) +
+    "-" +
+    number.slice(7)
+  );
+}
+
+
+/*
+ * 서비스워커
+ */
+
+async function prepareServiceWorker(){
+
+  if(
+    serviceWorkerRegistration
+  ){
+    return serviceWorkerRegistration;
+  }
+
+  if(
+    !("serviceWorker" in navigator)
+  ){
+    throw new Error(
+      "이 브라우저에서는 앱 설치를 지원하지 않습니다."
+    );
+  }
+
+  await navigator.serviceWorker.register(
+    "/firebase-messaging-sw.js",
+    {
+      scope:"/",
+      updateViaCache:"none"
+    }
+  );
+
+  serviceWorkerRegistration =
+    await navigator.serviceWorker.ready;
+
+  return serviceWorkerRegistration;
+}
+
+
+/*
+ * 서버에 자동차 등록
+ */
+
+async function registerVehicle(
+  token
+){
+
+  const response =
+    await fetch(
+      API_URL,
+      {
+        method:"POST",
+
+        headers:{
+          "Content-Type":
+            "application/json",
+
+          Authorization:
+            "Bearer " +
+            SUPABASE_KEY,
+
+          apikey:
+            SUPABASE_KEY
+        },
+
+        body:
+          JSON.stringify({
+            action:
+              "register",
+
+            registration_type:
+              "vehicle",
+
+            qr_code:
+              qrCode,
+
+            car_number:
+              (document.getElementById("carPlate") ? document.getElementById("carPlate").value.trim() : ""),
+
+            owner_phone:
+              ownerPhone,
+
+            push_token:
+              token,
+
+            platform:
+              "android",
+
+            user_agent:
+              navigator.userAgent
+          })
+      }
+    );
+
+  const data =
+    await response
+      .json()
+      .catch(
+        () => ({})
+      );
+
+  if(
+    !response.ok ||
+    data.ok === false ||
+    data.success === false
+  ){
+    throw new Error(
+      data.message ||
+      "자동차 등록에 실패했습니다."
+    );
+  }
+
+  return data;
+}
+
+
+/*
+ * 앱 설치창 준비
+ */
+
+/* beforeinstallprompt removed */
+
+
+/*
+ * 실제 앱 설치 완료
+ *
+ * 설치 완료 웹 문구는 표시하지 않음
+ * ��대전화 설치 완료 표시 후
+ * 푸시 화면을 표시
+ */
+
+/* appinstalled removed */
+
+
+/*
+ * 전화번호 자동 입력 형식
+ */
+
+phoneInput.addEventListener(
+  "input",
+  event => {
+
+    event.target.value =
+      formatPhone(
+        event.target.value
+      );
+  }
+);
+
+
+/*
+ * 전화번호 확인 후
+ * 휴대전화 앱 설치창 바로 표시
+ */
+
+registerBtn.addEventListener(
+  "click",
+  async () => {
+    if (processing) return;
+
+    ownerPhone = normalizePhone(phoneInput.value);
+
+    if (!validPhone(ownerPhone)) {
+      setStatus(registerStatus, "휴대전화번호를 정확히 입력해 주세요.", "error");
+      phoneInput.focus();
+      return;
+    }
+
+    if (!qrCode) {
+      setStatus(registerStatus, "자동차 QR 정보를 확인할 수 없습니다.", "error");
+      return;
+    }
+
+    processing = true;
+    registerBtn.disabled = true;
+    registerBtn.textContent = "알림 등록 처리 중...";
+    setStatus(registerStatus, "알림 권한을 요청하고 있습니다...", "waiting");
+
+    try {
+      if (!("Notification" in window)) {
+        throw new Error("이 기기 브라우저에서는 알림을 지원하지 않습니다.");
+      }
+
+      let permission = Notification.permission;
+      if (permission !== "granted") {
+        permission = await Notification.requestPermission();
+        if (permission !== "granted") {
+          throw new Error("차량이동 알림을 받으시려면 [알림 허용]을 눌러주셔야 합니다.");
+        }
+      }
+
+      if (!firebase.apps.length) {
+        firebase.initializeApp(FIREBASE_CONFIG);
+      }
+
+      const registration = await prepareServiceWorker();
+      const messaging = firebase.messaging();
+
+      const token = await messaging.getToken({
+        vapidKey: VAPID_KEY,
+        serviceWorkerRegistration: registration
+      });
+
+      if (!token) {
+        throw new Error("푸시 알림 토큰 발급에 실패했습니다. 잠시 후 다시 시도해 주세요.");
+      }
+
+      setStatus(registerStatus, "차량 정보를 등록하는 중입니다...", "waiting");
+
+      const result = await registerVehicle(token);
+
+      const storeId = String(result.store_id || "").trim();
+      if (storeId) {
+        localStorage.setItem(STORE_ID_KEY, storeId);
+      localStorage.setItem("wooriapt_my_qr", qrCode);
+      localStorage.setItem("wooriapt_my_phone", ownerPhone);
+      } else {
+        localStorage.removeItem(STORE_ID_KEY);
+      }
+
+      processing = false;
+      showCard(completeCard);
+
+    } catch (error) {
+      processing = false;
+      registerBtn.disabled = false;
+      registerBtn.textContent = "동의하고 1초 등록하기";
+      setStatus(
+        registerStatus,
+        error instanceof Error ? error.message : "자동차 등록에 실패했습니다.",
+        "error"
+      );
+    }
+  }
+);
+
+
+
+
+(async function start(){
+
+  if(
+    !qrCode
+  ){
+
+    errorText.textContent =
+      "자동차 QR 정보를 확인할 수 없습니다.";
+
+    showCard(
+      errorCard
+    );
+
+    return;
+  }
+
+  showCard(
+    registerCard
+  );
+
+  try{
+
+    await prepareServiceWorker();
+
+  }catch(error){
+
+    console.warn(
+      "서비스워커 준비 실패:",
+      error
+    );
+  }
+})();
+</script>
+
+</body>
+</html>
