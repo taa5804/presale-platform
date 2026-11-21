@@ -100,7 +100,7 @@
       <div class="top-btns">
         <button class="btn-download-db" onclick="exportDbExcel()" style="background:#0284c7; color:#fff; border:none; padding:10px 16px; border-radius:10px; font-size:13px; font-weight:800; cursor:pointer;">📥 고객 모집 DB 엑셀 다운로드</button>
         <button class="btn-charge-all" onclick="openGlobalRechargeModal()">⚡ 팀원 푸시 일괄 충전</button>
-        <button class="btn-order-more" onclick="location.href='/b2b.html'">📦 QR 카드 1,000장 추가주문</button>
+        <button class="btn-order-more" onclick="openBatchOrderModal()" style="background:#ea580c; font-weight:900;">📦 2회차 1,000장 추가 발급 신청</button>
       </div>
     </div>
 
@@ -108,8 +108,8 @@
     <div class="stats-grid">
       <div class="stat-card">
         <div class="stat-label">총 보유 안심주차 카드</div>
-        <div class="stat-value">1,000 <span>장</span></div>
-        <div class="stat-sub">팀원 25개 방에 40장씩 분배 완료</div>
+        <div class="stat-value" id="totalCardsDisplay">1,000 <span>장</span></div>
+        <div class="stat-sub" id="totalCardsSub">1차 1,000장 (0001~1000번) 25개 방에 40장씩 분배 완료</div>
       </div>
       <div class="stat-card">
         <div class="stat-label">등록 완료 차주 고객 (DB)</div>
@@ -172,6 +172,41 @@
 
     <div class="rooms-grid" id="roomsContainer">
       <!-- Generated via JS for 25 rooms -->
+    </div>
+  </div>
+
+  <!-- Modal 4: 2회차 1,000장 추가 발급 & 일련번호 지정 모달 -->
+  <div class="modal-wrap" id="batchOrderModal">
+    <div class="modal-content" style="max-width:500px;">
+      <h3 style="color:#fb923c; display:flex; align-items:center; gap:8px;">
+        📦 2회차 QR 카드 1,000장 추가 발급 & 번호 지정
+      </h3>
+      <p style="font-size:12.5px; color:#94a3b8; margin-bottom:16px; line-height:1.6;">
+        기존 1회차(CAR-0001~1000) 소진 후, <b>2회차(1001번~)</b> 카드를 추가 발급하여 팀원 25개 방에 누적 배정합니다.
+      </p>
+
+      <div style="background:#090d16; padding:14px; border-radius:12px; border:1px solid #334155; margin-bottom:14px;">
+        <div style="font-size:13px; color:#cbd5e1; margin-bottom:6px;">
+          <b>1회차 기존 보유:</b> CAR-0001 ~ CAR-1000 (1,000장 완판/배정 완료)
+        </div>
+        <div style="font-size:14px; font-weight:800; color:#38bdf8; margin-bottom:10px;">
+          <b>2회차 신규 발급:</b> CAR-1001 ~ CAR-2000 (1,000장 추가)
+        </div>
+        <div style="font-size:12.5px; color:#94a3b8; line-height:1.6;">
+          • 팀원 1인당 추가: 방당 40장 추가 (총 80장 누적 배정)<br>
+          • 방 1번: 0001~0040 (1차) + 1001~1040 (2차)<br>
+          • 방 2번: 0041~0080 (1차) + 1041~1080 (2차)
+        </div>
+      </div>
+
+      <div style="font-size:14px; font-weight:800; color:#fff; margin-bottom:14px; background:#1e293b; padding:12px; border-radius:10px;">
+        결제 금액: <span style="color:#f87171; font-size:18px;">1,000,000원</span> <small style="color:#94a3b8;">(장당 1,000원 정규 도매가 / 세금계산서 발행)</small>
+      </div>
+
+      <div class="modal-btn-row">
+        <button class="btn-m-save" style="background:#ea580c;" onclick="confirmBatchOrder()">🚀 2회차 1,000장 추가 발급 승인 및 ERP 연동</button>
+        <button class="btn-m-cancel" onclick="closeBatchOrderModal()">취소</button>
+      </div>
     </div>
   </div>
 
@@ -313,7 +348,7 @@
         <div class="room-card">
           <div class="room-top">
             <span class="room-badge">방 ${r.roomNo}번</span>
-            <span class="room-cards-range">${r.cardRange}</span>
+            <span class="room-cards-range">${r.cardRange}${r.batch2Range ? '<br><span style="color:#fb923c;">' + r.batch2Range + '</span>' : ''}</span>
           </div>
           <div class="agent-name">${r.name}</div>
           <div class="agent-phone">📞 ${r.phone}</div>
@@ -351,6 +386,41 @@
     });
 
     // 1. 담당자 변경 승인 & 전화번호 변경 완벽 저장
+
+    function openBatchOrderModal() {
+      document.getElementById('batchOrderModal').style.display = 'flex';
+    }
+
+    function closeBatchOrderModal() {
+      document.getElementById('batchOrderModal').style.display = 'none';
+    }
+
+    function confirmBatchOrder() {
+      // Add 2nd batch cards to rooms
+      rooms.forEach((r, idx) => {
+        const start2 = String(1001 + (idx * 40)).padStart(4, '0');
+        const end2 = String(1001 + (idx * 40) + 39).padStart(4, '0');
+        r.batch2Range = `CAR-${start2} ~ CAR-${end2} (2차 40장)`;
+        r.totalCards = 80;
+      });
+
+      localStorage.setItem('wooriaptcd_erp_batch_level', '2');
+      saveRooms();
+      renderRooms();
+      closeBatchOrderModal();
+
+      document.getElementById('totalCardsDisplay').innerHTML = '2,000 <span>장</span>';
+      document.getElementById('totalCardsSub').textContent = '1차(0001~1000) + 2차(1001~2000) 25개 방에 80장씩 배정 완료';
+
+      alert(`🎉 [2회차 1,000장 추가 발급 승인 완료!]
+
+• 발급 일련번호: CAR-1001 ~ CAR-2000 (1,000장 추가)
+• 팀원 25개 방에 각각 2차 40장씩 누적 배정 (팀원당 총 80장)
+• 총 보유 카드: 2,000장으로 관리자 ERP에 실시간 연동되었습니다!
+
+본사에서 1001~2000번 실물 카드를 즉시 인쇄 제작하여 발송합니다.`);
+    }
+
     function openReassign(roomNo) {
       activeEditingRoom = roomNo;
       const r = rooms.find(item => item.roomNo === roomNo);
