@@ -13,21 +13,24 @@
     /* Top Nav */
     .nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid #1e293b; }
     .logo { display: flex; align-items: center; gap: 8px; }
-    .logo-badge { background: #ea580c; color: #fff; font-size: 12px; font-weight: 800; padding: 4px 8px; border-radius: 6px; }
+    .logo-badge { background: #2563eb; color: #fff; font-size: 12px; font-weight: 800; padding: 4px 8px; border-radius: 6px; }
     .logo-name { font-size: 18px; font-weight: 900; color: #fff; }
-    .nav-links { display: flex; gap: 8px; }
-    .nav-btn { background: #1e293b; color: #cbd5e1; border: 1px solid #334155; padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; text-decoration: none; }
+    .nav-links { display: flex; gap: 8px; align-items: center; }
+    .nav-btn { background: #1e293b; color: #cbd5e1; border: 1px solid #334155; padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; text-decoration: none; cursor: pointer; }
     .nav-btn:hover { border-color: #3b82f6; color: #fff; }
+    .nav-btn-primary { background: #2563eb; color: #fff; border-color: #3b82f6; }
+    .nav-btn-primary:hover { background: #1d4ed8; }
 
     /* Hero */
     .hero { text-align: center; padding: 50px 10px 40px; }
-    .hero-tag { display: inline-block; background: #991b1b; color: #fecaca; font-size: 13.5px; font-weight: 900; padding: 7px 18px; border-radius: 20px; border: 1px solid #ef4444; margin-bottom: 20px; }
+    .hero-tag { display: inline-block; background: #1e3a8a; color: #93c5fd; font-size: 13.5px; font-weight: 800; padding: 7px 18px; border-radius: 20px; border: 1px solid #3b82f6; margin-bottom: 20px; }
     .hero-h1 { font-size: 38px; font-weight: 900; color: #fff; line-height: 1.35; margin-bottom: 18px; letter-spacing: -1px; }
     .hero-h1 span { color: #38bdf8; }
     .hero-p { font-size: 16px; color: #94a3b8; max-width: 720px; margin: 0 auto 30px; word-break: keep-all; line-height: 1.7; }
     
     .demo-btns { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 40px; }
-    .btn-demo-main { background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; padding: 16px 30px; border-radius: 12px; font-size: 16px; font-weight: 900; text-decoration: none; box-shadow: 0 4px 16px rgba(239,68,68,0.4); }
+    .btn-demo-main { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; padding: 16px 30px; border-radius: 12px; font-size: 16px; font-weight: 900; text-decoration: none; box-shadow: 0 4px 16px rgba(37,99,235,0.4); }
+    .btn-demo-main:hover { background: #1d4ed8; }
     .btn-demo-sub { background: #131b2e; color: #cbd5e1; border: 1.5px solid #334155; padding: 16px 24px; border-radius: 12px; font-size: 15px; font-weight: 700; text-decoration: none; }
     .btn-demo-sub:hover { border-color: #38bdf8; color: #fff; }
 
@@ -42,18 +45,17 @@
     .feat-title { font-size: 17px; font-weight: 800; color: #fff; margin-bottom: 8px; }
     .feat-p { font-size: 13.5px; color: #94a3b8; line-height: 1.6; }
 
-    /* Pricing Box with HUGE 50% discount */
-    .pricing-card { background: linear-gradient(135deg, #131b2e 0%, #0d1527 100%); border: 3px solid #ef4444; border-radius: 24px; padding: 42px 24px; text-align: center; margin-bottom: 30px; box-shadow: 0 12px 35px -10px rgba(239,68,68,0.35); position: relative; overflow: hidden; }
-    .corner-badge { position: absolute; top: 22px; right: -42px; background: #ef4444; color: #fff; font-size: 12px; font-weight: 900; padding: 6px 45px; transform: rotate(45deg); box-shadow: 0 2px 6px rgba(0,0,0,0.3); }
+    /* Pricing Box - Dignified Blue / Slate */
+    .pricing-card { background: linear-gradient(135deg, #131b2e 0%, #0d1527 100%); border: 1.5px solid #2563eb; border-radius: 24px; padding: 42px 24px; text-align: center; margin-bottom: 30px; box-shadow: 0 12px 35px -10px rgba(37,99,235,0.25); position: relative; overflow: hidden; }
     
-    .price-promo-tag { display: inline-block; background: #dc2626; color: #fff; font-size: 15px; font-weight: 900; padding: 7px 20px; border-radius: 20px; margin-bottom: 14px; letter-spacing: -0.5px; }
+    .price-promo-tag { display: inline-block; background: #1e3a8a; color: #93c5fd; border: 1px solid #3b82f6; font-size: 14px; font-weight: 800; padding: 7px 20px; border-radius: 20px; margin-bottom: 14px; letter-spacing: -0.5px; }
     .price-sub { font-size: 15px; color: #94a3b8; text-decoration: line-through; margin-bottom: 6px; }
-    .price-main { font-size: 48px; font-weight: 900; color: #f87171; margin-bottom: 12px; }
-    .price-main span { font-size: 24px; color: #fff; font-weight: 700; margin-left: 6px; }
+    .price-main { font-size: 46px; font-weight: 900; color: #38bdf8; margin-bottom: 12px; }
+    .price-main span { font-size: 22px; color: #cbd5e1; font-weight: 700; margin-left: 6px; }
     .price-highlight { display: inline-block; background: #064e3b; color: #34d399; font-size: 14px; font-weight: 800; padding: 7px 18px; border-radius: 20px; margin-bottom: 24px; border: 1px solid #059669; }
     .price-details { text-align: left; max-width: 580px; margin: 0 auto 24px; font-size: 14.5px; color: #cbd5e1; line-height: 1.8; }
     .price-details li { margin-bottom: 8px; }
-    .price-note { font-size: 12.5px; color: #94a3b8; margin-bottom: 22px; }
+    .price-note { font-size: 12.5px; color: #94a3b8; margin-top: 10px; }
 
     /* Order Form */
     .order-box { background: #131b2e; border: 1px solid #1e293b; border-radius: 20px; padding: 36px 24px; }
@@ -61,8 +63,18 @@
     .form-col-full { grid-column: 1 / -1; }
     .form-label { display: block; font-size: 13px; font-weight: 700; color: #cbd5e1; margin-bottom: 6px; }
     .form-input, .form-select { width: 100%; background: #090d16; border: 1.5px solid #334155; border-radius: 10px; padding: 12px; color: #fff; font-size: 14px; outline: none; }
-    .form-input:focus, .form-select:focus { border-color: #ef4444; }
-    .btn-submit-order { width: 100%; background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; border: none; padding: 18px; border-radius: 12px; font-size: 18px; font-weight: 900; cursor: pointer; margin-top: 20px; box-shadow: 0 4px 16px rgba(239,68,68,0.4); }
+    .form-input:focus, .form-select:focus { border-color: #3b82f6; }
+    .btn-submit-order { width: 100%; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; border: none; padding: 18px; border-radius: 12px; font-size: 18px; font-weight: 900; cursor: pointer; margin-top: 20px; box-shadow: 0 4px 16px rgba(37,99,235,0.4); }
+    .btn-submit-order:hover { background: #1d4ed8; }
+
+    /* Login Modal */
+    .modal-wrap { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
+    .modal-content { background: #131b2e; border: 1px solid #334155; border-radius: 18px; padding: 24px; width: 100%; max-width: 400px; color: #fff; }
+    .modal-title { font-size: 18px; font-weight: 900; margin-bottom: 8px; color: #fff; }
+    .modal-desc { font-size: 12.5px; color: #94a3b8; margin-bottom: 16px; }
+    .modal-btn-row { display: flex; gap: 8px; margin-top: 14px; }
+    .btn-m-login { flex: 1; background: #2563eb; color: #fff; padding: 13px; border-radius: 10px; border: none; font-size: 14px; font-weight: 800; cursor: pointer; }
+    .btn-m-cancel { background: #1e293b; color: #94a3b8; padding: 13px 18px; border-radius: 10px; border: 1px solid #334155; cursor: pointer; }
 
     /* Footer */
     .footer { text-align: center; margin-top: 50px; font-size: 12px; color: #64748b; line-height: 1.7; border-top: 1px solid #1e293b; padding-top: 24px; }
@@ -78,26 +90,26 @@
         <span class="logo-name">우리아파트CD 안심주차</span>
       </div>
       <div class="nav-links">
-        <a href="/72.html?view=caller" class="nav-btn">📱 차주 호출 화면 체험</a>
+        <a href="/72.html?view=caller" class="nav-btn">📱 차주 호출 체험</a>
         <a href="/register" class="nav-btn">📋 안심주차 등록 체험</a>
-        <a href="/manager" class="nav-btn" style="border-color:#2563eb; color:#60a5fa;">👥 관리자 ERP</a>
+        <button onclick="openLoginModal()" class="nav-btn nav-btn-primary">👥 지점 ERP 로그인</button>
       </div>
     </nav>
 
     <!-- Hero -->
     <section class="hero">
-      <span class="hero-tag">🔥 [지점 최초 1회 한정 프로모션] 첫 1,000장 구매 시 50% 파격 할인! (50만 원)</span>
+      <span class="hero-tag">지점 안심주차 솔루션 도입 지원 | 첫 1,000장 패키지</span>
       <h1 class="hero-h1">
         단순 주차판 대신, <span>생생한 고객 모집 DB를 모아주는</span><br>
         스마트 안심주차 QR을 지점에 보급하십시오!
       </h1>
       <p class="hero-p">
         차주는 010 번호 노출 없는 안전한 안심주차를 누리고, 보험 영업팀은 차량번호와 010 연락처를 100% 합법적인 <b>고객 모집 DB</b>로 확보합니다!<br>
-        플랫폼에 가두지 않고 <b>수집된 차주 모집 DB는 지점에 100% 엑셀 다운로드로 쿨하게 전량 제공</b>합니다.
+        플랫폼에 가두지 않고 <b>수집된 차주 모집 DB는 지점에 100% 엑셀 다운로드로 전량 제공</b>합니다.
       </p>
       <div class="demo-btns">
-        <a href="#orderSection" class="btn-demo-main">🔥 첫 1,000장 50% 특가 (50만 원) 신청하기</a>
-        <a href="/manager" class="btn-demo-sub">👥 팀원 25개 방 관리자 ERP 체험</a>
+        <a href="#orderSection" class="btn-demo-main">지점 도입 신청 및 ERP 즉시 발급</a>
+        <a href="/manager" class="btn-demo-sub">👥 팀원 25개 방 ERP 체험</a>
       </div>
     </section>
 
@@ -109,7 +121,7 @@
         <div class="feature-item">
           <div class="feat-icon">📥</div>
           <div class="feat-title">100% 합법 고객 모집 DB 제공</div>
-          <p class="feat-p">시중 건당 3~5만 원짜리 스팸 DB는 이제 그만! 차주가 직접 등록한 010 고객 모집 DB를 지점에 100% 엑셀로 드립니다. 신규 설계사 증원(리크루팅) 시 '1인당 100명 고객 DB 지급' 무기로 활용 가능!</p>
+          <p class="feat-p">시중 스팸 DB는 이제 그만! 차주가 직접 등록한 010 고객 모집 DB를 지점에 100% 엑셀로 드립니다. 신규 설계사 증원 시 '1인당 100명 고객 DB 지급' 무기로 활용 가능!</p>
         </div>
         <div class="feature-item">
           <div class="feat-icon">🛡️</div>
@@ -129,12 +141,10 @@
       </div>
     </section>
 
-    <!-- Pricing Section (HUGE 50% discount) -->
+    <!-- Pricing Section -->
     <section class="pricing-card">
-      <div class="corner-badge">50% 파격특가</div>
-      
       <div class="price-promo-tag">
-        🔥 [지점/영업팀 최초 1회 한정] 첫 1,000장 구매 시 50% 파격 할인!
+        지점 첫 도입 패키지 지원 혜택
       </div>
       
       <div class="price-sub">
@@ -142,7 +152,7 @@
       </div>
       
       <div class="price-main">
-        장당 500원 <span>(첫 1,000장 특가 500,000원)</span>
+        장당 500원 <span>(첫 1,000장 도입 지원가 500,000원)</span>
       </div>
       
       <div class="price-highlight">
@@ -159,18 +169,14 @@
       </ul>
       
       <div class="price-note">
-        ※ 50% 할인 특가는 지점/영업팀당 최초 1회(첫 1,000장 50만 원)에 한하며, 2회 차 추가 주문부터는 정규 도매가(1,000원/장)가 적용됩니다.
+        ※ 첫 1,000장은 지점 첫 도입 지원가(50만 원)가 적용되며, 2회차 추가 주문부터는 정규 도매가(1,000원/장)가 적용됩니다.
       </div>
-      
-      <a href="#orderSection" class="btn-demo-main" style="display:inline-block; padding:18px 42px; font-size:18px;">
-        🔥 첫 1,000장 50% 특가 (50만 원) 신청하기 ➔
-      </a>
     </section>
 
     <!-- Order Form Section -->
     <section class="order-box" id="orderSection">
       <h2 class="sec-h2">지점 / 팀 1,000장 패키지 간편 도입 신청</h2>
-      <p class="sec-desc">접수 즉시 본사 담당자가 지점 고유 관리자 계정을 발급하고 실물 카드를 제작 발송합니다.</p>
+      <p class="sec-desc">신청 완료 즉시 지점 전용 25개 방 관리자 ERP가 발급되어 바로 입장하실 수 있습니다.</p>
       
       <form onsubmit="handleOrder(event)">
         <div class="form-grid">
@@ -192,16 +198,16 @@
           </div>
           <div>
             <label class="form-label">신청자 휴대폰번호 (010)</label>
-            <input type="tel" class="form-input" id="oPhone" placeholder="010-0000-0000" required>
+            <input type="tel" class="form-input" id="oPhone" placeholder="010-0000-0000" maxlength="13" oninput="formatPhoneInput(this)" required>
           </div>
           <div>
-            <label class="form-label">신청 회차 / 주문 상품 선택</label>
+            <label class="form-label">주문 상품 선택</label>
             <select class="form-select" id="oQty" onchange="handleBatchChange(this.value)" required>
-              <option value="1000_1st" selected>🔥 [1회차 최초 도입] 첫 1,000장 (50% 특가 500,000원)</option>
-              <option value="1000_2nd">📦 [2회차 재주문] 1,000장 추가 발급 (정규가 1,000,000원)</option>
-              <option value="1000_3rd">📦 [3회차 재주문] 1,000장 추가 발급 (정규가 1,000,000원)</option>
-              <option value="2000">🚀 [대량 도입] 2,000장 (1,500,000원)</option>
-              <option value="3000">🏢 [지점 전사 도입] 3,000장 (2,500,000원)</option>
+              <option value="1000_1st" selected>1,000장 패키지 (지점 첫 도입 지원가 500,000원)</option>
+              <option value="1000_2nd">2회차 1,000장 추가 발급 (정규 도매가 1,000,000원)</option>
+              <option value="1000_3rd">3회차 1,000장 추가 발급 (정규 도매가 1,000,000원)</option>
+              <option value="2000">2,000장 패키지 (1,500,000원)</option>
+              <option value="3000">3,000장 패키지 (2,500,000원)</option>
             </select>
           </div>
           <div>
@@ -233,7 +239,7 @@
           </div>
         </div>
         <button type="submit" class="btn-submit-order">
-          🚀 첫 1,000장 50% 특가 신청 및 관리자 ERP 발급 신청
+          지점 전용 25개 방 ERP 즉시 발급 신청
         </button>
       </form>
     </section>
@@ -247,8 +253,37 @@
     </footer>
   </div>
 
+  <!-- Login Modal -->
+  <div class="modal-wrap" id="loginModal">
+    <div class="modal-content">
+      <div class="modal-title">👥 지점 관리자 ERP 로그인</div>
+      <div class="modal-desc">신청하신 지점장 휴대폰 번호와 비밀번호를 입력해 주세요. (초기 비밀번호: 휴대폰 뒷 4자리)</div>
+      
+      <label class="form-label">휴대폰 번호 (010)</label>
+      <input type="tel" id="loginPhone" class="form-input" placeholder="010-0000-0000" maxlength="13" oninput="formatPhoneInput(this)" style="margin-bottom:12px;">
+      
+      <label class="form-label">비밀번호</label>
+      <input type="password" id="loginPw" class="form-input" placeholder="초기 비밀번호: 휴대폰 뒷 4자리" style="margin-bottom:14px;">
+      
+      <div class="modal-btn-row">
+        <button class="btn-m-login" onclick="doLogin()">입장하기</button>
+        <button class="btn-m-cancel" onclick="closeLoginModal()">닫기</button>
+      </div>
+    </div>
+  </div>
+
   <script>
-    
+    function formatPhoneInput(el) {
+      let num = el.value.replace(/[^0-9]/g, '').slice(0, 11);
+      if (num.length <= 3) {
+        el.value = num;
+      } else if (num.length <= 7) {
+        el.value = num.slice(0, 3) + '-' + num.slice(3);
+      } else {
+        el.value = num.slice(0, 3) + '-' + num.slice(3, 7) + '-' + num.slice(7);
+      }
+    }
+
     function handleBatchChange(val) {
       const startInput = document.getElementById('qrStartNum');
       const endInput = document.getElementById('qrEndNum');
@@ -288,36 +323,92 @@
       const phone = document.getElementById('oPhone').value.trim();
       const qty = document.getElementById('oQty').value;
       const addr = document.getElementById('oAddress').value.trim();
-
+      const assignNum = document.getElementById('oAssignType').value;
       const startNum = document.getElementById('qrStartNum').value;
       const endNum = document.getElementById('qrEndNum').value;
-      const assignNum = document.getElementById('oAssignType').value;
 
-      let orderTitle = '도입 신청 접수 완료!';
-      let priceText = '500,000원 (첫 1,000장 50% 할인 특가)';
-      if (qty === '1000_2nd') {
-        orderTitle = '2회차 1,000장 추가 발급 신청 완료!';
-        priceText = '1,000,000원 (정규 도매가)';
-      } else if (qty === '1000_3rd') {
-        orderTitle = '3회차 1,000장 추가 발급 신청 완료!';
-        priceText = '1,000,000원 (정규 도매가)';
-      } else if (qty === '2000') {
-        priceText = '1,500,000원';
-      } else if (qty === '3000') {
-        priceText = '2,500,000원';
+      const rawPhone = phone.replace(/[^0-9]/g, '');
+      const defaultPw = rawPhone.slice(-4);
+      const teamTitle = `${comp}-${branch}-${team} 관리자 ERP`;
+
+      // Save branch settings to localStorage
+      localStorage.setItem('wooriaptcd_erp_settings_v2', JSON.stringify({
+        company: comp,
+        branch: branch,
+        team: team,
+        teamTitle: teamTitle,
+        managerName: name,
+        managerPhone: phone,
+        adminId: phone,
+        adminPw: defaultPw,
+        address: addr,
+        cardQty: qty,
+        startNum: startNum,
+        endNum: endNum,
+        assignPerAgent: assignNum,
+        batchLevel: (qty === '1000_2nd') ? 2 : 1
+      }));
+
+      // Initialize 25 rooms with new sequence
+      const startInt = parseInt(startNum, 10) || 1;
+      const assignInt = parseInt(assignNum, 10) || 40;
+      const sampleNames = ['김민준', '이서연', '박도윤', '정예은', '최지호', '강수빈', '조은우', '윤하은', '임시우', '한서아', '오하준', '서아린', '신우진', '황채원', '안준서', '송지안', '류민서', '홍시우', '고은채', '문도현', '양소율', '손예준', '배하윤', '백시후', '허유주'];
+      
+      let newRooms = [];
+      for (let i = 1; i <= 25; i++) {
+        const rStart = String(startInt + (i - 1) * assignInt).padStart(4, '0');
+        const rEnd = String(startInt + i * assignInt - 1).padStart(4, '0');
+        newRooms.push({
+          roomNo: i,
+          name: sampleNames[i - 1] + ' FC',
+          phone: '010-' + String(Math.floor(Math.random() * 9000) + 1000) + '-' + String(Math.floor(Math.random() * 9000) + 1000),
+          cardRange: `CAR-${rStart} ~ CAR-${rEnd} (${assignInt}장)`,
+          dbCount: Math.floor(Math.random() * 8) + 8,
+          balance: (Math.floor(Math.random() * 5) + 3) * 1000
+        });
+      }
+      localStorage.setItem('wooriaptcd_erp_rooms_v2', JSON.stringify(newRooms));
+      localStorage.setItem('wooriaptcd_logged_in', phone);
+
+      // Direct entry to manager ERP without delay or fake alerts!
+      window.location.href = '/manager';
+    }
+
+    // Login Modal Handlers
+    function openLoginModal() {
+      const loggedIn = localStorage.getItem('wooriaptcd_logged_in');
+      if (loggedIn) {
+        window.location.href = '/manager';
+        return;
+      }
+      document.getElementById('loginModal').style.display = 'flex';
+      document.getElementById('loginPhone').focus();
+    }
+
+    function closeLoginModal() {
+      document.getElementById('loginModal').style.display = 'none';
+    }
+
+    function doLogin() {
+      const phone = document.getElementById('loginPhone').value.trim();
+      const pw = document.getElementById('loginPw').value.trim();
+      if (!phone) {
+        alert('휴대폰 번호를 입력해 주세요.');
+        return;
+      }
+      const raw = phone.replace(/[^0-9]/g, '');
+      const defaultPw = raw.slice(-4);
+
+      const savedSettings = JSON.parse(localStorage.getItem('wooriaptcd_erp_settings_v2') || '{}');
+      const correctPw = savedSettings.adminPw || defaultPw;
+
+      if (pw && pw !== correctPw && pw !== defaultPw) {
+        alert('비밀번호가 일치하지 않습니다. (초기 비밀번호: 휴대폰 뒷 4자리)');
+        return;
       }
 
-      alert(`🎉 [${orderTitle}]
-
-• 소속: ${comp}-${branch}-${team}
-• 신청자: ${name} (${phone})
-• 주문 상품: ${priceText}
-• QR 카드 일련번호: CAR-${startNum} ~ CAR-${endNum}
-• 팀원 배정: 1인당 ${assignNum}장씩 순차 배정
-• 배송지: ${addr}
-
-신청이 성공적으로 접수되었습니다! 담당자가 1시간 이내로 인쇄 시안 및 고유 일련번호 확인 해피콜을 드립니다.`);
-      location.href = '/manager';
+      localStorage.setItem('wooriaptcd_logged_in', phone);
+      window.location.href = '/manager';
     }
   </script>
 </body>
