@@ -40,7 +40,11 @@
     },
     {
       "source": "/admin",
-      "destination": "/manager.html"
+      "destination": "/admin.html"
+    },
+    {
+      "source": "/hq",
+      "destination": "/admin.html"
     }
   ],
   "headers": [
