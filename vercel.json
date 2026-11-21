@@ -2,10 +2,13 @@
   "version": 2,
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/c/:car", "destination": "/c.html?car=:car" },
-    { "source": "/c", "destination": "/c.html" },
-    { "source": "/register/:car", "destination": "/register.html?car=:car" },
-    { "source": "/register", "destination": "/register.html" },
+    { "source": "/c/:car", "destination": "/72.html?qr=:car" },
+    { "source": "/c", "destination": "/72.html" },
+    { "source": "/72", "destination": "/72.html" },
+    { "source": "/register/:car", "destination": "/72-android.html?qr=:car" },
+    { "source": "/register", "destination": "/72-android.html" },
+    { "source": "/b2b", "destination": "/b2b.html" },
+    { "source": "/order", "destination": "/b2b.html" },
     { "source": "/manager", "destination": "/manager.html" },
     { "source": "/admin", "destination": "/manager.html" }
   ],
