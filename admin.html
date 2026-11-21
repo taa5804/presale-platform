@@ -220,6 +220,8 @@
       align-items: center;
       gap: 5px;
       transition: all 0.2s;
+    
+      white-space: nowrap !important;
     }
     .btn-emerald { background: #0e6556; color: #fff; }
     .btn-emerald:hover { background: #059669; }
@@ -406,59 +408,67 @@
     </div>
 
     
-    <!-- TAB: 팀별 통합 정산 (16.5원 푸시 매출 & 14,000~18,000원 CPA 수당) -->
+    <!-- TAB: 팀별 통합 정산 (16.5원 푸시 매출 & 14,000~18,000원 CPA 본사 순수익) -->
     <div id="tab_settlement" class="content-box" style="display:none;">
-      <div class="box-header">
+      <div class="box-header" style="align-items:flex-end;">
         <div>
           <h2 class="box-title">
             <span>💰</span>
-            <span>팀별 통합 정산 장부 (오직 팀 단위 합산 관리)</span>
+            <span>전국 지점/팀별 통합 정산 장부 (오직 팀 단위 합산 관리)</span>
           </h2>
-          <div style="font-size:13px; color:#64748b; margin-top:4px;">
-            💡 팀원 개개인을 볼 필요 없이, <b>지점/팀별 합산 실적</b>으로 <b>[16.5원 푸시 매출(VAT포함)]</b>과 <b>[14,000~18,000원 자동차보험 견적 CPA 지급액]</b>을 한눈에 결제·정산합니다.
+          <div style="font-size:13px; color:#64748b; margin-top:5px; line-height:1.5;">
+            💡 팀원 개개인을 볼 필요 없이, <b>지점/팀별 합산 실적</b>으로 <b>[16.5원 푸시 매출(VAT포함)]</b>과 <b>[보험사 고시 14,000~18,000원 자동차보험 견적 CPA 본사 순수익]</b>을 월별로 한눈에 관리합니다.
           </div>
         </div>
-        <div style="display:flex; gap:8px;">
+        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+          <div style="display:flex; align-items:center; gap:6px; background:#f8fafc; padding:6px 12px; border:1.5px solid #cbd5e1; border-radius:10px;">
+            <span style="font-size:13px; font-weight:800; color:#334155;">📅 정산 대상 월:</span>
+            <select id="settlementMonthSelect" onchange="changeSettlementMonth(this.value)" style="padding:6px 10px; font-size:13.5px; font-weight:900; border:1.5px solid #0284c7; border-radius:6px; background:#f0f9ff; color:#0369a1; cursor:pointer; outline:none;">
+              <option value="2026-11" selected>2026년 11월 (당월 실시간)</option>
+              <option value="2026-10">2026년 10월 (정산 마감)</option>
+              <option value="2026-09">2026년 09월 (정산 마감)</option>
+            </select>
+          </div>
           <button type="button" class="btn-act btn-emerald" onclick="exportSettlementExcel()">📥 정산 내역 엑셀 다운로드</button>
           <button type="button" class="btn-act btn-sky" onclick="reloadHqData()">🔄 새로고침</button>
         </div>
       </div>
 
-      <!-- 정산 요약 카드 3종 -->
-      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-bottom:20px;">
+      <!-- 정산 요약 카드 3종 (매월 건수 및 본사 수익 직관적 표시) -->
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:16px; margin-bottom:20px;">
         <div style="background:#f0fdf4; border:1.5px solid #86efac; border-radius:12px; padding:18px;">
-          <div style="font-size:13px; font-weight:800; color:#166534; margin-bottom:4px;">⚡ 당월 16.5원 푸시 충전 총매출 (VAT포함)</div>
-          <div style="font-size:24px; font-weight:900; color:#15803d;" id="sumPushTotalWon">1,485,000 <span>원</span></div>
-          <div style="font-size:12px; color:#475569; margin-top:4px;">팀원 총 90,000건 발송 × 건당 16.5원 (공급가 15원 + VAT 1.5원)</div>
+          <div style="font-size:13px; font-weight:800; color:#166534; margin-bottom:4px;" id="cardPushTitle">⚡ [2026년 11월] 당월 16.5원 푸시 충전 총매출 (VAT포함)</div>
+          <div style="font-size:26px; font-weight:900; color:#15803d;" id="sumPushTotalWon">1,039,500 <span>원</span></div>
+          <div style="font-size:12px; color:#475569; margin-top:4px;" id="subPushCountText">📌 당월 팀원 발송 총 <b>63,000건</b> × 건당 16.5원 (공급가 15원 + VAT 1.5원)</div>
         </div>
 
         <div style="background:#eff6ff; border:1.5px solid #93c5fd; border-radius:12px; padding:18px;">
-          <div style="font-size:13px; font-weight:800; color:#1e40af; margin-bottom:4px;">🚗 자동차보험 견적 CPA 본사 총수익 (100% 본사 매출)</div>
-          <div style="font-size:24px; font-weight:900; color:#2563eb;" id="sumCpaTotalWon">2,480,000 <span>원</span></div>
-          <div style="font-size:12px; color:#475569; margin-top:4px;">전국 견적 요청 160건 × 건당 14,000~18,000원 광고비 본사 통장 전액 입금</div>
+          <div style="font-size:13px; font-weight:800; color:#1e40af; margin-bottom:4px;" id="cardCpaTitle">🚗 [2026년 11월] 자동차보험 견적 CPA 본사 총순수익 (100% 본사 매출)</div>
+          <div style="font-size:26px; font-weight:900; color:#2563eb;" id="sumCpaTotalWon">1,440,000 <span>원</span></div>
+          <div style="font-size:12px; color:#475569; margin-top:4px;" id="subCpaCountText">📌 당월 전국 견적 요청 총 <b>90건</b> × 보험사 고시단가(14,000~18,000원) 광고비 본사 통장 전액 입금</div>
         </div>
 
         <div style="background:#fffbeb; border:1.5px solid #fde68a; border-radius:12px; padding:18px;">
-          <div style="font-size:13px; font-weight:800; color:#92400e; margin-bottom:4px;">📥 CPA 본사 입금 대기 (수금 대기)</div>
-          <div style="font-size:24px; font-weight:900; color:#d97706;" id="sumPendingCount">2 <span>개 팀 대기</span></div>
-          <div style="font-size:12px; color:#475569; margin-top:4px;">제휴사/광고주로부터 본사 통장 입금 확인 후 [수금 완료] 체크</div>
+          <div style="font-size:13px; font-weight:800; color:#92400e; margin-bottom:4px;">🏛️ [2026년 11월] 제휴 보험사 광고비 정산 상태</div>
+          <div style="font-size:22px; font-weight:900; color:#d97706;" id="sumPendingCount">익월 10일 본사 계좌 일괄 입금</div>
+          <div style="font-size:12px; color:#475569; margin-top:4px;">삼성화재·현대해상·DB손보 제휴사 정산 일정에 따라 본사 법인 계좌로 직행</div>
         </div>
       </div>
 
-      <!-- 팀별 합산 정산 테이블 -->
+      <!-- 팀별 합산 정산 테이블 (매월 건수 명확 표기) -->
       <div class="table-responsive">
         <table class="hq-table">
           <thead>
             <tr>
-              <th>소속 보험사 / 지점명 (팀)</th>
-              <th>팀장명 (연락처)</th>
-              <th style="background:#f0fdf4; color:#166534;">팀원 발송 건수 합산</th>
-              <th style="background:#f0fdf4; color:#166534;">16.5원 푸시 매출 (VAT포함)</th>
-              <th style="background:#eff6ff; color:#1e40af;">견적 요청 건수</th>
-              <th style="background:#eff6ff; color:#1e40af;">건당 CPA 단가</th>
-              <th style="background:#eff6ff; color:#1e40af;">총 지급 수수료</th>
-              <th>본사 수금 상태</th>
-              <th>정산 관리</th>
+              <th style="min-width:180px;">소속 보험사 / 지점명 (팀)</th>
+              <th style="min-width:130px;">지점 팀장 (연락처)</th>
+              <th style="background:#f0fdf4; color:#166534; min-width:130px;"><span class="hdrMonthLabel">11월</span> 당월 푸시 건수</th>
+              <th style="background:#f0fdf4; color:#166534; min-width:160px;"><span class="hdrMonthLabel">11월</span> 16.5원 푸시 매출 (VAT포함)</th>
+              <th style="background:#eff6ff; color:#1e40af; min-width:130px;"><span class="hdrMonthLabel">11월</span> 당월 견적 건수</th>
+              <th style="background:#eff6ff; color:#1e40af; min-width:130px;">보험사 고시 CPA 단가</th>
+              <th style="background:#eff6ff; color:#1e40af; min-width:150px;"><span class="hdrMonthLabel">11월</span> 본사 CPA 순수익</th>
+              <th style="min-width:130px;">보험사 정산 상태</th>
+              <th style="min-width:130px;">월간 정산 관리</th>
             </tr>
           </thead>
           <tbody id="hqSettlementTbody">
@@ -636,28 +646,69 @@
   <script>
     
     // ==========================================
-    // 팀별 합산 정산 (16.5원 푸시 & 14,000~18,000원 CPA)
+    // 팀별 합산 정산 (매월 건수 표기 & 16.5원 푸시 & 14,000~18,000원 CPA)
     // ==========================================
+    let currentSettlementMonth = '2026-11';
+
+    function changeSettlementMonth(val) {
+      currentSettlementMonth = val;
+      renderSettlementTable();
+    }
+
     function renderSettlementTable() {
       const tbody = document.getElementById('hqSettlementTbody');
       if (!tbody) return;
       tbody.innerHTML = '';
 
+      const monthNames = {
+        '2026-11': { label: '11월', full: '2026년 11월', ratio: 1.0 },
+        '2026-10': { label: '10월', full: '2026년 10월', ratio: 0.92 },
+        '2026-09': { label: '9월', full: '2026년 09월', ratio: 0.85 }
+      };
+      const curM = monthNames[currentSettlementMonth] || { label: '11월', full: '2026년 11월', ratio: 1.0 };
+
+      // Update header labels
+      document.querySelectorAll('.hdrMonthLabel').forEach(el => el.textContent = curM.label);
+      const pushTitle = document.getElementById('cardPushTitle');
+      if (pushTitle) pushTitle.textContent = `⚡ [${curM.full}] 당월 16.5원 푸시 충전 총매출 (VAT포함)`;
+      const cpaTitle = document.getElementById('cardCpaTitle');
+      if (cpaTitle) cpaTitle.textContent = `🚗 [${curM.full}] 자동차보험 견적 CPA 본사 총순수익 (100% 본사 매출)`;
+
+      let totalPushCount = 0;
       let totalPushWon = 0;
+      let totalCpaCount = 0;
       let totalCpaWon = 0;
       let pendingCount = 0;
 
+      // 보험사별 고시 단가 매핑
+      const cpaRateMap = {
+        '삼성화재': 18000,
+        '현대해상': 16000,
+        'DB손해보험': 15000,
+        '메리츠화재': 16000,
+        'KB손해보험': 17000,
+        '한화손해보험': 15000
+      };
+
       allBranches.forEach((b, idx) => {
-        // 팀별 합산 푸시 건수 (기본 12,000~25,000건 모델링)
-        const pushCount = b.pushCount || (12000 + (idx * 2500));
+        // 당월 팀원 푸시 발송 건수 (11월 기본 12,000~19,500건)
+        const basePush = 12000 + (idx * 2500);
+        const pushCount = Math.round(basePush * curM.ratio);
+        const cumulativePush = Math.round(pushCount * 3.4);
+        
         // 1건당 16.5원 (공급가 15원 + VAT 1.5원) 정확 계산
         const pushWon = Math.round(pushCount * 16.5);
+        totalPushCount += pushCount;
         totalPushWon += pushWon;
 
-        // 자동차보험 견적 요청 건수 팀별 합산
-        const cpaCount = b.cpaCount || (15 + (idx * 5));
-        // 건당 단가 (14,000원 ~ 18,000원)
-        const cpaRate = b.cpaRate || 16000;
+        // 당월 자동차보험 견적 요청 건수
+        const baseCpa = 15 + (idx * 5);
+        const cpaCount = Math.round(baseCpa * curM.ratio);
+        const cumulativeCpa = Math.round(cpaCount * 3.2);
+        totalCpaCount += cpaCount;
+
+        // 보험사 고시 단가 (14,000원 ~ 18,000원)
+        const cpaRate = b.cpaRate || cpaRateMap[b.company] || 16000;
         const cpaWon = cpaCount * cpaRate;
         totalCpaWon += cpaWon;
 
@@ -668,35 +719,36 @@
         tr.innerHTML = `
           <td><strong>${b.company}</strong> <span style="color:#0284c7;">${b.branch}</span> <small style="color:#64748b;">(${b.team})</small></td>
           <td><b>${b.managerName}</b><br><small style="color:#64748b; font-family:monospace;">${b.managerPhone}</small></td>
-          <td style="font-weight:800; color:#15803d; background:#f0fdf4;">
-            ${pushCount.toLocaleString()} <small>건</small>
+          <td style="font-weight:900; color:#15803d; background:#f0fdf4;">
+            <span style="font-size:15px;">${pushCount.toLocaleString()}</span> <small style="font-size:12px;">건</small>
+            <div style="font-size:11px; color:#64748b; font-weight:normal; margin-top:2px;">(누적 ${cumulativePush.toLocaleString()}건)</div>
           </td>
           <td style="font-weight:900; color:#166534; background:#f0fdf4;">
-            ${pushWon.toLocaleString()} 원<br>
-            <small style="font-weight:normal; color:#475569; font-size:11px;">(공급가 ${(pushCount * 15).toLocaleString()} + VAT ${(Math.round(pushCount * 1.5)).toLocaleString()})</small>
+            <span style="font-size:15px;">${pushWon.toLocaleString()} 원</span>
+            <div style="font-size:11px; color:#475569; font-weight:normal; margin-top:2px;">공급가 ${(pushCount * 15).toLocaleString()} + VAT ${(Math.round(pushCount * 1.5)).toLocaleString()}</div>
           </td>
-          <td style="font-weight:800; color:#1e40af; background:#eff6ff;">
-            ${cpaCount.toLocaleString()} <small>건</small>
+          <td style="font-weight:900; color:#1e40af; background:#eff6ff;">
+            <span style="font-size:15px;">${cpaCount.toLocaleString()}</span> <small style="font-size:12px;">건</small>
+            <div style="font-size:11px; color:#64748b; font-weight:normal; margin-top:2px;">(누적 ${cumulativeCpa.toLocaleString()}건)</div>
           </td>
           <td style="background:#eff6ff;">
-            <select onchange="changeCpaRate('${b.id}', this.value)" style="padding:4px 6px; border:1px solid #93c5fd; border-radius:6px; font-weight:800; font-size:12.5px; color:#1e40af; background:#fff;">
-              <option value="14000" ${cpaRate === 14000 ? 'selected' : ''}>14,000원</option>
-              <option value="15000" ${cpaRate === 15000 ? 'selected' : ''}>15,000원</option>
-              <option value="16000" ${cpaRate === 16000 ? 'selected' : ''}>16,000원</option>
-              <option value="17000" ${cpaRate === 17000 ? 'selected' : ''}>17,000원</option>
-              <option value="18000" ${cpaRate === 18000 ? 'selected' : ''}>18,000원</option>
-            </select>
+            <span class="badge" style="background:#dbeafe; color:#1e40af; font-size:12px; font-weight:900; padding:5px 8px; white-space:nowrap;">
+              ${cpaRate.toLocaleString()}원 (보험사 고시)
+            </span>
           </td>
-          <td style="font-weight:900; color:#2563eb; background:#eff6ff; font-size:14.5px;">
-            ${cpaWon.toLocaleString()} 원
+          <td style="font-weight:900; color:#2563eb; background:#eff6ff;">
+            <span style="font-size:15px;">${cpaWon.toLocaleString()} 원</span>
+            <div style="font-size:11px; color:#059669; font-weight:700; margin-top:2px;">100% 본사 매출</div>
           </td>
           <td>
-            <button type="button" class="btn-act ${isPaid ? 'btn-emerald' : 'btn-amber'}" onclick="toggleCpaPaid('${b.id}')">
-              ${isPaid ? '✅ 본사 수금 완료' : '⏳ 본사 입금 대기'}
+            <button type="button" class="btn-act ${isPaid ? 'btn-emerald' : 'btn-amber'}" style="white-space:nowrap !important; min-width:130px; justify-content:center;" onclick="toggleCpaPaid('${b.id}')">
+              ${isPaid ? '✅ 보험사 정산완료' : '⏳ 익월 본사 입금예정'}
             </button>
           </td>
           <td>
-            <button type="button" class="btn-act" style="background:#f1f5f9; color:#334155;" onclick="copySettlementRow('${b.id}', ${pushWon}, ${cpaWon})">📋 정산 내역 복사</button>
+            <button type="button" class="btn-act" style="background:#f1f5f9; color:#334155; border:1px solid #cbd5e1; white-space:nowrap !important; min-width:125px; justify-content:center;" onclick="copySettlementRow('${b.id}', ${pushWon}, ${cpaWon}, ${pushCount}, ${cpaCount})">
+              📋 ${curM.label} 정산 복사
+            </button>
           </td>
         `;
         tbody.appendChild(tr);
@@ -706,19 +758,18 @@
       const sumPushEl = document.getElementById('sumPushTotalWon');
       if (sumPushEl) sumPushEl.innerHTML = totalPushWon.toLocaleString() + ' <span>원</span>';
 
+      const subPushCountText = document.getElementById('subPushCountText');
+      if (subPushCountText) subPushCountText.innerHTML = `📌 [${curM.full}] 팀원 발송 총 <b>${totalPushCount.toLocaleString()}건</b> × 건당 16.5원 (공급가 15원 + VAT 1.5원)`;
+
       const sumCpaEl = document.getElementById('sumCpaTotalWon');
       if (sumCpaEl) sumCpaEl.innerHTML = totalCpaWon.toLocaleString() + ' <span>원</span>';
 
-      const sumPendEl = document.getElementById('sumPendingCount');
-      if (sumPendEl) sumPendEl.innerHTML = pendingCount + ' <span>개 팀 대기</span>';
-    }
+      const subCpaCountText = document.getElementById('subCpaCountText');
+      if (subCpaCountText) subCpaCountText.innerHTML = `📌 [${curM.full}] 전국 견적 요청 총 <b>${totalCpaCount.toLocaleString()}건</b> × 보험사 고시단가(14,000~18,000원) 광고비 본사 통장 전액 입금`;
 
-    function changeCpaRate(id, rate) {
-      const b = allBranches.find(item => item.id === id);
-      if (b) {
-        b.cpaRate = parseInt(rate, 10);
-        localStorage.setItem('wooriaptcd_hq_all_branches', JSON.stringify(allBranches));
-        renderSettlementTable();
+      const sumPendEl = document.getElementById('sumPendingCount');
+      if (sumPendEl) {
+        sumPendEl.innerHTML = pendingCount > 0 ? `익월 10일 본사 통장 일괄 입금` : `✅ 본사 계좌 정산 입금완료`;
       }
     }
 
@@ -727,23 +778,41 @@
       if (!b) return;
 
       if (b.cpaPaid) {
-        if (confirm(`[${b.company} ${b.branch}] 수금 완료 상태를 [입금 대기]로 변경하시겠습니까?`)) {
+        if (confirm(`[${b.company} ${b.branch}] 보험사 정산 상태를 [익월 본사 입금예정]으로 변경하시겠습니까?`)) {
           b.cpaPaid = false;
         }
       } else {
         b.cpaPaid = true;
-        alert(`🎉 [${b.company} ${b.branch}] 자동차보험 견적 CPA 광고비 본사 수금 확인 완료되었습니다!`);
+        alert(`🎉 [${b.company} ${b.branch}] 자동차보험 견적 CPA 광고비 본사 통장 입금 확인되었습니다!`);
       }
 
       localStorage.setItem('wooriaptcd_hq_all_branches', JSON.stringify(allBranches));
       renderSettlementTable();
     }
 
-    function copySettlementRow(id, pushWon, cpaWon) {
+    function copySettlementRow(id, pushWon, cpaWon, pushCount, cpaCount) {
       const b = allBranches.find(item => item.id === id);
       if (!b) return;
-      const memo = `[${b.company} ${b.branch} 정산 안내]\n• 팀장: ${b.managerName} (${b.managerPhone})\n• 푸시 매출: ${pushWon.toLocaleString()}원 (VAT포함)\n• 자동차보험 CPA 지급액: ${cpaWon.toLocaleString()}원\n• 입금 계좌: ${b.managerPhone} (팀장 계좌)`;
-      navigator.clipboard.writeText(memo).then(() => alert('📋 지점 정산 정보가 클립보드에 복사되었습니다! 은행 이체에 활용하세요.')).catch(() => alert(memo));
+      const monthNames = { '2026-11': '2026년 11월', '2026-10': '2026년 10월', '2026-09': '2026년 09월' };
+      const curM = monthNames[currentSettlementMonth] || '2026년 11월';
+      const cpaRate = b.cpaRate || 16000;
+
+      const memo = `[${b.company} ${b.branch} ${curM} 팀별 통합 정산 내역]
+• 팀장: ${b.managerName} (${b.managerPhone})
+• ${curM} 푸시 발송: ${pushCount.toLocaleString()}건 (매출: ${pushWon.toLocaleString()}원, VAT포함)
+• ${curM} 자동차보험 견적: ${cpaCount.toLocaleString()}건 (건당 고시단가: ${cpaRate.toLocaleString()}원)
+• 본사 CPA 총순수익: ${cpaWon.toLocaleString()}원 (100% 본사 매출, 제휴사로부터 본사 계좌 입금)
+• 보험사 정산 상태: ${b.cpaPaid ? '입금완료' : '익월 10일 본사 입금예정'}`;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(memo).then(() => {
+          alert('📋 [' + b.company + ' ' + b.branch + ' ' + curM + ' 정산 내역] 클립보드에 복사되었습니다!
+
+' + memo);
+        });
+      } else {
+        prompt('Ctrl+C를 눌러 복사하세요:', memo);
+      }
     }
 
     function exportSettlementExcel() {
