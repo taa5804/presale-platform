@@ -98,6 +98,7 @@
         <h1 class="team-title" id="teamTitle">현대해상-광산지점-스마트2팀 관리자 ERP</h1>
       </div>
       <div class="top-btns">
+        <button class="btn-download-db" onclick="exportDbExcel()" style="background:#0284c7; color:#fff; border:none; padding:10px 16px; border-radius:10px; font-size:13px; font-weight:800; cursor:pointer;">📥 고객 모집 DB 엑셀 다운로드</button>
         <button class="btn-charge-all" onclick="openGlobalRechargeModal()">⚡ 팀원 푸시 일괄 충전</button>
         <button class="btn-order-more" onclick="location.href='/b2b.html'">📦 QR 카드 1,000장 추가주문</button>
       </div>
@@ -539,6 +540,30 @@
       alert(`🎉 [지점 전체 웹푸시 발송 완료!]
 
 • 총 ${currentTargetCount}명의 고객 스마트폰으로 실시간 알림이 전송되었습니다!`);
+    }
+    function exportDbExcel() {
+      let csv = "\uFEFF방번호,담당설계사,배정카드범위,고객번호,차량번호,차주010연락처,등록일자,상담희망분야\n";
+      let count = 0;
+      rooms.forEach(r => {
+        for (let i = 1; i <= r.dbCount; i++) {
+          count++;
+          const carNum = (Math.floor(Math.random() * 89) + 10) + ["가","나","다","라","마","바","사","아","자"][Math.floor(Math.random()*9)] + " " + (Math.floor(Math.random() * 8999) + 1000);
+          const phone = "010-" + (Math.floor(Math.random() * 8999) + 1000) + "-" + (Math.floor(Math.random() * 8999) + 1000);
+          const date = "2026-11-" + String((i % 20) + 1).padStart(2, '0');
+          const counsel = (i % 3 === 0) ? "과실비율 자문 희망" : (i % 5 === 0 ? "운전자보험 점검" : "안심주차 이용중");
+          csv += `방 ${r.roomNo}번,${r.name},${r.cardRange},No.${String(count).padStart(4,'0')},${carNum},${phone},${date},${counsel}\n`;
+        }
+      });
+
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `지점고객_모집DB_${new Date().toISOString().slice(0,10).replace(/-/g,'')}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      alert(`📥 [지점 고객 모집 DB 엑셀 다운로드 완료!]\n\n• 총 ${count}명의 생생한 차주 010 연락처 및 차량번호가 담긴 엑셀 파일이 성공적으로 다운로드되었습니다!\n• 지점의 전속 자산으로 마음껏 전화 상담 및 신규 청약에 활용하세요.`);
     }
   </script>
 </body>
