@@ -195,12 +195,37 @@
             <input type="tel" class="form-input" id="oPhone" placeholder="010-0000-0000" required>
           </div>
           <div>
-            <label class="form-label">주문 수량 선택</label>
-            <select class="form-select" id="oQty" required>
-              <option value="1000" selected>첫 1,000장 도입 (50% 할인 특가 500,000원) - 지점 최초 1회 한정</option>
-              <option value="2000">2,000장 (1,500,000원) - 첫 1,000장 50% 할인 + 1,000장 정규가</option>
-              <option value="3000">3,000장 (2,500,000원) - 지점 전사 도입</option>
+            <label class="form-label">신청 회차 / 주문 상품 선택</label>
+            <select class="form-select" id="oQty" onchange="handleBatchChange(this.value)" required>
+              <option value="1000_1st" selected>🔥 [1회차 최초 도입] 첫 1,000장 (50% 특가 500,000원)</option>
+              <option value="1000_2nd">📦 [2회차 재주문] 1,000장 추가 발급 (정규가 1,000,000원)</option>
+              <option value="1000_3rd">📦 [3회차 재주문] 1,000장 추가 발급 (정규가 1,000,000원)</option>
+              <option value="2000">🚀 [대량 도입] 2,000장 (1,500,000원)</option>
+              <option value="3000">🏢 [지점 전사 도입] 3,000장 (2,500,000원)</option>
             </select>
+          </div>
+          <div>
+            <label class="form-label">팀원 1인당 배정 방식</label>
+            <select class="form-select" id="oAssignType" onchange="handleAssignChange()">
+              <option value="40" selected>25명 팀원에게 40장씩 균등 배정 (1회차: 0001~0040 / 2회차: 1001~1040)</option>
+              <option value="50">20명 팀원에게 50장씩 균등 배정 (1회차: 0001~0050 / 2회차: 1001~1050)</option>
+              <option value="100">10명 팀원에게 100장씩 집중 배정 (1회차: 0001~0100 / 2회차: 1001~1100)</option>
+            </select>
+          </div>
+          <div class="form-col-full" style="background:#090d16; padding:14px; border-radius:12px; border:1px solid #334155;">
+            <label class="form-label" style="color:#38bdf8; font-weight:800; margin-bottom:8px;">
+              🔢 QR 카드 고유 일련번호 지정 (지점 및 팀원 식별용)
+            </label>
+            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+              <span style="font-weight:800; color:#fff; font-size:15px;">시작번호: CAR-</span>
+              <input type="text" id="qrStartNum" class="form-input" style="width:110px; text-align:center; font-weight:800; color:#38bdf8;" value="0001" required>
+              <span style="font-weight:800; color:#fff; font-size:15px;">~ 끝번호: CAR-</span>
+              <input type="text" id="qrEndNum" class="form-input" style="width:110px; text-align:center; font-weight:800; color:#38bdf8;" value="1000" required>
+              <span id="qrAssignPreview" style="font-size:12.5px; color:#94a3b8; margin-left:6px;">(팀원당 40장: 방 1번 0001~0040번 인쇄)</span>
+            </div>
+            <div style="font-size:11.5px; color:#64748b; margin-top:6px;">
+              ※ 2회차 주문 시 자동으로 1001~2000번으로 설정되며, 지점 요청에 따라 일련번호를 자유롭게 지정하실 수 있습니다.
+            </div>
           </div>
           <div class="form-col-full">
             <label class="form-label">실물 카드 배송지 주소</label>
@@ -223,6 +248,37 @@
   </div>
 
   <script>
+    
+    function handleBatchChange(val) {
+      const startInput = document.getElementById('qrStartNum');
+      const endInput = document.getElementById('qrEndNum');
+      if (val === '1000_1st') {
+        startInput.value = '0001';
+        endInput.value = '1000';
+      } else if (val === '1000_2nd') {
+        startInput.value = '1001';
+        endInput.value = '2000';
+      } else if (val === '1000_3rd') {
+        startInput.value = '2001';
+        endInput.value = '3000';
+      } else if (val === '2000') {
+        startInput.value = '0001';
+        endInput.value = '2000';
+      } else if (val === '3000') {
+        startInput.value = '0001';
+        endInput.value = '3000';
+      }
+      handleAssignChange();
+    }
+
+    function handleAssignChange() {
+      const assign = document.getElementById('oAssignType').value;
+      const start = parseInt(document.getElementById('qrStartNum').value, 10) || 1;
+      const endFirst = start + parseInt(assign, 10) - 1;
+      const preview = document.getElementById('qrAssignPreview');
+      preview.textContent = `(팀원당 ${assign}장 배정: 방 1번 ${String(start).padStart(4,'0')}~${String(endFirst).padStart(4,'0')}번 인쇄)`;
+    }
+
     function handleOrder(e) {
       e.preventDefault();
       const comp = document.getElementById('oCompany').value.trim();
@@ -235,14 +291,34 @@
 
       const priceText = qty === '1000' ? '500,000원 (첫 1,000장 50% 할인 특가)' : (qty === '2000' ? '1,500,000원' : '2,500,000원');
 
-      alert(`🎉 [첫 1,000장 50% 특가 신청 접수 완료!]
+      const startNum = document.getElementById('qrStartNum').value;
+      const endNum = document.getElementById('qrEndNum').value;
+      const assignNum = document.getElementById('oAssignType').value;
+
+      let orderTitle = '도입 신청 접수 완료!';
+      let priceText = '500,000원 (첫 1,000장 50% 할인 특가)';
+      if (qty === '1000_2nd') {
+        orderTitle = '2회차 1,000장 추가 발급 신청 완료!';
+        priceText = '1,000,000원 (정규 도매가)';
+      } else if (qty === '1000_3rd') {
+        orderTitle = '3회차 1,000장 추가 발급 신청 완료!';
+        priceText = '1,000,000원 (정규 도매가)';
+      } else if (qty === '2000') {
+        priceText = '1,500,000원';
+      } else if (qty === '3000') {
+        priceText = '2,500,000원';
+      }
+
+      alert(`🎉 [${orderTitle}]
 
 • 소속: ${comp}-${branch}-${team}
 • 신청자: ${name} (${phone})
-• 주문: ${parseInt(qty).toLocaleString()}장 (${priceText})
+• 주문 상품: ${priceText}
+• QR 카드 일련번호: CAR-${startNum} ~ CAR-${endNum}
+• 팀원 배정: 1인당 ${assignNum}장씩 순차 배정
 • 배송지: ${addr}
 
-신청이 성공적으로 접수되었습니다. 본사 담당자가 1시간 이내로 해피콜 및 관리자 ERP 계정 정보를 안내해 드립니다.`);
+신청이 성공적으로 접수되었습니다! 담당자가 1시간 이내로 인쇄 시안 및 고유 일련번호 확인 해피콜을 드립니다.`);
       location.href = '/manager';
     }
   </script>
