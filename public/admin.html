@@ -433,15 +433,15 @@
         </div>
 
         <div style="background:#eff6ff; border:1.5px solid #93c5fd; border-radius:12px; padding:18px;">
-          <div style="font-size:13px; font-weight:800; color:#1e40af; margin-bottom:4px;">🚗 자동차보험 견적 CPA 총 지급액</div>
+          <div style="font-size:13px; font-weight:800; color:#1e40af; margin-bottom:4px;">🚗 자동차보험 견적 CPA 본사 총수익 (100% 본사 매출)</div>
           <div style="font-size:24px; font-weight:900; color:#2563eb;" id="sumCpaTotalWon">2,480,000 <span>원</span></div>
-          <div style="font-size:12px; color:#475569; margin-top:4px;">전국 견적 요청 160건 × 건당 14,000~18,000원 실적 지급</div>
+          <div style="font-size:12px; color:#475569; margin-top:4px;">전국 견적 요청 160건 × 건당 14,000~18,000원 광고비 본사 통장 전액 입금</div>
         </div>
 
         <div style="background:#fffbeb; border:1.5px solid #fde68a; border-radius:12px; padding:18px;">
-          <div style="font-size:13px; font-weight:800; color:#92400e; margin-bottom:4px;">📋 CPA 송금 대기 지점</div>
+          <div style="font-size:13px; font-weight:800; color:#92400e; margin-bottom:4px;">📥 CPA 본사 입금 대기 (수금 대기)</div>
           <div style="font-size:24px; font-weight:900; color:#d97706;" id="sumPendingCount">2 <span>개 팀 대기</span></div>
-          <div style="font-size:12px; color:#475569; margin-top:4px;">통장 계좌 확인 후 원클릭 [송금 완료] 처리</div>
+          <div style="font-size:12px; color:#475569; margin-top:4px;">제휴사/광고주로부터 본사 통장 입금 확인 후 [수금 완료] 체크</div>
         </div>
       </div>
 
@@ -457,7 +457,7 @@
               <th style="background:#eff6ff; color:#1e40af;">견적 요청 건수</th>
               <th style="background:#eff6ff; color:#1e40af;">건당 CPA 단가</th>
               <th style="background:#eff6ff; color:#1e40af;">총 지급 수수료</th>
-              <th>송금 상태</th>
+              <th>본사 수금 상태</th>
               <th>정산 관리</th>
             </tr>
           </thead>
@@ -692,11 +692,11 @@
           </td>
           <td>
             <button type="button" class="btn-act ${isPaid ? 'btn-emerald' : 'btn-amber'}" onclick="toggleCpaPaid('${b.id}')">
-              ${isPaid ? '✅ 송금 완료' : '⏳ 송금 대기'}
+              ${isPaid ? '✅ 본사 수금 완료' : '⏳ 본사 입금 대기'}
             </button>
           </td>
           <td>
-            <button type="button" class="btn-act" style="background:#f1f5f9; color:#334155;" onclick="copySettlementRow('${b.id}', ${pushWon}, ${cpaWon})">📋 송금정보 복사</button>
+            <button type="button" class="btn-act" style="background:#f1f5f9; color:#334155;" onclick="copySettlementRow('${b.id}', ${pushWon}, ${cpaWon})">📋 정산 내역 복사</button>
           </td>
         `;
         tbody.appendChild(tr);
@@ -727,12 +727,12 @@
       if (!b) return;
 
       if (b.cpaPaid) {
-        if (confirm(`[${b.company} ${b.branch}] 송금 완료 상태를 [송금 대기]로 변경하시겠습니까?`)) {
+        if (confirm(`[${b.company} ${b.branch}] 수금 완료 상태를 [입금 대기]로 변경하시겠습니까?`)) {
           b.cpaPaid = false;
         }
       } else {
         b.cpaPaid = true;
-        alert(`🎉 [${b.company} ${b.branch}] 자동차보험 견적 CPA 수당 송금 완료 처리되었습니다!`);
+        alert(`🎉 [${b.company} ${b.branch}] 자동차보험 견적 CPA 광고비 본사 수금 확인 완료되었습니다!`);
       }
 
       localStorage.setItem('wooriaptcd_hq_all_branches', JSON.stringify(allBranches));
