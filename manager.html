@@ -8,7 +8,7 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Pretendard', sans-serif; }
     body { background: #090d16; color: #f1f5f9; min-height: 100vh; padding: 20px 16px 60px; }
-    .wrap { max-width: 1020px; margin: 0 auto; }
+    .wrap { max-width: 1080px; margin: 0 auto; }
 
     /* Header */
     .top-header { display: flex; justify-content: space-between; align-items: center; background: #131b2e; padding: 18px 24px; border-radius: 16px; border: 1px solid #1e293b; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
@@ -51,23 +51,32 @@
     .rooms-title { font-size: 18px; font-weight: 900; color: #fff; }
     .rooms-sub { font-size: 13px; color: #94a3b8; }
 
-    .rooms-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
-    .room-card { background: #131b2e; border: 1px solid #1e293b; border-radius: 14px; padding: 18px; transition: border-color 0.15s; }
+    .rooms-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 14px; }
+    .room-card { background: #131b2e; border: 1px solid #1e293b; border-radius: 14px; padding: 18px; transition: border-color 0.15s; display: flex; flex-direction: column; justify-content: space-between; }
     .room-card:hover { border-color: #3b82f6; }
-    .room-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-    .room-badge { background: #1e293b; color: #38bdf8; font-size: 12px; font-weight: 800; padding: 3px 8px; border-radius: 6px; border: 1px solid #334155; }
-    .room-cards-range { font-size: 11px; color: #64748b; }
+    .room-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+    .room-badge { background: #1e293b; color: #38bdf8; font-size: 13px; font-weight: 900; padding: 4px 10px; border-radius: 6px; border: 1px solid #334155; }
+    .room-cards-range { font-size: 11.5px; color: #94a3b8; text-align: right; line-height: 1.5; }
     
     .agent-name { font-size: 17px; font-weight: 800; color: #fff; margin-bottom: 2px; }
-    .agent-phone { font-size: 13.5px; color: #38bdf8; font-weight: 700; margin-bottom: 12px; }
+    .agent-phone { font-size: 13.5px; color: #38bdf8; font-weight: 700; margin-bottom: 10px; }
     
-    .db-count-box { background: #090d16; border-radius: 10px; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+    .db-count-box { background: #090d16; border-radius: 10px; padding: 9px 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
     .db-label { font-size: 12px; color: #94a3b8; }
     .db-num { font-size: 15px; font-weight: 900; color: #34d399; }
-    .wallet-box { background: #0d1527; border: 1px solid #1e293b; border-radius: 10px; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .wallet-box { background: #0d1527; border: 1px solid #1e293b; border-radius: 10px; padding: 9px 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
     .wallet-num { font-size: 14px; font-weight: 800; color: #60a5fa; }
 
-    .room-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+    /* QR Registration Row inside Room Card */
+    .qr-register-box { background: #090d16; border: 1px solid #334155; border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; }
+    .qr-reg-title { font-size: 11.5px; font-weight: 700; color: #38bdf8; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
+    .qr-reg-inputs { display: flex; align-items: center; gap: 6px; }
+    .qr-num-input { width: 75px; background: #131b2e; border: 1px solid #475569; border-radius: 6px; color: #fff; font-size: 12px; font-weight: 800; padding: 6px 8px; text-align: center; outline: none; }
+    .qr-num-input:focus { border-color: #3b82f6; }
+    .btn-qr-reg { flex: 1; background: #2563eb; color: #fff; border: none; padding: 7px 10px; border-radius: 6px; font-size: 12px; font-weight: 800; cursor: pointer; }
+    .btn-qr-reg:hover { background: #1d4ed8; }
+
+    .room-btns { display: flex; gap: 6px; flex-wrap: wrap; margin-top: auto; }
     .btn-reassign { flex: 1; background: #1e293b; border: 1px solid #334155; color: #cbd5e1; padding: 8px 10px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; text-align: center; }
     .btn-reassign:hover { border-color: #38bdf8; color: #fff; }
     .btn-charge-room { background: #064e3b; border: 1px solid #059669; color: #34d399; padding: 8px 10px; border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer; }
@@ -110,7 +119,7 @@
       <div class="stat-card">
         <div class="stat-label">총 보유 안심주차 카드</div>
         <div class="stat-value" id="totalCardsDisplay">1,000 <span>장</span></div>
-        <div class="stat-sub" id="totalCardsSub">1차 1,000장 25개 방 분배 완료</div>
+        <div class="stat-sub" id="totalCardsSub">25개 방 배정 완료</div>
       </div>
       <div class="stat-card">
         <div class="stat-label">등록 완료 차주 고객 (DB)</div>
@@ -167,7 +176,7 @@
     <div class="rooms-header">
       <div>
         <h2 class="rooms-title">👥 팀원 25개 전용 관리실 (방 1번 ~ 방 25번)</h2>
-        <div class="rooms-sub">각 팀원이 자기 담당 카드를 관리하고, 개인 잔액을 충전하여 자기 고객에게 직접 푸시를 발송합니다.</div>
+        <div class="rooms-sub">각 방마다 실물 QR 카드 번호(예: 1~100, 1001~1100)를 직접 입력하여 등록하고 누적 관리합니다.</div>
       </div>
     </div>
 
@@ -200,14 +209,14 @@
     </div>
   </div>
 
-  <!-- Modal 4: 2회차 1,000장 추가 발급 & 일련번호 지정 모달 -->
+  <!-- Modal 4: 2회차 1,000장 추가 발급 모달 -->
   <div class="modal-wrap" id="batchOrderModal">
     <div class="modal-content" style="max-width:500px;">
       <h3 style="color:#38bdf8; display:flex; align-items:center; gap:8px;">
         📦 2회차 QR 카드 1,000장 추가 발급 & 번호 지정
       </h3>
       <p style="font-size:12.5px; color:#94a3b8; margin-bottom:16px; line-height:1.6;">
-        기존 1회차(CAR-0001~1000) 소진 후, <b>2회차(1001번~)</b> 카드를 추가 발급하여 팀원 25개 방에 누적 배정합니다.
+        기존 1회차 소진 후, <b>2회차(1001번~)</b> 카드를 추가 발급하여 팀원 25개 방에 누적 배정합니다.
       </p>
 
       <div style="background:#090d16; padding:14px; border-radius:12px; border:1px solid #334155; margin-bottom:14px;">
@@ -218,9 +227,7 @@
           <b>2회차 신규 발급:</b> CAR-1001 ~ CAR-2000 (1,000장 추가)
         </div>
         <div style="font-size:12.5px; color:#94a3b8; line-height:1.6;">
-          • 팀원 1인당 추가: 방당 40장 추가 (총 80장 누적 배정)<br>
-          • 방 1번: 0001~0040 (1차) + 1001~1040 (2차)<br>
-          • 방 2번: 0041~0080 (1차) + 1041~1080 (2차)
+          • 지점장이 각 방에서 번호를 직접 입력하거나, 2회차 번호를 일괄 추가할 수 있습니다.
         </div>
       </div>
 
@@ -311,10 +318,6 @@
     document.getElementById("companyTag").textContent = currentCompany;
     document.getElementById("teamTitle").textContent = currentTeam;
 
-    if (savedSettings.startNum && savedSettings.endNum) {
-      document.getElementById('totalCardsSub').textContent = `CAR-${savedSettings.startNum}~${savedSettings.endNum} 25개 방 분배 완료`;
-    }
-
     function editTeamInfo() {
       const newComp = prompt("보험사명을 입력해 주세요 (예: 현대해상, 삼성화재, DB손보):", currentCompany);
       if (newComp) {
@@ -397,19 +400,31 @@
     if (!rooms || rooms.length !== 25) {
       rooms = [];
       for (let i = 1; i <= 25; i++) {
-        const startCard = String((i - 1) * 40 + 1).padStart(4, '0');
-        const endCard = String(i * 40).padStart(4, '0');
+        const startCard = (i - 1) * 40 + 1;
+        const endCard = i * 40;
         const randomDb = Math.floor(Math.random() * 8) + 8;
         const randomWallet = (Math.floor(Math.random() * 5) + 3) * 1000;
         rooms.push({
           roomNo: i,
           name: sampleNames[i - 1] + ' FC',
           phone: '010-' + String(Math.floor(Math.random() * 9000) + 1000) + '-' + String(Math.floor(Math.random() * 9000) + 1000),
-          cardRange: `CAR-${startCard} ~ CAR-${endCard} (40장)`,
+          ranges: [
+            { batch: 1, start: startCard, end: endCard, count: 40 }
+          ],
           dbCount: randomDb,
           balance: randomWallet
         });
       }
+      saveRooms();
+    } else {
+      // Ensure ranges array exists on all rooms
+      rooms.forEach((r, idx) => {
+        if (!r.ranges || r.ranges.length === 0) {
+          const s = (idx * 40) + 1;
+          const e = (idx + 1) * 40;
+          r.ranges = [{ batch: 1, start: s, end: e, count: 40 }];
+        }
+      });
       saveRooms();
     }
 
@@ -421,28 +436,110 @@
     function updateTopTotals() {
       const totalDb = rooms.reduce((acc, cur) => acc + (cur.dbCount || 0), 0);
       const totalBalance = rooms.reduce((acc, cur) => acc + (cur.balance || 0), 0);
+      
+      let totalCards = 0;
+      rooms.forEach(r => {
+        if (r.ranges && r.ranges.length > 0) {
+          totalCards += r.ranges.reduce((sum, rg) => sum + (rg.count || 0), 0);
+        } else {
+          totalCards += 40;
+        }
+      });
+
+      document.getElementById('totalCardsDisplay').innerHTML = totalCards.toLocaleString() + ' <span>장</span>';
+      document.getElementById('totalCardsSub').textContent = `25개 방 총 ${totalCards.toLocaleString()}장 배정 완료`;
       document.getElementById('totalDbDisplay').innerHTML = totalDb + ' <span>명</span>';
       document.getElementById('totalWalletDisplay').innerHTML = totalBalance.toLocaleString() + ' <span>원</span>';
     }
 
+    // Direct QR Code Registration Function for each Room
+    function registerRoomQr(roomNo) {
+      const startEl = document.getElementById(`qrStart_${roomNo}`);
+      const endEl = document.getElementById(`qrEnd_${roomNo}`);
+      const startVal = parseInt(startEl.value, 10);
+      const endVal = parseInt(endEl.value, 10);
+
+      if (isNaN(startVal) || isNaN(endVal) || startVal <= 0 || endVal < startVal) {
+        alert('시작번호와 끝번호를 정확히 입력해 주세요. (예: 시작 1, 끝 100 또는 시작 1001, 끝 1100)');
+        startEl.focus();
+        return;
+      }
+
+      const r = rooms.find(item => item.roomNo === roomNo);
+      if (!r) return;
+
+      if (!r.ranges) r.ranges = [];
+      const newBatchNum = r.ranges.length + 1;
+      const count = endVal - startVal + 1;
+
+      r.ranges.push({
+        batch: newBatchNum,
+        start: startVal,
+        end: endVal,
+        count: count
+      });
+
+      startEl.value = '';
+      endEl.value = '';
+
+      saveRooms();
+      renderRooms();
+
+      const startFmt = String(startVal).padStart(4, '0');
+      const endFmt = String(endVal).padStart(4, '0');
+      alert(`✅ [방 ${roomNo}번 QR 카드 등록 완료]\n\n• ${newBatchNum}차 배정: CAR-${startFmt} ~ CAR-${endFmt} (${count}장)\n• 방 ${roomNo}번 총 보유 카드: ${r.ranges.reduce((acc, c)=>acc+c.count, 0)}장으로 업데이트되었습니다.`);
+    }
+
     function renderRooms() {
       const container = document.getElementById('roomsContainer');
-      container.innerHTML = rooms.map(r => `
+      container.innerHTML = rooms.map(r => {
+        const rangesHtml = (r.ranges || []).map((rg, i) => {
+          const s = String(rg.start).padStart(4, '0');
+          const e = String(rg.end).padStart(4, '0');
+          const color = i === 0 ? '#cbd5e1' : '#38bdf8';
+          return `<div style="color:${color}; font-weight:700;">${i+1}차: CAR-${s}~${e} (${rg.count}장)</div>`;
+        }).join('');
+
+        const totalRoomCards = (r.ranges || []).reduce((acc, c) => acc + (c.count || 0), 0);
+
+        return `
         <div class="room-card">
-          <div class="room-top">
-            <span class="room-badge">방 ${r.roomNo}번</span>
-            <span class="room-cards-range">${r.cardRange}${r.batch2Range ? '<br><span style="color:#38bdf8;">' + r.batch2Range + '</span>' : ''}</span>
+          <div>
+            <div class="room-top">
+              <span class="room-badge">방 ${r.roomNo}번</span>
+              <div class="room-cards-range">
+                ${rangesHtml}
+                <div style="font-size:11px; color:#64748b; margin-top:2px;">(총 ${totalRoomCards}장 보유)</div>
+              </div>
+            </div>
+            <div class="agent-name">${r.name}</div>
+            <div class="agent-phone">📞 ${r.phone}</div>
+            
+            <div class="db-count-box">
+              <span class="db-label">보유 차주 고객 DB</span>
+              <span class="db-num">${r.dbCount}명</span>
+            </div>
+            <div class="wallet-box">
+              <span class="db-label">팀원 개별 푸시 잔액</span>
+              <span class="wallet-num">${r.balance.toLocaleString()}원 <small style="color:#64748b;">(${Math.floor(r.balance / 15)}건)</small></span>
+            </div>
+
+            <!-- QR Code Direct Register Box -->
+            <div class="qr-register-box">
+              <div class="qr-reg-title">
+                <span>🔢 QR 일련번호 직접 등록/추가</span>
+                <span style="font-size:11px; color:#94a3b8;">(예: 1~100, 1001~1100)</span>
+              </div>
+              <div class="qr-reg-inputs">
+                <span style="font-size:11px; font-weight:800; color:#38bdf8;">CAR-</span>
+                <input type="number" id="qrStart_${r.roomNo}" class="qr-num-input" placeholder="시작" min="1">
+                <span style="color:#64748b; font-size:11px;">~</span>
+                <input type="number" id="qrEnd_${r.roomNo}" class="qr-num-input" placeholder="끝" min="1">
+                <button class="btn-qr-reg" onclick="registerRoomQr(${r.roomNo})">+ QR등록</button>
+              </div>
+            </div>
           </div>
-          <div class="agent-name">${r.name}</div>
-          <div class="agent-phone">📞 ${r.phone}</div>
-          <div class="db-count-box">
-            <span class="db-label">보유 차주 고객 DB</span>
-            <span class="db-num">${r.dbCount}명</span>
-          </div>
-          <div class="wallet-box">
-            <span class="db-label">팀원 개별 푸시 잔액</span>
-            <span class="wallet-num">${r.balance.toLocaleString()}원 <small style="color:#64748b;">(${Math.floor(r.balance / 15)}건)</small></span>
-          </div>
+
           <div class="room-btns">
             <button class="btn-reassign" onclick="openReassign(${r.roomNo})">담당자 변경</button>
             <button class="btn-charge-room" onclick="openChargeModal(${r.roomNo})">⚡ 충전</button>
@@ -450,7 +547,8 @@
             <button class="btn-view-db" onclick="viewDb(${r.roomNo})">고객명단</button>
           </div>
         </div>
-      `).join('');
+      `;
+      }).join('');
       updateTopTotals();
     }
     renderRooms();
@@ -468,7 +566,7 @@
       e.target.value = formatPhone(e.target.value);
     });
 
-    // 1. 담당자 변경 승인 & 전화번호 변경 완벽 저장
+    // Batch order 1000 cards modal
     function openBatchOrderModal() {
       document.getElementById('batchOrderModal').style.display = 'flex';
     }
@@ -479,24 +577,24 @@
 
     function confirmBatchOrder() {
       rooms.forEach((r, idx) => {
-        const start2 = String(1001 + (idx * 40)).padStart(4, '0');
-        const end2 = String(1001 + (idx * 40) + 39).padStart(4, '0');
-        r.batch2Range = `CAR-${start2} ~ CAR-${end2} (2차 40장)`;
-        r.totalCards = 80;
+        const start2 = 1001 + (idx * 40);
+        const end2 = 1001 + (idx * 40) + 39;
+        if (!r.ranges) r.ranges = [];
+        r.ranges.push({
+          batch: r.ranges.length + 1,
+          start: start2,
+          end: end2,
+          count: 40
+        });
       });
 
-      localStorage.setItem('wooriaptcd_erp_batch_level', '2');
       saveRooms();
       renderRooms();
       closeBatchOrderModal();
 
-      document.getElementById('totalCardsDisplay').innerHTML = '2,000 <span>장</span>';
-      document.getElementById('totalCardsSub').textContent = '1차(0001~1000) + 2차(1001~2000) 25개 방에 80장씩 배정 완료';
-
       alert(`[2회차 1,000장 추가 발급 승인 완료]
 • 발급 일련번호: CAR-1001 ~ CAR-2000 (1,000장 추가)
-• 팀원 25개 방에 각각 2차 40장씩 누적 배정 (팀원당 총 80장)
-• 총 보유 카드: 2,000장으로 관리자 ERP에 실시간 연동되었습니다.`);
+• 팀원 25개 방에 각각 2차 40장씩 누적 배정되었습니다.`);
     }
 
     function openReassign(roomNo) {
@@ -592,7 +690,9 @@
       activePushRoom = roomNo;
       const r = rooms.find(item => item.roomNo === roomNo);
       document.getElementById('roomPushTitle').textContent = `방 ${roomNo}번 (${r.name}) 담당 고객 전용 푸시`;
-      document.getElementById('roomPushDesc').textContent = `배정 카드(${r.cardRange})로 등록된 전속 고객 ${r.dbCount}명에게 웹푸시를 발송합니다.`;
+      
+      const rangesText = (r.ranges || []).map((rg, i) => `${i+1}차: CAR-${rg.start}~${rg.end}`).join(', ');
+      document.getElementById('roomPushDesc').textContent = `배정 카드(${rangesText})로 등록된 전속 고객 ${r.dbCount}명에게 웹푸시를 발송합니다.`;
       
       const cost = r.dbCount * 15;
       document.getElementById('roomPushCost').textContent = cost.toLocaleString() + '원 (' + r.dbCount + '명 × 15원)';
@@ -635,9 +735,10 @@
 
     function viewDb(roomNo) {
       const r = rooms.find(item => item.roomNo === roomNo);
+      const rangesText = (r.ranges || []).map((rg, i) => `${i+1}차: CAR-${rg.start}~${rg.end}`).join(', ');
       alert(`📋 [방 ${roomNo}번 ${r.name} 고객 DB 명단]
 
-• 배정 카드: ${r.cardRange}
+• 배정 카드: ${rangesText}
 • 등록 차주: 총 ${r.dbCount}명
 • 담당자 직통: ${r.phone}
 
@@ -684,13 +785,14 @@
       let csv = "\uFEFF방번호,담당설계사,배정카드범위,고객번호,차량번호,차주010연락처,등록일자,상담희망분야\n";
       let count = 0;
       rooms.forEach(r => {
+        const rangesText = (r.ranges || []).map((rg, i) => `${i+1}차 CAR-${rg.start}~${rg.end}`).join(' / ');
         for (let i = 1; i <= r.dbCount; i++) {
           count++;
           const carNum = (Math.floor(Math.random() * 89) + 10) + ["가","나","다","라","마","바","사","아","자"][Math.floor(Math.random()*9)] + " " + (Math.floor(Math.random() * 8999) + 1000);
           const phone = "010-" + (Math.floor(Math.random() * 8999) + 1000) + "-" + (Math.floor(Math.random() * 8999) + 1000);
           const date = "2026-11-" + String((i % 20) + 1).padStart(2, '0');
           const counsel = (i % 3 === 0) ? "과실비율 자문 희망" : (i % 5 === 0 ? "운전자보험 점검" : "안심주차 이용중");
-          csv += `방 ${r.roomNo}번,${r.name},${r.cardRange},No.${String(count).padStart(4,'0')},${carNum},${phone},${date},${counsel}\n`;
+          csv += `방 ${r.roomNo}번,${r.name},${rangesText},No.${String(count).padStart(4,'0')},${carNum},${phone},${date},${counsel}\n`;
         }
       });
 
