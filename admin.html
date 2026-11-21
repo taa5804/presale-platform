@@ -316,7 +316,7 @@
         대표님(010-2286-4150) 전용 본사 마스터 보안 인증
       </p>
 
-      <input type="password" id="masterPinInput" class="login-input" placeholder="마스터 PIN 입력" maxlength="8" onkeydown="if(event.key==='Enter')doMasterLogin()">
+      <input type="password" id="masterPinInput" class="login-input" placeholder="마스터 PIN 입력" maxlength="15" inputmode="numeric" autocomplete="current-password" oninput="checkAutoPin(this.value)" onkeydown="if(event.key==='Enter')doMasterLogin()">
       <button type="button" class="login-btn" onclick="doMasterLogin()">🔐 본사 관리자 로그인</button>
       <div style="font-size:12px; color:#64748b; margin-top:14px;">(기본 마스터 PIN: 4150)</div>
     </div>
@@ -806,9 +806,9 @@
 
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(memo).then(() => {
-          alert('📋 [' + b.company + ' ' + b.branch + ' ' + curM + ' 정산 내역] 클립보드에 복사되었습니다!
+          alert(`📋 [${b.company} ${b.branch} ${curM} 정산 내역] 클립보드에 복사되었습니다!
 
-' + memo);
+${memo}`);
         });
       } else {
         prompt('Ctrl+C를 눌러 복사하세요:', memo);
@@ -832,16 +832,26 @@
       }
     }
 
+    function checkAutoPin(val) {
+      if (val === '4150' || val === '01022864150' || val === '010-2286-4150') {
+        doMasterLogin();
+      }
+    }
+
     function doMasterLogin() {
-      const pin = document.getElementById('masterPinInput').value.trim();
-      if (pin === MASTER_PIN || pin === "01022864150" || pin === "010-2286-4150") {
+      const pinEl = document.getElementById('masterPinInput');
+      const pin = (pinEl ? pinEl.value : '').trim();
+      if (pin === MASTER_PIN || pin === '4150' || pin === '01022864150' || pin === '010-2286-4150') {
         sessionStorage.setItem('wooriaptcd_master_auth', 'true');
-        document.getElementById('masterLoginGate').style.display = 'none';
+        const gate = document.getElementById('masterLoginGate');
+        if (gate) gate.style.display = 'none';
         initAdminData();
       } else {
-        alert("마스터 PIN이 올바르지 않습니다. (대표님 직통 뒷 4자리: 4150)");
-        document.getElementById('masterPinInput').value = '';
-        document.getElementById('masterPinInput').focus();
+        alert('마스터 PIN이 올바르지 않습니다. (대표님 직통 뒷 4자리: 4150)');
+        if (pinEl) {
+          pinEl.value = '';
+          pinEl.focus();
+        }
       }
     }
 
