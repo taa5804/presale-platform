@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>우리아파트CD 안심주차 & 3대 보험 B2B 솔루션</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Pretendard', sans-serif; }
+    body { background: #090d16; color: #f8fafc; line-height: 1.6; }
+    .wrap { max-width: 900px; margin: 0 auto; padding: 0 16px 80px; }
+
+    /* Top Nav */
+    .nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid #1e293b; }
+    .logo { display: flex; align-items: center; gap: 8px; }
+    .logo-badge { background: #2563eb; color: #fff; font-size: 12px; font-weight: 800; padding: 4px 8px; border-radius: 6px; }
+    .logo-name { font-size: 18px; font-weight: 900; color: #fff; }
+    .nav-links { display: flex; gap: 10px; }
+    .nav-btn { background: #1e293b; color: #cbd5e1; border: 1px solid #334155; padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; text-decoration: none; }
+    .nav-btn:hover { border-color: #3b82f6; color: #fff; }
+
+    /* Hero */
+    .hero { text-align: center; padding: 60px 10px 40px; }
+    .hero-tag { display: inline-block; background: #1e3a8a; color: #60a5fa; font-size: 13px; font-weight: 800; padding: 6px 16px; border-radius: 20px; border: 1px solid #2563eb; margin-bottom: 18px; }
+    .hero-h1 { font-size: 38px; font-weight: 900; color: #fff; line-height: 1.35; margin-bottom: 16px; letter-spacing: -1px; }
+    .hero-h1 span { color: #38bdf8; }
+    .hero-p { font-size: 16px; color: #94a3b8; max-width: 680px; margin: 0 auto 30px; word-break: keep-all; }
+    
+    .demo-btns { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 40px; }
+    .btn-demo-main { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; padding: 14px 26px; border-radius: 12px; font-size: 15px; font-weight: 800; text-decoration: none; box-shadow: 0 4px 14px rgba(37,99,235,0.4); }
+    .btn-demo-sub { background: #131b2e; color: #cbd5e1; border: 1.5px solid #334155; padding: 14px 22px; border-radius: 12px; font-size: 15px; font-weight: 700; text-decoration: none; }
+    .btn-demo-sub:hover { border-color: #38bdf8; color: #fff; }
+
+    /* 3 Big Features */
+    .section-box { background: #131b2e; border: 1px solid #1e293b; border-radius: 20px; padding: 32px 24px; margin-bottom: 30px; }
+    .sec-h2 { font-size: 22px; font-weight: 900; color: #fff; margin-bottom: 8px; text-align: center; }
+    .sec-desc { font-size: 14px; color: #94a3b8; text-align: center; margin-bottom: 28px; }
+    
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+    .feature-item { background: #090d16; border: 1px solid #1e293b; border-radius: 14px; padding: 22px; }
+    .feat-icon { font-size: 28px; margin-bottom: 12px; }
+    .feat-title { font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 8px; }
+    .feat-p { font-size: 13px; color: #94a3b8; line-height: 1.6; }
+
+    /* Pricing Box */
+    .pricing-card { background: linear-gradient(135deg, #131b2e 0%, #0d1527 100%); border: 2px solid #2563eb; border-radius: 20px; padding: 36px 24px; text-align: center; margin-bottom: 30px; box-shadow: 0 10px 30px -10px rgba(37,99,235,0.3); }
+    .price-sub { font-size: 14px; color: #94a3b8; text-decoration: line-through; margin-bottom: 6px; }
+    .price-main { font-size: 42px; font-weight: 900; color: #fff; margin-bottom: 10px; }
+    .price-main span { font-size: 20px; color: #38bdf8; font-weight: 700; margin-left: 4px; }
+    .price-highlight { display: inline-block; background: #064e3b; color: #34d399; font-size: 13px; font-weight: 800; padding: 5px 14px; border-radius: 20px; margin-bottom: 20px; border: 1px solid #059669; }
+    .price-details { text-align: left; max-width: 500px; margin: 0 auto 26px; font-size: 14px; color: #cbd5e1; line-height: 1.8; }
+    .price-details li { margin-bottom: 6px; }
+
+    /* Order Form */
+    .order-box { background: #131b2e; border: 1px solid #1e293b; border-radius: 20px; padding: 36px 24px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 20px; }
+    .form-col-full { grid-column: 1 / -1; }
+    .form-label { display: block; font-size: 13px; font-weight: 700; color: #cbd5e1; margin-bottom: 6px; }
+    .form-input, .form-select { width: 100%; background: #090d16; border: 1.5px solid #334155; border-radius: 10px; padding: 12px; color: #fff; font-size: 14px; outline: none; }
+    .form-input:focus, .form-select:focus { border-color: #3b82f6; }
+    .btn-submit-order { width: 100%; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; border: none; padding: 18px; border-radius: 12px; font-size: 17px; font-weight: 900; cursor: pointer; margin-top: 18px; box-shadow: 0 4px 14px rgba(37,99,235,0.4); }
+
+    /* Footer */
+    .footer { text-align: center; margin-top: 50px; font-size: 12px; color: #64748b; line-height: 1.7; border-top: 1px solid #1e293b; padding-top: 24px; }
+    .footer strong { color: #94a3b8; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <!-- Top Nav -->
+    <nav class="nav">
+      <div class="logo">
+        <span class="logo-badge">CD</span>
+        <span class="logo-name">우리아파트CD 안심주차</span>
+      </div>
+      <div class="nav-links">
+        <a href="/c.html" class="nav-btn">📱 차주 화면 체험</a>
+        <a href="/register.html" class="nav-btn">📋 등록 체험</a>
+        <a href="/manager.html" class="nav-btn" style="border-color:#2563eb; color:#60a5fa;">👥 관리자 ERP</a>
+      </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+      <span class="hero-tag">전국 45만 보험 영업인을 위한 스마트 안심주차 B2B 플랫폼</span>
+      <h1 class="hero-h1">
+        단순 주차판 대신, <span>평생 고객 DB를 모아주는</span><br>
+        스마트 안심주차 QR을 지점에 보급하십시오!
+      </h1>
+      <p class="hero-p">
+        차주는 010 번호 노출 없는 안전한 안심주차를 누리고, 보험 영업팀은 차량번호·휴대폰·만기월을 자동으로 확보하여 매년 다이렉트 최저가 조회 수수료와 운전자·건강보험 계약을 영구 독점합니다.
+      </p>
+      <div class="demo-btns">
+        <a href="#orderSection" class="btn-demo-main">📦 지점 1,000장 패키지 특가 신청하기</a>
+        <a href="/manager.html" class="btn-demo-sub">👥 팀원 25개 방 관리자 ERP 체험</a>
+      </div>
+    </section>
+
+    <!-- 3 Core Advantages -->
+    <section class="section-box">
+      <h2 class="sec-h2">왜 전국 보험 지점장들이 열광하는가?</h2>
+      <p class="sec-desc">기존 단순 판촉물과는 차원이 다른 3대 독점 무기를 제공합니다.</p>
+      <div class="features-grid">
+        <div class="feature-item">
+          <div class="feat-icon">🚗</div>
+          <div class="feat-title">다이렉트 4대사 1분 직행</div>
+          <p class="feat-p">메인 홈이 아닌 [보험료 산출 페이지 직행(딥링크)] 탑재! 차주가 1분 비교 산출을 마칠 때마다 건당 15,000원~18,000원 수익이 매년 발생합니다.</p>
+        </div>
+        <div class="feature-item">
+          <div class="feat-icon">👥</div>
+          <div class="feat-title">25개 팀원 방 & DB 영구 보존</div>
+          <p class="feat-p">팀원이 퇴사해도 고객 DB는 100% 팀장에게 안전하게 남습니다. [담당자 변경] 버튼 한 번으로 신규 설계사에게 1초 만에 승계됩니다.</p>
+        </div>
+        <div class="feature-item">
+          <div class="feat-icon">📢</div>
+          <div class="feat-title">15원 실시간 웹푸시 알림</div>
+          <p class="feat-p">통신사 스팸 필터 0%! 만기월별로 고객 스마트폰 상단에 사진과 메시지를 1초 만에 꽂아주는 강력한 모바일 브로드캐스트 엔진을 제공합니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing-card">
+      <div class="price-sub">시중 스마트 안심주차 정가: 1장당 2,500원 (250만 원)</div>
+      <div class="price-main">장당 1,000원 <span>(1,000장 패키지 100만 원)</span></div>
+      <div class="price-highlight">✨ 팀원 10명 팀 기준, 1인당 단 10만 원 투자로 100명 평생 고객 DB 확보!</div>
+      <ul class="price-details">
+        <li>✅ <b>45×60mm 특수 방수 UV 코팅 실물 카드 1,000장</b> (QR 및 No. CAR-0001~1000 고유번호 인쇄)</li>
+        <li>✅ <b>팀장 및 최대 25명 팀원 전용 관리자 ERP 시스템</b> 평생 무료 제공</li>
+        <li>✅ <b>다이렉트 4대사 최저가 비교 CPA 제휴 연동</b> (건당 15,000원~18,000원 수익)</li>
+        <li>✅ <b>050 안심연결 & 실시간 차량이동 웹푸시 호출 엔진</b> 탑재</li>
+        <li>✅ <b>세금계산서 100% 발행 지원</b> (팀 운영비/판촉비 처리 가능)</li>
+      </ul>
+      <a href="#orderSection" class="btn-demo-main" style="display:inline-block; padding:16px 36px;">지금 우리 지점 1,000장 도입 신청하기 ➔</a>
+    </section>
+
+    <!-- Order Form Section -->
+    <section class="order-box" id="orderSection">
+      <h2 class="sec-h2">지점 / 팀 1,000장 패키지 간편 도입 신청</h2>
+      <p class="sec-desc">접수 즉시 본사 담당자가 지점 고유 관리자 계정을 발급하고 실물 카드를 제작 발송합니다.</p>
+      
+      <form onsubmit="handleOrder(event)">
+        <div class="form-grid">
+          <div>
+            <label class="form-label">소속 보험사명</label>
+            <input type="text" class="form-input" id="oCompany" placeholder="예: 삼성생명, DB손보, 현대해상, GA명" required>
+          </div>
+          <div>
+            <label class="form-label">지점명 / 영업소</label>
+            <input type="text" class="form-input" id="oBranch" placeholder="예: 광산지점, 강남영업소" required>
+          </div>
+          <div>
+            <label class="form-label">팀명</label>
+            <input type="text" class="form-input" id="oTeam" placeholder="예: 2팀, 스마트팀" required>
+          </div>
+          <div>
+            <label class="form-label">신청자 성함 (지점장/팀장)</label>
+            <input type="text" class="form-input" id="oName" placeholder="예: 홍길동 지점장" required>
+          </div>
+          <div>
+            <label class="form-label">신청자 휴대폰번호 (010)</label>
+            <input type="tel" class="form-input" id="oPhone" placeholder="010-0000-0000" required>
+          </div>
+          <div>
+            <label class="form-label">주문 수량 (1,000장 단위)</label>
+            <select class="form-select" id="oQty" required>
+              <option value="1000">1,000장 (1,000,000원) - 기본 패키지</option>
+              <option value="2000">2,000장 (2,000,000원)</option>
+              <option value="3000">3,000장 (3,000,000원) - 지점 전사 도입</option>
+            </select>
+          </div>
+          <div class="form-col-full">
+            <label class="form-label">실물 카드 배송지 주소</label>
+            <input type="text" class="form-input" id="oAddress" placeholder="지점 또는 수령하실 상세 주소를 입력해 주세요" required>
+          </div>
+        </div>
+        <button type="submit" class="btn-submit-order">
+          🚀 지점 1,000장 패키지 신청 및 관리자 ERP 발급 신청
+        </button>
+      </form>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <strong>우리아파트CD 안심주차 & 3대 보험 솔루션 본사</strong><br>
+      주소: 광주광역시 광산구 하남산단8번로 176 | 대표전화: <strong>062-952-4150</strong> | 대표자 직통: <strong>010-2286-4150</strong><br>
+      사업자등록번호: 등록 완료 | 통신판매업신고 완료 | 100% 전자세금계산서 발행<br>
+      © wooriaptcd.com All rights reserved.
+    </footer>
+  </div>
+
+  <script>
+    function handleOrder(e) {
+      e.preventDefault();
+      const comp = document.getElementById('oCompany').value.trim();
+      const branch = document.getElementById('oBranch').value.trim();
+      const team = document.getElementById('oTeam').value.trim();
+      const name = document.getElementById('oName').value.trim();
+      const phone = document.getElementById('oPhone').value.trim();
+      const qty = document.getElementById('oQty').value;
+      const addr = document.getElementById('oAddress').value.trim();
+
+      alert(`🎉 [도입 신청 접수 완료!]\n\n• 소속: ${comp}-${branch}-${team}\n• 신청자: ${name} (${phone})\n• 수량: ${parseInt(qty).toLocaleString()}장\n• 배송지: ${addr}\n\n신청이 성공적으로 접수되었습니다. 본사 담당자가 1시간 이내로 해피콜 및 관리자 ERP 계정 정보를 안내해 드립니다.`);
+      location.href = '/manager.html';
+    }
+  </script>
+</body>
+</html>
