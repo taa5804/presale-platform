@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>우리아파트CD 지점/팀 관리자 ERP</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Pretendard', sans-serif; }
+    body { background: #090d16; color: #f1f5f9; min-height: 100vh; padding: 20px 16px 60px; }
+    .wrap { max-width: 1000px; margin: 0 auto; }
+
+    /* Header */
+    .top-header { display: flex; justify-content: space-between; align-items: center; background: #131b2e; padding: 18px 24px; border-radius: 16px; border: 1px solid #1e293b; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+    .team-badge-box { display: flex; align-items: center; gap: 10px; }
+    .org-tag { background: #2563eb; color: #fff; font-size: 12px; font-weight: 800; padding: 5px 10px; border-radius: 8px; }
+    .team-title { font-size: 20px; font-weight: 900; color: #fff; }
+    .top-btns { display: flex; gap: 8px; }
+    .btn-charge { background: #059669; color: #fff; border: none; padding: 10px 16px; border-radius: 10px; font-size: 13px; font-weight: 800; cursor: pointer; }
+    .btn-order-more { background: #3b82f6; color: #fff; border: none; padding: 10px 16px; border-radius: 10px; font-size: 13px; font-weight: 800; cursor: pointer; }
+
+    /* Top Stats Grid */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 24px; }
+    .stat-card { background: #131b2e; border: 1px solid #1e293b; border-radius: 14px; padding: 20px; }
+    .stat-label { font-size: 13px; color: #94a3b8; font-weight: 600; margin-bottom: 8px; }
+    .stat-value { font-size: 26px; font-weight: 900; color: #fff; }
+    .stat-value span { font-size: 15px; font-weight: 600; color: #64748b; margin-left: 4px; }
+    .stat-sub { font-size: 12px; color: #38bdf8; margin-top: 6px; font-weight: 600; }
+
+    /* Push Broadcast Section */
+    .push-panel { background: #131b2e; border: 1.5px solid #2563eb; border-radius: 18px; padding: 24px; margin-bottom: 30px; box-shadow: 0 10px 30px -10px rgba(37,99,235,0.2); }
+    .panel-title { font-size: 18px; font-weight: 900; color: #fff; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+    .panel-desc { font-size: 13px; color: #94a3b8; margin-bottom: 20px; }
+    
+    .filter-row { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+    .filter-btn { background: #090d16; border: 1px solid #334155; color: #cbd5e1; padding: 8px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; cursor: pointer; }
+    .filter-btn.active { background: #1d4ed8; border-color: #3b82f6; color: #fff; }
+
+    .tpl-row { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+    .tpl-btn { background: #1e293b; border: 1px solid #334155; color: #94a3b8; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; }
+    .tpl-btn:hover { border-color: #38bdf8; color: #fff; }
+
+    .push-textarea { width: 100%; height: 90px; background: #090d16; border: 1.5px solid #334155; border-radius: 12px; padding: 14px; color: #fff; font-size: 14px; resize: none; margin-bottom: 12px; outline: none; }
+    .push-textarea:focus { border-color: #3b82f6; }
+    
+    .push-bottom-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .cost-info { font-size: 13px; color: #cbd5e1; }
+    .cost-info b { color: #38bdf8; }
+    .btn-send-push { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; border: none; padding: 14px 28px; border-radius: 12px; font-size: 15px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 14px rgba(37,99,235,0.4); }
+
+    /* 25 Rooms Section */
+    .rooms-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
+    .rooms-title { font-size: 18px; font-weight: 900; color: #fff; }
+    .rooms-sub { font-size: 13px; color: #64748b; }
+
+    .rooms-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+    .room-card { background: #131b2e; border: 1px solid #1e293b; border-radius: 14px; padding: 18px; transition: border-color 0.15s; }
+    .room-card:hover { border-color: #3b82f6; }
+    .room-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .room-badge { background: #1e293b; color: #38bdf8; font-size: 12px; font-weight: 800; padding: 3px 8px; border-radius: 6px; border: 1px solid #334155; }
+    .room-cards-range { font-size: 11px; color: #64748b; }
+    
+    .agent-name { font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 3px; }
+    .agent-phone { font-size: 13px; color: #94a3b8; margin-bottom: 12px; }
+    
+    .db-count-box { background: #090d16; border-radius: 10px; padding: 10px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .db-label { font-size: 12px; color: #94a3b8; }
+    .db-num { font-size: 16px; font-weight: 900; color: #34d399; }
+
+    .room-btns { display: flex; gap: 6px; }
+    .btn-reassign { flex: 1; background: #1e293b; border: 1px solid #334155; color: #cbd5e1; padding: 8px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; }
+    .btn-reassign:hover { border-color: #38bdf8; color: #fff; }
+    .btn-view-db { background: #090d16; border: 1px solid #334155; color: #94a3b8; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; }
+
+    /* Modal */
+    .modal-wrap { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
+    .modal-content { background: #131b2e; border: 1px solid #334155; border-radius: 18px; padding: 24px; width: 100%; max-width: 440px; color: #fff; }
+    .modal-content h3 { font-size: 18px; margin-bottom: 12px; }
+    .modal-input { width: 100%; background: #090d16; border: 1px solid #475569; border-radius: 10px; padding: 12px; color: #fff; font-size: 14px; margin-bottom: 12px; outline: none; }
+    .modal-btn-row { display: flex; gap: 8px; margin-top: 10px; }
+    .btn-m-save { flex: 1; background: #2563eb; color: #fff; padding: 12px; border-radius: 10px; border: none; font-weight: 800; cursor: pointer; }
+    .btn-m-cancel { background: #1e293b; color: #94a3b8; padding: 12px 18px; border-radius: 10px; border: 1px solid #334155; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <!-- Header -->
+    <div class="top-header">
+      <div class="team-badge-box">
+        <span class="org-tag" id="companyTag">삼성생명</span>
+        <h1 class="team-title" id="teamTitle">삼성생명-광산지점-2팀 관리자 ERP</h1>
+      </div>
+      <div class="top-btns">
+        <button class="btn-charge" onclick="openRechargeModal()">⚡ 푸시 충전 (15원/건)</button>
+        <button class="btn-order-more" onclick="location.href='/'">📦 QR 카드 1,000장 추가주문</button>
+      </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">총 보유 안심주차 카드</div>
+        <div class="stat-value">1,000 <span>장</span></div>
+        <div class="stat-sub">팀원 25개 방에 40장씩 분배 완료</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">등록 완료 차주 고객 (DB)</div>
+        <div class="stat-value" id="totalDbDisplay">284 <span>명</span></div>
+        <div class="stat-sub">등록률 28.4% (매주 증가중)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">푸시 발송 잔액 (15원/건)</div>
+        <div class="stat-value" id="walletBalanceDisplay">45,000 <span>원</span></div>
+        <div class="stat-sub">3,000건 발송 가능 (통신비 0원)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">예상 다이렉트 CPA 조회수익</div>
+        <div class="stat-value">4,828,000 <span>원</span></div>
+        <div class="stat-sub">건당 17,000원 기준 (연간 자동발생)</div>
+      </div>
+    </div>
+
+    <!-- Targeted Push Broadcast Section -->
+    <div class="push-panel">
+      <div class="panel-title">
+        <span>📢</span> 스마트폰 상단 1초 웹푸시 단체 발송 센터
+      </div>
+      <div class="panel-desc">
+        스마트폰 상단 알림 바에 사진/메시지가 1초 만에 뜹니다. 통신사 스팸 필터 없이 100% 도달합니다. (발송비: 건당 단 15원)
+      </div>
+
+      <div class="filter-row">
+        <button class="filter-btn active" onclick="setFilter(this, 284)">전체 등록 차주 (284명)</button>
+        <button class="filter-btn" onclick="setFilter(this, 26)">이번 달(11월) 만기 고객 (26명)</button>
+        <button class="filter-btn" onclick="setFilter(this, 31)">다음 달(12월) 만기 고객 (31명)</button>
+        <button class="filter-btn" onclick="setFilter(this, 45)">미점검/상담 희망 고객 (45명)</button>
+      </div>
+
+      <div class="tpl-row">
+        <button class="tpl-btn" onclick="applyTpl(1)">[템플릿 1: 🚗 4대사 최저가 만기 비교 + 주유권 3만원]</button>
+        <button class="tpl-btn" onclick="applyTpl(2)">[템플릿 2: 🛡️ 동절기 안전운전 & 과실비율 무료 법률 자문]</button>
+        <button class="tpl-btn" onclick="applyTpl(3)">[템플릿 3: 💰 잠자는 숨은 보험금 조회(평균 80만원)]</button>
+      </div>
+
+      <textarea class="push-textarea" id="pushMsg">[만기 알림] 고객님 차량의 자동차보험 만기가 다가왔습니다. 삼성/DB/현대/KB 4대 다이렉트 최저가를 1분 만에 비교하고 주유권 3만원 혜택을 확인하세요!</textarea>
+
+      <div class="push-bottom-bar">
+        <div class="cost-info">
+          발송 대상: <b id="targetCount">284</b>명 × 15원 = 차감 금액: <b id="costDisplay">4,260</b>원 (차감 후 잔액: <span id="afterBalance">40,740</span>원)
+        </div>
+        <button class="btn-send-push" onclick="sendBroadcastPush()">
+          🚀 실시간 웹푸시 즉시 발송하기
+        </button>
+      </div>
+    </div>
+
+    <!-- 25 Team Member Rooms Section -->
+    <div class="rooms-header">
+      <div>
+        <h2 class="rooms-title">👥 팀원 25개 전용 관리실 (방 1번 ~ 방 25번)</h2>
+        <div class="rooms-sub">팀원 퇴사 시 [담당자 변경] 버튼을 누르면 고객 DB가 100% 보존되며 후임 설계사에게 즉시 승계됩니다.</div>
+      </div>
+    </div>
+
+    <div class="rooms-grid" id="roomsContainer">
+      <!-- Generated via JS for 25 rooms -->
+    </div>
+  </div>
+
+  <!-- Modal for Reassigning Agent -->
+  <div class="modal-wrap" id="reassignModal">
+    <div class="modal-content">
+      <h3 id="modalRoomTitle">방 담당 설계사 변경 / 승계</h3>
+      <p style="font-size:12px; color:#94a3b8; margin-bottom:14px;">설계사가 교체되어도 해당 방의 배정 카드와 등록 차주 DB는 안전하게 보존됩니다.</p>
+      <label style="font-size:12px; color:#cbd5e1; display:block; margin-bottom:6px;">새 담당 설계사 성함</label>
+      <input type="text" class="modal-input" id="mAgentName" placeholder="예: 박지훈 FC">
+      <label style="font-size:12px; color:#cbd5e1; display:block; margin-bottom:6px;">새 담당자 휴대폰번호</label>
+      <input type="text" class="modal-input" id="mAgentPhone" placeholder="010-0000-0000">
+      <div class="modal-btn-row">
+        <button class="btn-m-save" onclick="saveReassign()">담당자 승계 저장</button>
+        <button class="btn-m-cancel" onclick="closeReassign()">취소</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentTargetCount = 284;
+    let walletBalance = 45000;
+    let activeEditingRoom = 1;
+
+    // 25 Rooms Data Initialize
+    const rooms = [];
+    const sampleNames = ['김민준', '이서연', '박도윤', '정예은', '최지호', '강수빈', '조은우', '윤하은', '임시우', '한서아', '오하준', '서아린', '신우진', '황채원', '안준서', '송지안', '류민서', '홍시우', '고은채', '문도현', '양소율', '손예준', '배하윤', '백시후', '허유주'];
+    
+    for (let i = 1; i <= 25; i++) {
+      const startCard = String((i - 1) * 40 + 1).padStart(4, '0');
+      const endCard = String(i * 40).padStart(4, '0');
+      const randomDb = Math.floor(Math.random() * 8) + 8; // 8~15 registered cars
+      rooms.push({
+        roomNo: i,
+        name: sampleNames[i - 1] + ' FC',
+        phone: '010-' + String(Math.floor(Math.random() * 9000) + 1000) + '-' + String(Math.floor(Math.random() * 9000) + 1000),
+        cardRange: `CAR-${startCard} ~ CAR-${endCard} (40장)`,
+        dbCount: randomDb
+      });
+    }
+
+    function renderRooms() {
+      const container = document.getElementById('roomsContainer');
+      container.innerHTML = rooms.map(r => `
+        <div class="room-card">
+          <div class="room-top">
+            <span class="room-badge">방 ${r.roomNo}번</span>
+            <span class="room-cards-range">${r.cardRange}</span>
+          </div>
+          <div class="agent-name">${r.name}</div>
+          <div class="agent-phone">${r.phone}</div>
+          <div class="db-count-box">
+            <span class="db-label">보유 차주 고객 DB</span>
+            <span class="db-num">${r.dbCount}명</span>
+          </div>
+          <div class="room-btns">
+            <button class="btn-reassign" onclick="openReassign(${r.roomNo})">담당자 변경·승계</button>
+            <button class="btn-view-db" onclick="alert('${r.name} 담당 고객 DB 총 ${r.dbCount}명의 차량번호와 만기월 명단을 확인합니다.')">명단</button>
+          </div>
+        </div>
+      `).join('');
+    }
+    renderRooms();
+
+    function setFilter(btn, count) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentTargetCount = count;
+      document.getElementById('targetCount').textContent = count;
+      const cost = count * 15;
+      document.getElementById('costDisplay').textContent = cost.toLocaleString();
+      document.getElementById('afterBalance').textContent = (walletBalance - cost).toLocaleString();
+    }
+
+    function applyTpl(type) {
+      const textarea = document.getElementById('pushMsg');
+      if (type === 1) {
+        textarea.value = '[만기 알림] 고객님 차량의 자동차보험 만기가 다가왔습니다. 삼성/DB/현대/KB 4대 다이렉트 최저가를 1분 만에 비교하고 주유권 3만원 혜택을 확인하세요!';
+      } else if (type === 2) {
+        textarea.value = '[차주 필수 안내] 동절기 도로 결빙 안전운전 수칙 및 접촉사고 발생 시 과실비율 1:1 무료 법률 자문 서비스를 안내해 드립니다.';
+      } else if (type === 3) {
+        textarea.value = '[숨은 보험금 찾기] 차주님께서 아직 찾아가지 않은 미청구 숨은 보험금(평균 80만원)을 1분 만에 조회하고 가족 보장료를 20% 줄여보세요!';
+      }
+    }
+
+    function sendBroadcastPush() {
+      const cost = currentTargetCount * 15;
+      if (walletBalance < cost) {
+        alert('푸시 충전 잔액이 부족합니다. 상단의 [⚡ 푸시 충전] 버튼을 눌러 잔액을 충전해 주세요.');
+        return;
+      }
+
+      if (!confirm(`📢 [웹푸시 단체 발송 승인]\n\n• 발송 대상: ${currentTargetCount}명\n• 발송 비용: ${cost.toLocaleString()}원 (건당 15원)\n\n고객들의 스마트폰 상단 알림 바에 실시간 웹푸시를 전송하시겠습니까?`)) {
+        return;
+      }
+
+      walletBalance -= cost;
+      document.getElementById('walletBalanceDisplay').innerHTML = walletBalance.toLocaleString() + ' <span>원</span>';
+      document.getElementById('afterBalance').textContent = (walletBalance - (currentTargetCount * 15)).toLocaleString();
+
+      if ('Notification' in window && Notification.permission === 'granted') {
+        try {
+          new Notification('📢 [삼성생명 2팀] 단체 웹푸시 알림', {
+            body: document.getElementById('pushMsg').value,
+            icon: '/icon-192.png'
+          });
+        } catch(e) {}
+      }
+
+      alert(`🎉 [웹푸시 발송 완료!]\n\n• 총 ${currentTargetCount}명의 고객 스마트폰으로 1초 만에 배너 알림이 성공적으로 전송되었습니다!\n• 차감 금액: ${cost.toLocaleString()}원\n• 남은 잔액: ${walletBalance.toLocaleString()}원`);
+    }
+
+    function openReassign(roomNo) {
+      activeEditingRoom = roomNo;
+      const r = rooms.find(item => item.roomNo === roomNo);
+      document.getElementById('modalRoomTitle').textContent = `방 ${roomNo}번 담당 설계사 변경 / 승계`;
+      document.getElementById('mAgentName').value = r.name;
+      document.getElementById('mAgentPhone').value = r.phone;
+      document.getElementById('reassignModal').style.display = 'flex';
+    }
+
+    function closeReassign() {
+      document.getElementById('reassignModal').style.display = 'none';
+    }
+
+    function saveReassign() {
+      const name = document.getElementById('mAgentName').value.trim();
+      const phone = document.getElementById('mAgentPhone').value.trim();
+      if (!name || !phone) {
+        alert('이름과 전화번호를 모두 입력해 주세요.');
+        return;
+      }
+      const r = rooms.find(item => item.roomNo === activeEditingRoom);
+      r.name = name;
+      r.phone = phone;
+      renderRooms();
+      closeReassign();
+      alert(`방 ${activeEditingRoom}번 담당자가 [${name}] 님으로 안전하게 변경되었습니다. 기존 ${r.dbCount}명의 고객 DB가 승계되었습니다.`);
+    }
+
+    function openRechargeModal() {
+      const amt = prompt('충전할 금액을 입력하세요 (예: 30000, 50000, 100000):', '50000');
+      if (amt && !isNaN(amt)) {
+        walletBalance += parseInt(amt);
+        document.getElementById('walletBalanceDisplay').innerHTML = walletBalance.toLocaleString() + ' <span>원</span>';
+        alert(`⚡ ${parseInt(amt).toLocaleString()}원이 성공적으로 충전되었습니다!`);
+      }
+    }
+  </script>
+</body>
+</html>
