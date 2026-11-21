@@ -346,6 +346,11 @@ async function start(){
     return;
   }
 
+  if(view === "caller" || params.get("preview") === "caller" || params.get("test") === "1"){
+    show(request);
+    return;
+  }
+
   if(!qr){
     errorText.textContent = "차량에 부착된 안심주차 QR 코드를 스마트폰 카메라로 스캔해 주세요.";
     show(errorCard);
