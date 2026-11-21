@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>우리아파트CD 차주 안심주차 등록</title>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#1e293b">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Pretendard', sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background: #0f172a; color: #f8fafc; display: flex; justify-content: center; min-height: 100vh; padding-bottom: 40px; }
+    .container { width: 100%; max-width: 460px; background: #0f172a; min-height: 100vh; display: flex; flex-direction: column; }
+    
+    .header { background: #1e293b; padding: 18px 20px; border-bottom: 1px solid #334155; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
+    .logo-box { display: flex; align-items: center; gap: 8px; }
+    .logo-badge { background: #2563eb; color: #fff; font-size: 11px; font-weight: 800; padding: 3px 7px; border-radius: 6px; }
+    .logo-title { font-size: 16px; font-weight: 800; color: #fff; }
+
+    .hero-box { padding: 24px 20px 16px; text-align: center; }
+    .hero-badge { display: inline-block; background: #1e3a8a; color: #60a5fa; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; margin-bottom: 10px; border: 1px solid #2563eb; }
+    .hero-title { font-size: 24px; font-weight: 900; color: #fff; margin-bottom: 8px; letter-spacing: -0.5px; }
+    .hero-desc { font-size: 14px; color: #94a3b8; line-height: 1.6; word-break: keep-all; }
+
+    .form-card { margin: 10px 16px; background: #1e293b; border-radius: 18px; padding: 22px; border: 1px solid #334155; }
+    .form-group { margin-bottom: 18px; }
+    .form-label { display: block; font-size: 13px; font-weight: 700; color: #cbd5e1; margin-bottom: 8px; }
+    .form-label span { color: #f43f5e; }
+    .form-input, .form-select { width: 100%; background: #0f172a; border: 1.5px solid #475569; border-radius: 12px; padding: 14px; font-size: 16px; color: #fff; outline: none; transition: border-color 0.2s; }
+    .form-input:focus, .form-select:focus { border-color: #3b82f6; }
+    .form-help { font-size: 12px; color: #64748b; margin-top: 5px; }
+
+    .btn-submit { width: 100%; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; padding: 18px; border-radius: 14px; font-size: 17px; font-weight: 800; border: none; cursor: pointer; box-shadow: 0 4px 14px rgba(37,99,235,0.4); margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .btn-submit:active { transform: scale(0.98); }
+
+    .privacy-notice { margin: 16px; background: #0f172a; border: 1px dashed #334155; border-radius: 12px; padding: 14px; font-size: 12px; color: #64748b; line-height: 1.6; }
+    .privacy-notice strong { color: #94a3b8; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="logo-box">
+        <span class="logo-badge">CD</span>
+        <span class="logo-title">우리아파트 안심주차 등록</span>
+      </div>
+      <span style="font-size:12px; color:#38bdf8; font-weight:700;" id="cardNoBadge">No. CAR-0001</span>
+    </header>
+
+    <div class="hero-box">
+      <span class="hero-badge">앞유리 개인 010 노출 원천 차단</span>
+      <h1 class="hero-title">내 차 안심주차 1초 등록</h1>
+      <p class="hero-desc">
+        스마트폰 앞유리에 부착된 QR 카드를 내 차량에 등록합니다.<br>
+        개인정보 노출 없이 050 가심번호와 실시간 푸시로 안심 호출을 받으실 수 있습니다.
+      </p>
+    </div>
+
+    <form class="form-card" id="regForm" onsubmit="handleRegister(event)">
+      <!-- 1. 차량번호 -->
+      <div class="form-group">
+        <label class="form-label">차량번호 <span>*</span></label>
+        <input type="text" class="form-input" id="carPlate" placeholder="예: 12가 3456" required autocomplete="off">
+        <div class="form-help">정확한 차량번호를 띄어쓰기 없이 입력해 주세요.</div>
+      </div>
+
+      <!-- 2. 차주 휴대폰번호 -->
+      <div class="form-group">
+        <label class="form-label">차주 휴대폰번호 <span>*</span></label>
+        <input type="tel" class="form-input" id="carPhone" placeholder="010-0000-0000" maxlength="13" required autocomplete="tel">
+        <div class="form-help">050 안심연결 및 이동 호출 알림을 수신할 휴대폰 번호입니다.</div>
+      </div>
+
+      <!-- 3. 현재 가입 보험사 -->
+      <div class="form-group">
+        <label class="form-label">현재 자동차보험사 <span>*</span></label>
+        <select class="form-select" id="carInsurer" required>
+          <option value="" disabled selected>보험사를 선택해 주세요</option>
+          <option value="samsung">삼성화재 다이렉트</option>
+          <option value="db">DB손해보험 다이렉트</option>
+          <option value="hyundai">현대해상 다이렉트</option>
+          <option value="kb">KB손해보험 다이렉트</option>
+          <option value="meritz">메리츠화재</option>
+          <option value="hanwha">한화손해보험</option>
+          <option value="etc">기타 보험사</option>
+        </select>
+      </div>
+
+      <!-- 4. 보험 갱신 만기월 -->
+      <div class="form-group">
+        <label class="form-label">자동차보험 갱신 만기월 <span>*</span></label>
+        <select class="form-select" id="carExpireMonth" required>
+          <option value="" disabled selected>만기월을 선택해 주세요</option>
+          <option value="1">1월 만기</option>
+          <option value="2">2월 만기</option>
+          <option value="3">3월 만기</option>
+          <option value="4">4월 만기</option>
+          <option value="5">5월 만기</option>
+          <option value="6">6월 만기</option>
+          <option value="7">7월 만기</option>
+          <option value="8">8월 만기</option>
+          <option value="9">9월 만기</option>
+          <option value="10">10월 만기</option>
+          <option value="11">11월 만기</option>
+          <option value="12">12월 만기</option>
+        </select>
+        <div class="form-help">만기 30일 전 4대 다이렉트 최저가 비교 및 주유권 혜택 알림을 보내드립니다.</div>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="btn-submit" id="btnSubmit">
+        <span>🚗 1초 알림 허용 및 안심주차 등록 완료</span>
+      </button>
+    </form>
+
+    <div class="privacy-notice">
+      <strong>🔒 개인정보 보호 및 3중 안심 보장</strong><br>
+      • 입력하신 010 휴대폰 번호는 앞유리 QR 화면에 절대 노출되지 않으며, 암호화된 050 안심번호로만 중계됩니다.<br>
+      • 우리아파트CD 플랫폼은 스토킹, 보이스피싱, 불법 스팸으로부터 차주님의 소중한 개인정보를 안전하게 보호합니다.
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const carId = params.get('car') || params.get('id') || 'CAR-0001';
+    document.getElementById('cardNoBadge').textContent = 'No. ' + carId;
+
+    // Auto format phone number
+    const phoneInput = document.getElementById('carPhone');
+    phoneInput.addEventListener('input', function(e) {
+      let val = e.target.value.replace(/[^0-9]/g, '');
+      if (val.length > 3 && val.length <= 7) {
+        val = val.slice(0, 3) + '-' + val.slice(3);
+      } else if (val.length > 7) {
+        val = val.slice(0, 3) + '-' + val.slice(3, 7) + '-' + val.slice(7, 11);
+      }
+      e.target.value = val;
+    });
+
+    async function handleRegister(event) {
+      event.preventDefault();
+      const plate = document.getElementById('carPlate').value.trim();
+      const phone = document.getElementById('carPhone').value.trim();
+      const insurer = document.getElementById('carInsurer').value;
+      const expireMonth = document.getElementById('carExpireMonth').value;
+
+      if (!plate || !phone || !insurer || !expireMonth) {
+        alert('모든 필수 정보를 입력해 주세요.');
+        return;
+      }
+
+      // 1. Request Web Push Permission
+      let perm = 'default';
+      if ('Notification' in window) {
+        try {
+          perm = await Notification.requestPermission();
+        } catch(e) {}
+      }
+
+      // 2. Save to local storage session
+      localStorage.setItem('wooriaptcd_plate', plate);
+      localStorage.setItem('wooriaptcd_phone', phone);
+      localStorage.setItem('wooriaptcd_carId', carId);
+
+      alert('🎉 [안심주차 등록 완료!]\n\n차량번호 ' + plate + ' 등록이 성공적으로 완료되었습니다.\n지금부터 차량 앞유리 QR을 통해 안전하게 안심 호출을 받으실 수 있습니다.');
+
+      // 3. Redirect to owner view
+      window.location.href = '/c.html?car=' + encodeURIComponent(carId) + '&view=owner';
+    }
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(err => console.warn('SW err', err));
+    }
+  </script>
+</body>
+</html>
