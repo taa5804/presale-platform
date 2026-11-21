@@ -8,18 +8,18 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Pretendard', sans-serif; }
     body { background: #090d16; color: #f1f5f9; min-height: 100vh; padding: 20px 16px 60px; }
-    .wrap { max-width: 1000px; margin: 0 auto; }
+    .wrap { max-width: 1020px; margin: 0 auto; }
 
     /* Header */
     .top-header { display: flex; justify-content: space-between; align-items: center; background: #131b2e; padding: 18px 24px; border-radius: 16px; border: 1px solid #1e293b; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
-    .team-badge-box { display: flex; align-items: center; gap: 10px; }
-    .org-tag { background: #2563eb; color: #fff; font-size: 12px; font-weight: 800; padding: 5px 10px; border-radius: 8px; }
+    .team-badge-box { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+    .org-tag { background: #ea580c; color: #fff; font-size: 12px; font-weight: 800; padding: 5px 10px; border-radius: 8px; }
     .team-title { font-size: 20px; font-weight: 900; color: #fff; }
     .top-btns { display: flex; gap: 8px; }
-    .btn-charge { background: #059669; color: #fff; border: none; padding: 10px 16px; border-radius: 10px; font-size: 13px; font-weight: 800; cursor: pointer; }
-    .btn-order-more { background: #3b82f6; color: #fff; border: none; padding: 10px 16px; border-radius: 10px; font-size: 13px; font-weight: 800; cursor: pointer; }
+    .btn-charge-all { background: #059669; color: #fff; border: none; padding: 10px 16px; border-radius: 10px; font-size: 13px; font-weight: 800; cursor: pointer; }
+    .btn-order-more { background: #2563eb; color: #fff; border: none; padding: 10px 16px; border-radius: 10px; font-size: 13px; font-weight: 800; cursor: pointer; }
 
-    /* Top Stats Grid */
+    /* Top Stats Grid (CPA 전면 삭제 -> 운전자보험 상담 및 차량 안심호출 반영) */
     .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 24px; }
     .stat-card { background: #131b2e; border: 1px solid #1e293b; border-radius: 14px; padding: 20px; }
     .stat-label { font-size: 13px; color: #94a3b8; font-weight: 600; margin-bottom: 8px; }
@@ -51,52 +51,59 @@
     /* 25 Rooms Section */
     .rooms-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
     .rooms-title { font-size: 18px; font-weight: 900; color: #fff; }
-    .rooms-sub { font-size: 13px; color: #64748b; }
+    .rooms-sub { font-size: 13px; color: #94a3b8; }
 
-    .rooms-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+    .rooms-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
     .room-card { background: #131b2e; border: 1px solid #1e293b; border-radius: 14px; padding: 18px; transition: border-color 0.15s; }
     .room-card:hover { border-color: #3b82f6; }
     .room-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
     .room-badge { background: #1e293b; color: #38bdf8; font-size: 12px; font-weight: 800; padding: 3px 8px; border-radius: 6px; border: 1px solid #334155; }
     .room-cards-range { font-size: 11px; color: #64748b; }
     
-    .agent-name { font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 3px; }
-    .agent-phone { font-size: 13px; color: #94a3b8; margin-bottom: 12px; }
+    .agent-name { font-size: 17px; font-weight: 800; color: #fff; margin-bottom: 2px; }
+    .agent-phone { font-size: 13.5px; color: #38bdf8; font-weight: 700; margin-bottom: 12px; }
     
-    .db-count-box { background: #090d16; border-radius: 10px; padding: 10px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .db-count-box { background: #090d16; border-radius: 10px; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
     .db-label { font-size: 12px; color: #94a3b8; }
-    .db-num { font-size: 16px; font-weight: 900; color: #34d399; }
+    .db-num { font-size: 15px; font-weight: 900; color: #34d399; }
+    .wallet-box { background: #0d1527; border: 1px solid #1e293b; border-radius: 10px; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .wallet-num { font-size: 14px; font-weight: 800; color: #60a5fa; }
 
-    .room-btns { display: flex; gap: 6px; }
-    .btn-reassign { flex: 1; background: #1e293b; border: 1px solid #334155; color: #cbd5e1; padding: 8px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; }
+    .room-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+    .btn-reassign { flex: 1; background: #1e293b; border: 1px solid #334155; color: #cbd5e1; padding: 8px 10px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; text-align: center; }
     .btn-reassign:hover { border-color: #38bdf8; color: #fff; }
-    .btn-view-db { background: #090d16; border: 1px solid #334155; color: #94a3b8; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; }
+    .btn-charge-room { background: #064e3b; border: 1px solid #059669; color: #34d399; padding: 8px 10px; border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer; }
+    .btn-charge-room:hover { background: #059669; color: #fff; }
+    .btn-push-room { background: #1e3a8a; border: 1px solid #2563eb; color: #93c5fd; padding: 8px 10px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; }
+    .btn-push-room:hover { background: #2563eb; color: #fff; }
+    .btn-view-db { background: #090d16; border: 1px solid #334155; color: #94a3b8; padding: 8px 10px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; }
 
     /* Modal */
     .modal-wrap { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
     .modal-content { background: #131b2e; border: 1px solid #334155; border-radius: 18px; padding: 24px; width: 100%; max-width: 440px; color: #fff; }
     .modal-content h3 { font-size: 18px; margin-bottom: 12px; }
-    .modal-input { width: 100%; background: #090d16; border: 1px solid #475569; border-radius: 10px; padding: 12px; color: #fff; font-size: 14px; margin-bottom: 12px; outline: none; }
-    .modal-btn-row { display: flex; gap: 8px; margin-top: 10px; }
-    .btn-m-save { flex: 1; background: #2563eb; color: #fff; padding: 12px; border-radius: 10px; border: none; font-weight: 800; cursor: pointer; }
-    .btn-m-cancel { background: #1e293b; color: #94a3b8; padding: 12px 18px; border-radius: 10px; border: 1px solid #334155; cursor: pointer; }
+    .modal-input { width: 100%; background: #090d16; border: 1.5px solid #475569; border-radius: 10px; padding: 12px; color: #fff; font-size: 15px; margin-bottom: 12px; outline: none; }
+    .modal-input:focus { border-color: #3b82f6; }
+    .modal-btn-row { display: flex; gap: 8px; margin-top: 14px; }
+    .btn-m-save { flex: 1; background: #2563eb; color: #fff; padding: 13px; border-radius: 10px; border: none; font-size: 14px; font-weight: 800; cursor: pointer; }
+    .btn-m-cancel { background: #1e293b; color: #94a3b8; padding: 13px 18px; border-radius: 10px; border: 1px solid #334155; cursor: pointer; }
   </style>
 </head>
 <body>
   <div class="wrap">
     <!-- Header -->
     <div class="top-header">
-      <div class="team-badge-box">
-        <span class="org-tag" id="companyTag">삼성생명</span>
-        <h1 class="team-title" id="teamTitle">삼성생명-광산지점-2팀 관리자 ERP</h1>
+      <div class="team-badge-box" onclick="editTeamInfo()">
+        <span class="org-tag" id="companyTag">현대해상</span>
+        <h1 class="team-title" id="teamTitle">현대해상-광산지점-스마트2팀 관리자 ERP</h1>
       </div>
       <div class="top-btns">
-        <button class="btn-charge" onclick="openRechargeModal()">⚡ 푸시 충전 (15원/건)</button>
-        <button class="btn-order-more" onclick="location.href='/'">📦 QR 카드 1,000장 추가주문</button>
+        <button class="btn-charge-all" onclick="openGlobalRechargeModal()">⚡ 팀원 푸시 일괄 충전</button>
+        <button class="btn-order-more" onclick="location.href='/b2b.html'">📦 QR 카드 1,000장 추가주문</button>
       </div>
     </div>
 
-    <!-- Stats Grid -->
+    <!-- Stats Grid (CPA 삭제 완료 -> 운전자보험 상담신청 및 안심호출 누적치 반영) -->
     <div class="stats-grid">
       <div class="stat-card">
         <div class="stat-label">총 보유 안심주차 카드</div>
@@ -106,50 +113,50 @@
       <div class="stat-card">
         <div class="stat-label">등록 완료 차주 고객 (DB)</div>
         <div class="stat-value" id="totalDbDisplay">284 <span>명</span></div>
-        <div class="stat-sub">등록률 28.4% (매주 증가중)</div>
+        <div class="stat-sub">등록률 28.4% (실시간 누적 중)</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">푸시 발송 잔액 (15원/건)</div>
-        <div class="stat-value" id="walletBalanceDisplay">45,000 <span>원</span></div>
-        <div class="stat-sub">3,000건 발송 가능 (통신비 0원)</div>
+        <div class="stat-label">팀원 푸시 충전 잔액 합계 (15원/건)</div>
+        <div class="stat-value" id="totalWalletDisplay">125,000 <span>원</span></div>
+        <div class="stat-sub">25개 방 팀원들이 개별 충전하여 사용</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">예상 다이렉트 CPA 조회수익</div>
-        <div class="stat-value">4,828,000 <span>원</span></div>
-        <div class="stat-sub">건당 17,000원 기준 (연간 자동발생)</div>
+        <div class="stat-label">운전자·상해보험 상담 접수</div>
+        <div class="stat-value" id="totalCounselDisplay">48 <span>건</span></div>
+        <div class="stat-sub">과실비율 1:1 무료 자문 & 보장분석</div>
       </div>
     </div>
 
     <!-- Targeted Push Broadcast Section -->
     <div class="push-panel">
       <div class="panel-title">
-        <span>📢</span> 스마트폰 상단 1초 웹푸시 단체 발송 센터
+        <span>📢</span> 스마트폰 상단 1초 웹푸시 센터 (지점 전체 공지)
       </div>
       <div class="panel-desc">
-        스마트폰 상단 알림 바에 사진/메시지가 1초 만에 뜹니다. 통신사 스팸 필터 없이 100% 도달합니다. (발송비: 건당 단 15원)
+        스마트폰 상단 알림 바에 사진/메시지가 1초 만에 뜹니다. 통신사 스팸 필터 없이 100% 도달합니다. (발송비: 건당 15원)
       </div>
 
       <div class="filter-row">
         <button class="filter-btn active" onclick="setFilter(this, 284)">전체 등록 차주 (284명)</button>
         <button class="filter-btn" onclick="setFilter(this, 26)">이번 달(11월) 만기 고객 (26명)</button>
         <button class="filter-btn" onclick="setFilter(this, 31)">다음 달(12월) 만기 고객 (31명)</button>
-        <button class="filter-btn" onclick="setFilter(this, 45)">미점검/상담 희망 고객 (45명)</button>
+        <button class="filter-btn" onclick="setFilter(this, 48)">과실비율/상담 신청 차주 (48명)</button>
       </div>
 
       <div class="tpl-row">
-        <button class="tpl-btn" onclick="applyTpl(1)">[템플릿 1: 🚗 4대사 최저가 만기 비교 + 주유권 3만원]</button>
-        <button class="tpl-btn" onclick="applyTpl(2)">[템플릿 2: 🛡️ 동절기 안전운전 & 과실비율 무료 법률 자문]</button>
-        <button class="tpl-btn" onclick="applyTpl(3)">[템플릿 3: 💰 잠자는 숨은 보험금 조회(평균 80만원)]</button>
+        <button class="tpl-btn" onclick="applyTpl(1)">[템플릿 1: 🚗 현대해상 하이카 다이렉트 1분 계산 직행]</button>
+        <button class="tpl-btn" onclick="applyTpl(2)">[템플릿 2: 🛡️ 동절기 안전운전 & 접촉사고 과실비율 1:1 무료 법률 자문]</button>
+        <button class="tpl-btn" onclick="applyTpl(3)">[템플릿 3: 💰 미청구 숨은 보험금 찾기 & 보장 다이어트]</button>
       </div>
 
-      <textarea class="push-textarea" id="pushMsg">[만기 알림] 고객님 차량의 자동차보험 만기가 다가왔습니다. 삼성/DB/현대/KB 4대 다이렉트 최저가를 1분 만에 비교하고 주유권 3만원 혜택을 확인하세요!</textarea>
+      <textarea class="push-textarea" id="pushMsg">[현대해상 안심안내] 고객님 차량의 자동차보험 만기가 다가왔습니다. 보험개발원 자동조회로 1분 만에 하이카 다이렉트 최저가를 계산해 보세요!</textarea>
 
       <div class="push-bottom-bar">
         <div class="cost-info">
-          발송 대상: <b id="targetCount">284</b>명 × 15원 = 차감 금액: <b id="costDisplay">4,260</b>원 (차감 후 잔액: <span id="afterBalance">40,740</span>원)
+          발송 대상: <b id="targetCount">284</b>명 × 15원 = 차감 금액: <b id="costDisplay">4,260</b>원 (팀원 잔액에서 차감)
         </div>
         <button class="btn-send-push" onclick="sendBroadcastPush()">
-          🚀 실시간 웹푸시 즉시 발송하기
+          🚀 전체 등록 차주에게 웹푸시 즉시 발송
         </button>
       </div>
     </div>
@@ -158,7 +165,7 @@
     <div class="rooms-header">
       <div>
         <h2 class="rooms-title">👥 팀원 25개 전용 관리실 (방 1번 ~ 방 25번)</h2>
-        <div class="rooms-sub">팀원 퇴사 시 [담당자 변경] 버튼을 누르면 고객 DB가 100% 보존되며 후임 설계사에게 즉시 승계됩니다.</div>
+        <div class="rooms-sub">각 팀원이 자기 담당 카드를 관리하고, 개인 잔액을 충전하여 자기 고객에게 직접 푸시를 발송합니다.</div>
       </div>
     </div>
 
@@ -167,42 +174,136 @@
     </div>
   </div>
 
-  <!-- Modal for Reassigning Agent -->
+  <!-- Modal 1: 담당자 변경 및 승계 모달 (전화번호 변경 완벽 저장 및 영구 보존) -->
   <div class="modal-wrap" id="reassignModal">
     <div class="modal-content">
-      <h3 id="modalRoomTitle">방 담당 설계사 변경 / 승계</h3>
-      <p style="font-size:12px; color:#94a3b8; margin-bottom:14px;">설계사가 교체되어도 해당 방의 배정 카드와 등록 차주 DB는 안전하게 보존됩니다.</p>
+      <h3 id="modalRoomTitle">방 담당 설계사 변경 승인</h3>
+      <p style="font-size:12px; color:#94a3b8; margin-bottom:14px;">설계사가 변경되어도 배정된 카드와 기존 차주 고객 DB는 100% 안전하게 승계됩니다.</p>
+      
       <label style="font-size:12px; color:#cbd5e1; display:block; margin-bottom:6px;">새 담당 설계사 성함</label>
       <input type="text" class="modal-input" id="mAgentName" placeholder="예: 박지훈 FC">
-      <label style="font-size:12px; color:#cbd5e1; display:block; margin-bottom:6px;">새 담당자 휴대폰번호</label>
-      <input type="text" class="modal-input" id="mAgentPhone" placeholder="010-0000-0000">
+      
+      <label style="font-size:12px; color:#cbd5e1; display:block; margin-bottom:6px;">새 담당자 휴대폰번호 (010)</label>
+      <input type="tel" class="modal-input" id="mAgentPhone" placeholder="010-0000-0000" maxlength="13">
+      
       <div class="modal-btn-row">
-        <button class="btn-m-save" onclick="saveReassign()">담당자 승계 저장</button>
+        <button class="btn-m-save" onclick="saveReassign()">✅ 담당자 변경 승인 및 즉시 저장</button>
         <button class="btn-m-cancel" onclick="closeReassign()">취소</button>
       </div>
     </div>
   </div>
 
-  <script>
-    let currentTargetCount = 284;
-    let walletBalance = 45000;
-    let activeEditingRoom = 1;
+  <!-- Modal 2: 팀원 개별 푸시 잔액 충전 모달 -->
+  <div class="modal-wrap" id="chargeModal">
+    <div class="modal-content">
+      <h3 id="chargeModalTitle">방 팀원 푸시 잔액 충전</h3>
+      <p style="font-size:12px; color:#94a3b8; margin-bottom:14px;">팀원 개별 지갑에 푸시 발송 잔액을 충전합니다. (건당 15원)</p>
+      
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:14px;">
+        <button onclick="setChargeAmt(5000)" style="padding:10px; background:#1e293b; border:1px solid #334155; color:#fff; border-radius:8px; cursor:pointer;">5,000원 (333건)</button>
+        <button onclick="setChargeAmt(10000)" style="padding:10px; background:#1e293b; border:1px solid #334155; color:#fff; border-radius:8px; cursor:pointer;">10,000원 (666건)</button>
+        <button onclick="setChargeAmt(20000)" style="padding:10px; background:#1e293b; border:1px solid #334155; color:#fff; border-radius:8px; cursor:pointer;">20,000원 (1,333건)</button>
+        <button onclick="setChargeAmt(50000)" style="padding:10px; background:#1e293b; border:1px solid #334155; color:#fff; border-radius:8px; cursor:pointer;">50,000원 (3,333건)</button>
+      </div>
 
-    // 25 Rooms Data Initialize
-    const rooms = [];
+      <input type="number" class="modal-input" id="mChargeAmt" value="10000" placeholder="충전 금액 직접 입력">
+
+      <div class="modal-btn-row">
+        <button class="btn-m-save" style="background:#059669;" onclick="confirmRoomCharge()">⚡ 충전 완료 승인</button>
+        <button class="btn-m-cancel" onclick="closeChargeModal()">취소</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: 팀원 담당 고객 전용 푸시 발송 모달 -->
+  <div class="modal-wrap" id="roomPushModal">
+    <div class="modal-content">
+      <h3 id="roomPushTitle">담당 고객 전용 웹푸시 발송</h3>
+      <p id="roomPushDesc" style="font-size:12px; color:#94a3b8; margin-bottom:14px;"></p>
+      
+      <textarea class="push-textarea" id="roomPushMsg" style="height:100px;">[안내] 담당 FC입니다. 고객님의 소중한 차량 안심주차 서비스 이용에 감사드립니다. 동절기 차량 무상점검 및 과실비율 무료 상담이 필요하시면 언제든 연락주세요!</textarea>
+      
+      <div style="font-size:13px; color:#cbd5e1; margin-bottom:12px;">
+        차감 예정: <b id="roomPushCost" style="color:#38bdf8;">0원</b> (내 잔액: <span id="myRoomBalance">0원</span>)
+      </div>
+
+      <div class="modal-btn-row">
+        <button class="btn-m-save" onclick="confirmRoomPush()">📢 내 고객에게 즉시 발송</button>
+        <button class="btn-m-cancel" onclick="closeRoomPush()">취소</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "wooriaptcd_erp_rooms_v2";
+    const SETTINGS_KEY = "wooriaptcd_erp_settings_v2";
+
+    let currentTargetCount = 284;
+    let activeEditingRoom = 1;
+    let activeChargingRoom = 1;
+    let activePushRoom = 1;
+
+    // Load Settings
+    const savedSettings = JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}");
+    const currentCompany = savedSettings.company || "현대해상";
+    const currentTeam = savedSettings.teamTitle || "현대해상-광산지점-스마트2팀 관리자 ERP";
+    document.getElementById("companyTag").textContent = currentCompany;
+    document.getElementById("teamTitle").textContent = currentTeam;
+
+    function editTeamInfo() {
+      const newComp = prompt("보험사명을 입력해 주세요 (예: 현대해상, 삼성화재, DB손보):", currentCompany);
+      if (newComp) {
+        const newTitle = prompt("지점 및 팀명을 입력해 주세요:", currentTeam);
+        if (newTitle) {
+          localStorage.setItem(SETTINGS_KEY, JSON.stringify({ company: newComp, teamTitle: newTitle }));
+          document.getElementById("companyTag").textContent = newComp;
+          document.getElementById("teamTitle").textContent = newTitle;
+        }
+      }
+    }
+
+    // 25 Rooms Data Initialize / Load from localStorage
     const sampleNames = ['김민준', '이서연', '박도윤', '정예은', '최지호', '강수빈', '조은우', '윤하은', '임시우', '한서아', '오하준', '서아린', '신우진', '황채원', '안준서', '송지안', '류민서', '홍시우', '고은채', '문도현', '양소율', '손예준', '배하윤', '백시후', '허유주'];
     
-    for (let i = 1; i <= 25; i++) {
-      const startCard = String((i - 1) * 40 + 1).padStart(4, '0');
-      const endCard = String(i * 40).padStart(4, '0');
-      const randomDb = Math.floor(Math.random() * 8) + 8; // 8~15 registered cars
-      rooms.push({
-        roomNo: i,
-        name: sampleNames[i - 1] + ' FC',
-        phone: '010-' + String(Math.floor(Math.random() * 9000) + 1000) + '-' + String(Math.floor(Math.random() * 9000) + 1000),
-        cardRange: `CAR-${startCard} ~ CAR-${endCard} (40장)`,
-        dbCount: randomDb
-      });
+    let rooms = [];
+    const savedRooms = localStorage.getItem(STORAGE_KEY);
+    if (savedRooms) {
+      try {
+        rooms = JSON.parse(savedRooms);
+      } catch(e) {
+        rooms = [];
+      }
+    }
+
+    if (!rooms || rooms.length !== 25) {
+      rooms = [];
+      for (let i = 1; i <= 25; i++) {
+        const startCard = String((i - 1) * 40 + 1).padStart(4, '0');
+        const endCard = String(i * 40).padStart(4, '0');
+        const randomDb = Math.floor(Math.random() * 8) + 8; // 8~15 registered cars
+        const randomWallet = (Math.floor(Math.random() * 5) + 3) * 1000; // 3000~7000 KRW
+        rooms.push({
+          roomNo: i,
+          name: sampleNames[i - 1] + ' FC',
+          phone: '010-' + String(Math.floor(Math.random() * 9000) + 1000) + '-' + String(Math.floor(Math.random() * 9000) + 1000),
+          cardRange: `CAR-${startCard} ~ CAR-${endCard} (40장)`,
+          dbCount: randomDb,
+          balance: randomWallet
+        });
+      }
+      saveRooms();
+    }
+
+    function saveRooms() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(rooms));
+      updateTopTotals();
+    }
+
+    function updateTopTotals() {
+      const totalDb = rooms.reduce((acc, cur) => acc + (cur.dbCount || 0), 0);
+      const totalBalance = rooms.reduce((acc, cur) => acc + (cur.balance || 0), 0);
+      document.getElementById('totalDbDisplay').innerHTML = totalDb + ' <span>명</span>';
+      document.getElementById('totalWalletDisplay').innerHTML = totalBalance.toLocaleString() + ' <span>원</span>';
     }
 
     function renderRooms() {
@@ -214,75 +315,49 @@
             <span class="room-cards-range">${r.cardRange}</span>
           </div>
           <div class="agent-name">${r.name}</div>
-          <div class="agent-phone">${r.phone}</div>
+          <div class="agent-phone">📞 ${r.phone}</div>
           <div class="db-count-box">
             <span class="db-label">보유 차주 고객 DB</span>
             <span class="db-num">${r.dbCount}명</span>
           </div>
+          <div class="wallet-box">
+            <span class="db-label">팀원 개별 푸시 잔액</span>
+            <span class="wallet-num">${r.balance.toLocaleString()}원 <small style="color:#64748b;">(${Math.floor(r.balance / 15)}건)</small></span>
+          </div>
           <div class="room-btns">
-            <button class="btn-reassign" onclick="openReassign(${r.roomNo})">담당자 변경·승계</button>
-            <button class="btn-view-db" onclick="alert('${r.name} 담당 고객 DB 총 ${r.dbCount}명의 차량번호와 만기월 명단을 확인합니다.')">명단</button>
+            <button class="btn-reassign" onclick="openReassign(${r.roomNo})">담당자 변경</button>
+            <button class="btn-charge-room" onclick="openChargeModal(${r.roomNo})">⚡ 충전</button>
+            <button class="btn-push-room" onclick="openRoomPush(${r.roomNo})">📢 푸시</button>
+            <button class="btn-view-db" onclick="viewDb(${r.roomNo})">고객명단</button>
           </div>
         </div>
       `).join('');
+      updateTopTotals();
     }
     renderRooms();
 
-    function setFilter(btn, count) {
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      currentTargetCount = count;
-      document.getElementById('targetCount').textContent = count;
-      const cost = count * 15;
-      document.getElementById('costDisplay').textContent = cost.toLocaleString();
-      document.getElementById('afterBalance').textContent = (walletBalance - cost).toLocaleString();
+    // Phone Auto Format Function
+    function formatPhone(val) {
+      const num = String(val || '').replace(/[^0-9]/g, '').slice(0, 11);
+      if (num.length <= 3) return num;
+      if (num.length <= 7) return num.slice(0, 3) + '-' + num.slice(3);
+      return num.slice(0, 3) + '-' + num.slice(3, 7) + '-' + num.slice(7);
     }
 
-    function applyTpl(type) {
-      const textarea = document.getElementById('pushMsg');
-      if (type === 1) {
-        textarea.value = '[만기 알림] 고객님 차량의 자동차보험 만기가 다가왔습니다. 삼성/DB/현대/KB 4대 다이렉트 최저가를 1분 만에 비교하고 주유권 3만원 혜택을 확인하세요!';
-      } else if (type === 2) {
-        textarea.value = '[차주 필수 안내] 동절기 도로 결빙 안전운전 수칙 및 접촉사고 발생 시 과실비율 1:1 무료 법률 자문 서비스를 안내해 드립니다.';
-      } else if (type === 3) {
-        textarea.value = '[숨은 보험금 찾기] 차주님께서 아직 찾아가지 않은 미청구 숨은 보험금(평균 80만원)을 1분 만에 조회하고 가족 보장료를 20% 줄여보세요!';
-      }
-    }
+    const phoneInput = document.getElementById('mAgentPhone');
+    phoneInput.addEventListener('input', (e) => {
+      e.target.value = formatPhone(e.target.value);
+    });
 
-    function sendBroadcastPush() {
-      const cost = currentTargetCount * 15;
-      if (walletBalance < cost) {
-        alert('푸시 충전 잔액이 부족합니다. 상단의 [⚡ 푸시 충전] 버튼을 눌러 잔액을 충전해 주세요.');
-        return;
-      }
-
-      if (!confirm(`📢 [웹푸시 단체 발송 승인]\n\n• 발송 대상: ${currentTargetCount}명\n• 발송 비용: ${cost.toLocaleString()}원 (건당 15원)\n\n고객들의 스마트폰 상단 알림 바에 실시간 웹푸시를 전송하시겠습니까?`)) {
-        return;
-      }
-
-      walletBalance -= cost;
-      document.getElementById('walletBalanceDisplay').innerHTML = walletBalance.toLocaleString() + ' <span>원</span>';
-      document.getElementById('afterBalance').textContent = (walletBalance - (currentTargetCount * 15)).toLocaleString();
-
-      if ('Notification' in window && Notification.permission === 'granted') {
-        try {
-          new Notification('📢 [삼성생명 2팀] 단체 웹푸시 알림', {
-            body: document.getElementById('pushMsg').value,
-            icon: '/icon-192.png'
-          });
-        } catch(e) {}
-      }
-
-      alert(`🎉 [웹푸시 발송 완료!]\n\n• 총 ${currentTargetCount}명의 고객 스마트폰으로 1초 만에 배너 알림이 성공적으로 전송되었습니다!\n• 차감 금액: ${cost.toLocaleString()}원\n• 남은 잔액: ${walletBalance.toLocaleString()}원`);
-    }
-
+    // 1. 담당자 변경 승인 & 전화번호 변경 완벽 저장
     function openReassign(roomNo) {
       activeEditingRoom = roomNo;
       const r = rooms.find(item => item.roomNo === roomNo);
-      document.getElementById('modalRoomTitle').textContent = `방 ${roomNo}번 담당 설계사 변경 / 승계`;
+      document.getElementById('modalRoomTitle').textContent = `방 ${roomNo}번 담당 설계사 변경 승인`;
       document.getElementById('mAgentName').value = r.name;
       document.getElementById('mAgentPhone').value = r.phone;
       document.getElementById('reassignModal').style.display = 'flex';
+      phoneInput.focus();
     }
 
     function closeReassign() {
@@ -292,25 +367,178 @@
     function saveReassign() {
       const name = document.getElementById('mAgentName').value.trim();
       const phone = document.getElementById('mAgentPhone').value.trim();
-      if (!name || !phone) {
-        alert('이름과 전화번호를 모두 입력해 주세요.');
+      
+      if (!name) {
+        alert('설계사 성함을 입력해 주세요.');
+        document.getElementById('mAgentName').focus();
         return;
       }
+      
+      const rawPhone = phone.replace(/[^0-9]/g, '');
+      if (rawPhone.length < 10 || rawPhone.length > 11) {
+        alert('휴대폰 번호를 010-0000-0000 형식으로 정확히 입력해 주세요.');
+        phoneInput.focus();
+        return;
+      }
+
+      const formattedPhone = formatPhone(rawPhone);
       const r = rooms.find(item => item.roomNo === activeEditingRoom);
+      
       r.name = name;
-      r.phone = phone;
+      r.phone = formattedPhone;
+
+      // localStorage에 즉시 영구 저장!
+      saveRooms();
       renderRooms();
       closeReassign();
-      alert(`방 ${activeEditingRoom}번 담당자가 [${name}] 님으로 안전하게 변경되었습니다. 기존 ${r.dbCount}명의 고객 DB가 승계되었습니다.`);
+
+      alert(`✅ [담당자 변경 승인 완료]
+
+• 방 번호: 방 ${activeEditingRoom}번
+• 담당 설계사: ${name}
+• 전화번호: ${formattedPhone}
+
+전화번호가 성공적으로 변경 승인되었으며, 기존 ${r.dbCount}명의 차주 고객 DB가 영구 보존 및 승계되었습니다.`);
     }
 
-    function openRechargeModal() {
-      const amt = prompt('충전할 금액을 입력하세요 (예: 30000, 50000, 100000):', '50000');
-      if (amt && !isNaN(amt)) {
-        walletBalance += parseInt(amt);
-        document.getElementById('walletBalanceDisplay').innerHTML = walletBalance.toLocaleString() + ' <span>원</span>';
-        alert(`⚡ ${parseInt(amt).toLocaleString()}원이 성공적으로 충전되었습니다!`);
+    // 2. 팀원 개별 푸시 잔액 충전
+    function openChargeModal(roomNo) {
+      activeChargingRoom = roomNo;
+      const r = rooms.find(item => item.roomNo === roomNo);
+      document.getElementById('chargeModalTitle').textContent = `방 ${roomNo}번 (${r.name}) 푸시 잔액 충전`;
+      document.getElementById('mChargeAmt').value = '10000';
+      document.getElementById('chargeModal').style.display = 'flex';
+    }
+
+    function setChargeAmt(amt) {
+      document.getElementById('mChargeAmt').value = amt;
+    }
+
+    function closeChargeModal() {
+      document.getElementById('chargeModal').style.display = 'none';
+    }
+
+    function confirmRoomCharge() {
+      const amt = parseInt(document.getElementById('mChargeAmt').value, 10);
+      if (!amt || amt <= 0) {
+        alert('충전할 금액을 올바르게 입력해 주세요.');
+        return;
       }
+      const r = rooms.find(item => item.roomNo === activeChargingRoom);
+      r.balance = (r.balance || 0) + amt;
+      saveRooms();
+      renderRooms();
+      closeChargeModal();
+      alert(`⚡ [충전 완료]
+
+방 ${activeChargingRoom}번 (${r.name}) 님에게 ${amt.toLocaleString()}원이 성공적으로 충전되었습니다!
+(현재 잔액: ${r.balance.toLocaleString()}원)`);
+    }
+
+    function openGlobalRechargeModal() {
+      const amt = prompt('전체 25개 방 팀원 각각에게 균등 충전할 금액을 입력하세요 (예: 10000, 20000):', '10000');
+      if (amt && !isNaN(amt) && parseInt(amt) > 0) {
+        const addAmt = parseInt(amt);
+        rooms.forEach(r => { r.balance = (r.balance || 0) + addAmt; });
+        saveRooms();
+        renderRooms();
+        alert(`⚡ 25개 전 방 팀원에게 각각 ${addAmt.toLocaleString()}원씩 일괄 충전되었습니다!`);
+      }
+    }
+
+    // 3. 팀원 담당 고객 전용 푸시 발송
+    function openRoomPush(roomNo) {
+      activePushRoom = roomNo;
+      const r = rooms.find(item => item.roomNo === roomNo);
+      const cost = r.dbCount * 15;
+      document.getElementById('roomPushTitle').textContent = `방 ${roomNo}번 (${r.name}) 담당 고객 전용 푸시 발송`;
+      document.getElementById('roomPushDesc').textContent = `이 방에 배정된 총 ${r.dbCount}명의 차주 스마트폰 상단으로 1초 만에 메시지를 발송합니다.`;
+      document.getElementById('roomPushCost').textContent = cost.toLocaleString() + '원 (' + r.dbCount + '명 × 15원)';
+      document.getElementById('myRoomBalance').textContent = (r.balance || 0).toLocaleString() + '원';
+      document.getElementById('roomPushModal').style.display = 'flex';
+    }
+
+    function closeRoomPush() {
+      document.getElementById('roomPushModal').style.display = 'none';
+    }
+
+    function confirmRoomPush() {
+      const r = rooms.find(item => item.roomNo === activePushRoom);
+      const cost = r.dbCount * 15;
+      if ((r.balance || 0) < cost) {
+        alert(`잔액이 부족합니다! (필요: ${cost.toLocaleString()}원 / 보유: ${(r.balance||0).toLocaleString()}원)
+먼저 [⚡ 충전] 버튼을 눌러 푸시 잔액을 충전해 주세요.`);
+        return;
+      }
+      r.balance -= cost;
+      saveRooms();
+      renderRooms();
+      closeRoomPush();
+
+      if ('Notification' in window && Notification.permission === 'granted') {
+        try {
+          new Notification(`📢 [${r.name}] 고객 전용 안심 알림`, {
+            body: document.getElementById('roomPushMsg').value,
+            icon: '/icon-192.png'
+          });
+        } catch(e) {}
+      }
+
+      alert(`🎉 [푸시 발송 완료!]
+
+• 발송 대상: 방 ${activePushRoom}번 (${r.name}) 담당 차주 ${r.dbCount}명
+• 차감 금액: ${cost.toLocaleString()}원
+• 남은 팀원 잔액: ${r.balance.toLocaleString()}원
+
+고객들의 스마트폰 상단에 메시지가 즉시 전송되었습니다!`);
+    }
+
+    function viewDb(roomNo) {
+      const r = rooms.find(item => item.roomNo === roomNo);
+      alert(`📋 [방 ${roomNo}번 ${r.name} 고객 DB 명단]
+
+• 배정 카드: ${r.cardRange}
+• 등록 차주: 총 ${r.dbCount}명
+• 담당자 직통: ${r.phone}
+
+※ 차량번호 및 차주 상세 010 연락처가 안전하게 암호화 보존 중입니다.`);
+    }
+
+    // Top Broadcast
+    function setFilter(btn, count) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentTargetCount = count;
+      document.getElementById('targetCount').textContent = count;
+      const cost = count * 15;
+      document.getElementById('costDisplay').textContent = cost.toLocaleString();
+    }
+
+    function applyTpl(type) {
+      const textarea = document.getElementById('pushMsg');
+      if (type === 1) {
+        textarea.value = '[현대해상 안심안내] 고객님 차량의 자동차보험 만기가 다가왔습니다. 보험개발원 자동조회로 1분 만에 하이카 다이렉트 최저가를 계산해 보세요!';
+      } else if (type === 2) {
+        textarea.value = '[차주 필수 안내] 동절기 도로 결빙 안전운전 수칙 및 접촉사고 발생 시 1:1 과실비율 무료 법률 자문 서비스를 안내해 드립니다.';
+      } else if (type === 3) {
+        textarea.value = '[숨은 보험금 찾기] 차주님께서 아직 찾아가지 않은 미청구 숨은 보험금(평균 80만원)을 1분 만에 조회하고 가족 보장료를 20% 절감해 보세요!';
+      }
+    }
+
+    function sendBroadcastPush() {
+      const cost = currentTargetCount * 15;
+      if (!confirm(`📢 [지점 전체 웹푸시 단체 발송 승인]
+
+• 발송 대상: 전체 차주 ${currentTargetCount}명
+• 총 발송 비용: ${cost.toLocaleString()}원 (건당 15원)
+
+고객들의 스마트폰 상단 알림 바에 실시간 웹푸시를 전송하시겠습니까?`)) {
+        return;
+      }
+
+      alert(`🎉 [지점 전체 웹푸시 발송 완료!]
+
+• 총 ${currentTargetCount}명의 고객 스마트폰으로 실시간 알림이 전송되었습니다!`);
     }
   </script>
 </body>
