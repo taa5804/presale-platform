@@ -442,22 +442,9 @@ const params = new URLSearchParams(location.search);
 let pathQr = "";
 const pathMatch = location.pathname.match(/\/(?:c|register|qr)\/([A-Za-z0-9_-]+)/i);
 if (pathMatch && pathMatch[1]) { pathQr = pathMatch[1]; }
-
-let qr = String(params.get("qr") || pathQr || "").trim().toUpperCase().replace(/[^A-Z0-9_-]/g, "");
-
+let rawQr = String(params.get("qr") || pathQr || "").trim().toUpperCase().replace(/[^A-Z0-9_-]/g, "");
+let qr = rawQr ? (rawQr.endsWith("-V2") ? rawQr : rawQr + "-V2") : "";
 const view = String(params.get("view") || "").trim().toLowerCase();
-
-
-
-if(qr){
-
-  localStorage.setItem("wooriapt_my_qr", qr);
-
-} else {
-
-  qr = localStorage.getItem("wooriapt_my_qr") || "";
-
-}
 
 
 
@@ -579,32 +566,27 @@ function routeRegistration(){
 
 
 
+let hasRequestedInThisScan = false;
 function applyState(d){
-
-  const count = Number(d.request_count || 0);
-
-  emergencyBtn.disabled = d.emergency_enabled !== true;
-
-  if(d.next_allowed_at){
-
-    const target = new Date(d.next_allowed_at).getTime();
-
-    if(target > Date.now()){
-
-      startCountdown(target);
-
-      return;
-
-    }
-
+  if (!hasRequestedInThisScan) {
+    emergencyBtn.disabled = true;
+    countdown.textContent = "";
+    moveBtn.disabled = false;
+    moveBtn.textContent = "📢 차량이동요청";
+    return;
   }
-
+  const count = Number(d.request_count || 0);
+  emergencyBtn.disabled = d.emergency_enabled !== true;
+  if(d.next_allowed_at){
+    const target = new Date(d.next_allowed_at).getTime();
+    if(target > Date.now()){
+      startCountdown(target);
+      return;
+    }
+  }
   countdown.textContent = "";
-
-  moveBtn.disabled = count >= 3;
-
-  moveBtn.textContent = count >= 3 ? "차량이동요청 3회 완료" : "📢 차량이동요청";
-
+  moveBtn.disabled = false;
+  moveBtn.textContent = "📢 차량이동요청";
 }
 
 
@@ -750,6 +732,7 @@ async function start(){
 
 
 moveBtn.onclick = async () => {
+  hasRequestedInThisScan = true;
 
   moveBtn.disabled = true;
 
