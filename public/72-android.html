@@ -371,7 +371,8 @@ let pathQr = "";
 const pathMatch = window.location.pathname.match(/\/(?:c|register|qr)\/([A-Za-z0-9_-]+)/i);
 if (pathMatch && pathMatch[1]) { pathQr = pathMatch[1]; }
 
-let qrCode = String(params.get("qr") || pathQr || "").trim().toUpperCase().replace(/[^A-Z0-9_-]/g, "");
+let rawQr = String(params.get("qr") || pathQr || "CAR-0001").trim().toUpperCase().replace(/[^A-Z0-9_-]/g, "");
+let qrCode = rawQr.endsWith("-V2") ? rawQr : rawQr + "-V2";
 
 if (!qrCode) {
 
