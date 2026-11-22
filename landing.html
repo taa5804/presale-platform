@@ -416,6 +416,68 @@
       </div>
     </section>
 
+    
+    <!-- 섹션 2-2: 네이버클라우드 · 알리고 vs 우리아파트CD 웹푸시 완벽 비교 & 영업용 원클릭 복사 -->
+    <section class="section-card" style="border: 2px solid #0284c7; background: #ffffff;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:14px;">
+        <div>
+          <span class="sec-badge" style="background:#0284c7; color:#fff;">영업 현장 설명 & 카톡 전송용 핵심 비교</span>
+          <h2 class="sec-title" style="margin:0;">네이버클라우드 · 알리고(문자/알림톡) vs 우리아파트CD 웹푸시 비교</h2>
+        </div>
+        <button type="button" onclick="copyPushPitchText()" style="background:linear-gradient(135deg, #059669, #047857); color:#fff; border:none; padding:12px 20px; border-radius:10px; font-size:14px; font-weight:900; cursor:pointer; box-shadow:0 4px 14px rgba(5,150,105,0.35);">
+          📋 영업 설명문 전체 복사하기 (카톡·문자 전송용)
+        </button>
+      </div>
+      <p style="font-size:14.5px; color:#475569; margin:0 0 16px;">
+        보험사 지점장님·영업팀장님께서 가장 많이 물어보시는 <strong>"기존 문자 사이트(네이버클라우드, 알리고)와 우리 웹푸시가 무엇이 다른가?"</strong>에 대한 한눈에 보는 비교표입니다.
+      </p>
+
+      <div style="overflow-x:auto;">
+        <table class="comp-table">
+          <thead>
+            <tr>
+              <th style="min-width:130px;">비교 기준</th>
+              <th style="background:#334155; min-width:210px;">네이버클라우드 (NCP SENS)</th>
+              <th style="background:#475569; min-width:210px;">알리고 (일반문자 / 알림톡)</th>
+              <th style="background:#059669; min-width:240px;">우리아파트CD 전용 웹푸시</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1건당 발송 비용</strong></td>
+              <td class="td-bad">장문(LMS) 30~40원<br>이미지(MMS) 100~120원</td>
+              <td class="td-bad">장문(LMS) 26~35원<br>이미지(MMS) 90~110원</td>
+              <td class="td-good">글자수 무제한 + 이미지/링크 포함<br>단일가 15원 (VAT포함 16.5원)</td>
+            </tr>
+            <tr>
+              <td><strong>스팸함 차단 여부</strong></td>
+              <td class="td-bad">'보험·만기·특약' 단어 포함 시<br>통신사 스팸함으로 자동 차단됨</td>
+              <td class="td-bad">앞머리 (광고) 표기 필수 및<br>스마트폰 스팸필터에 대량 걸림</td>
+              <td class="td-good">차주가 직접 자동차 QR로 동의한 채널!<br>스팸 차단 없이 100% 화면 상단 도달</td>
+            </tr>
+            <tr>
+              <td><strong>영업/만기 안내 제약</strong></td>
+              <td class="td-bad">알림톡은 영업/특약 홍보 발송 시<br>검수 반려 및 계정 정지</td>
+              <td class="td-bad">알림톡 영업성 발송 절대 불가<br>(오직 정보성만 허용)</td>
+              <td class="td-good">출차 알림 + 자동차·운전자·화재보험<br>만기 안내 및 비교견적 자유 발송</td>
+            </tr>
+            <tr>
+              <td><strong>개통 및 서류 절차</strong></td>
+              <td class="td-bad">개발자 API 연동 및 통신사 서류,<br>발신번호 증명원 제출 등 매우 복잡</td>
+              <td class="td-bad">팀원 25명 각각의 통신가입증명원,<br>위임장 제출 등 서류 심사 까다로움</td>
+              <td class="td-good">복잡한 통신사 서류 심사 0건!<br>초도 발주 즉시 25명 팀원 방 자동 개설</td>
+            </tr>
+            <tr>
+              <td><strong>지점 정산 & 세금계산서</strong></td>
+              <td>기업 개발팀 단위 클라우드 과금</td>
+              <td>팀원 개별 충전 시 지점 합산 불가</td>
+              <td class="td-good">팀원 개별 관리 필요 없이 [팀별 합산]<br>16.5원 정산 & 지점 세금계산서 즉시 발행</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
     <!-- 섹션 3: 지점 도입 패키지 스펙 -->
     <section class="section-card" style="background:#091e42; color:#fff; border:2px solid #f59e0b;">
       <span class="sec-badge" style="background:#f59e0b; color:#000;">지점·사업단·GA 공식 도입 기준</span>
@@ -656,6 +718,39 @@
         pkgEl.textContent = `[${region}] ${company} 지점 · 영업팀 초도 도입 표준 패키지 (1,000장 + 25명 ERP)`;
       }
     })();
+  
+    function copyPushPitchText() {
+      const pitch = `[📊 네이버클라우드 · 알리고 vs 우리아파트CD 웹푸시 핵심 비교]
+
+지점장님·팀장님! 기존에 쓰시던 문자업체(네이버클라우드, 알리고)와 저희 [우리아파트CD 안심주차 웹푸시]는 차원이 다릅니다.
+
+1️⃣ 발송 비용 70~85% 즉시 절감
+• 네이버클라우드 / 알리고: 장문(LMS) 30~40원, 명함 이미지(MMS) 100~120원
+• 우리 웹푸시: 글자수 제한 없음 + 설계사 명함/비교견적 링크 포함 무조건 [건당 15원 (VAT포함 16.5원)] 단일가!
+
+2️⃣ 통신사 스팸함 차단 0% (100% 차주 화면 도달)
+• 일반 문자(알리고 등): '보험, 만기, 설계사' 단어만 들어가도 스마트폰 스팸함으로 직행해 차주가 아예 못 봅니다. (카카오 알림톡은 영업성 발송 자체가 금지되어 반려됨)
+• 우리 웹푸시: 고객이 자기 차 앞유리 [자동차 QR]을 직접 찍고 개통한 직통 알림이라 스팸 차단 없이 차주 휴대폰 화면 맨 위에 100% 즉시 뜹니다!
+
+3️⃣ 복잡한 통신사 서류 심사 없음 (25명 팀원 방 즉시 개설)
+• 네이버클라우드 / 알리고: 팀원 25명의 통신서비스 이용증명원, 위임장, 발신번호 사전등록 등 서류 절차가 매우 복잡합니다.
+• 우리 웹푸시: 통신사 서류 심사 일절 없이, 지점 초도 발주(1,000장 / 50만원) 즉시 팀장님과 25명 팀원 전용 ERP 방이 그 자리에서 열립니다.
+
+4️⃣ 자동차·운전자·화재 3대 보험 자동 타겟팅 & 팀별 합산 정산
+• 고객은 자동차 QR만 찍으면 팀원 방에 차주 DB(차량번호·만기월)가 자동 등록됩니다.
+• 팀장님은 팀원 개개인을 일일이 관리하실 필요 없이 [팀 단위 합산(건당 16.5원)]으로 한눈에 보시고, 지점 사업자등록증으로 전자세금계산서를 100% 발행해 드립니다.
+
+👉 지점 도입 및 자동검색 확인: https://www.wooriaptcd.com/landing`;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(pitch).then(() => {
+          alert('✅ [네이버클라우드·알리고 vs 우리 웹푸시 영업 비교 설명문]이 복사되었습니다!\n\n카톡이나 문자에 바로 붙여넣기(Ctrl+V) 하시면 됩니다.');
+        });
+      } else {
+        prompt('아래 내용을 복사(Ctrl+C)하세요:', pitch);
+      }
+    }
+
   </script>
 </body>
 </html>
