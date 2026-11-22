@@ -282,23 +282,49 @@
     </div>
   </div>
 
-  <!-- Modal 2: 팀원 개별 푸시 잔액 충전 모달 -->
+  <!-- Modal 2: 팀원 개별 푸시 잔액 충전 모달 (건당 15원 + VAT 1.5원 = 16.5원 정확 계산) -->
   <div class="modal-wrap" id="chargeModal">
-    <div class="modal-content">
-      <h3 id="chargeModalTitle">방 팀원 푸시 잔액 충전</h3>
-      <p style="font-size:12px; color:#94a3b8; margin-bottom:14px;">팀원 개별 지갑에 푸시 발송 잔액을 충전합니다. (건당 15원)</p>
+    <div class="modal-content" style="max-width:460px;">
+      <h3 id="chargeModalTitle">⚡ 팀원 웹푸시 발송 건수 충전</h3>
+      <p style="font-size:12.5px; color:#94a3b8; margin-bottom:14px; line-height:1.5;">
+        웹푸시 단가: <b>건당 15원 (부가세 포함 16.5원)</b><br>
+        충전 내역은 본사 관리자 <b>[지점/팀별 통합 정산]</b>에 자동 합산됩니다.
+      </p>
       
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:14px;">
-        <button onclick="setChargeAmt(5000)" style="padding:10px; background:#1e293b; border:1px solid #334155; color:#fff; border-radius:8px; cursor:pointer;">5,000원 (333건)</button>
-        <button onclick="setChargeAmt(10000)" style="padding:10px; background:#1e293b; border:1px solid #334155; color:#fff; border-radius:8px; cursor:pointer;">10,000원 (666건)</button>
-        <button onclick="setChargeAmt(20000)" style="padding:10px; background:#1e293b; border:1px solid #334155; color:#fff; border-radius:8px; cursor:pointer;">20,000원 (1,333건)</button>
-        <button onclick="setChargeAmt(50000)" style="padding:10px; background:#1e293b; border:1px solid #334155; color:#fff; border-radius:8px; cursor:pointer;">50,000원 (3,333건)</button>
+        <button type="button" onclick="setChargePkg(1000, 16500)" style="padding:11px 8px; background:#1e293b; border:1.5px solid #38bdf8; color:#fff; border-radius:10px; cursor:pointer; font-weight:800; font-size:13px;">
+          1,000건 충전<br><span style="color:#facc15; font-size:14.5px;">16,500원</span> <small style="color:#94a3b8; font-size:10.5px;">(VAT포함)</small>
+        </button>
+        <button type="button" onclick="setChargePkg(2000, 33000)" style="padding:11px 8px; background:#1e293b; border:1.5px solid #334155; color:#fff; border-radius:10px; cursor:pointer; font-weight:800; font-size:13px;">
+          2,000건 충전<br><span style="color:#facc15; font-size:14.5px;">33,000원</span> <small style="color:#94a3b8; font-size:10.5px;">(VAT포함)</small>
+        </button>
+        <button type="button" onclick="setChargePkg(3000, 49500)" style="padding:11px 8px; background:#1e293b; border:1.5px solid #334155; color:#fff; border-radius:10px; cursor:pointer; font-weight:800; font-size:13px;">
+          3,000건 충전<br><span style="color:#facc15; font-size:14.5px;">49,500원</span> <small style="color:#94a3b8; font-size:10.5px;">(VAT포함)</small>
+        </button>
+        <button type="button" onclick="setChargePkg(5000, 82500)" style="padding:11px 8px; background:#1e293b; border:1.5px solid #334155; color:#fff; border-radius:10px; cursor:pointer; font-weight:800; font-size:13px;">
+          5,000건 충전<br><span style="color:#facc15; font-size:14.5px;">82,500원</span> <small style="color:#94a3b8; font-size:10.5px;">(VAT포함)</small>
+        </button>
       </div>
 
-      <input type="number" class="modal-input" id="mChargeAmt" value="10000" placeholder="충전 금액 직접 입력">
+      <div style="background:#0f172a; border:1px solid #334155; border-radius:10px; padding:12px; margin-bottom:12px; font-size:12.5px;">
+        <div style="font-weight:800; color:#38bdf8; margin-bottom:6px;">💳 결제 방식 선택</div>
+        <label style="display:flex; align-items:center; gap:8px; color:#fff; font-weight:700; margin-bottom:6px; cursor:pointer;">
+          <input type="radio" name="chargePayType" value="card" checked> 신용·체크카드 즉시 결제 (24시간 1초 자동충전)
+        </label>
+        <label style="display:flex; align-items:center; gap:8px; color:#fff; font-weight:700; cursor:pointer;">
+          <input type="radio" name="chargePayType" value="bank"> 무통장 입금 (🕘 운영시간: 평일 오전 09:00 ~ 오후 18:00)
+        </label>
+        <div id="hqBankInfoBox" style="margin-top:8px; padding:8px 10px; background:#1e293b; border-radius:8px; color:#cbd5e1; font-size:11.5px; line-height:1.5;">
+          • 입금계좌: <b id="dynHqBankText" style="color:#facc15;">대표이사 지정 계좌 (본사 설정 연동)</b><br>
+          • 평일 09:00~18:00 입금 즉시 자동 확인 및 충전 (시간 외 입금 시 익일 09시 반영)
+        </div>
+      </div>
+
+      <input type="hidden" id="mChargeCount" value="1000">
+      <input type="number" class="modal-input" id="mChargeAmt" value="16500" placeholder="충전 결제 금액 (VAT포함)">
 
       <div class="modal-btn-row">
-        <button class="btn-m-save" style="background:#059669;" onclick="confirmRoomCharge()">⚡ 충전 완료 승인</button>
+        <button class="btn-m-save" style="background:#059669;" onclick="confirmRoomCharge()">⚡ 결제 및 즉시 충전 승인</button>
         <button class="btn-m-cancel" onclick="closeChargeModal()">취소</button>
       </div>
     </div>
@@ -686,33 +712,82 @@
       document.getElementById('mChargeAmt').value = amt;
     }
 
+    function setChargePkg(cnt, amt) {
+      const cntEl = document.getElementById('mChargeCount');
+      if (cntEl) cntEl.value = cnt;
+      document.getElementById('mChargeAmt').value = amt;
+    }
+
+    function syncHqBankDisplay() {
+      const cfg = JSON.parse(localStorage.getItem('wooriaptcd_hq_bank_config') || '{"mode":"personal","bank":"농협은행","acct":"302-XXXX-XXXX-XX","holder":"장수용 (대표이사)","hours":"평일 오전 09:00 ~ 오후 18:00"}');
+      const el = document.getElementById('dynHqBankText');
+      if (el) {
+        el.textContent = `${cfg.bank} ${cfg.acct} (예금주: ${cfg.holder})`;
+      }
+    }
+    window.addEventListener('DOMContentLoaded', syncHqBankDisplay);
+
     function confirmRoomCharge() {
       const amt = parseInt(document.getElementById('mChargeAmt').value, 10);
       if (!amt || amt <= 0) {
-        alert('충전 금액을 입력해 주세요.');
+        alert('충전 금액을 선택해 주세요.');
         return;
       }
+      const addedCount = Math.round(amt / 16.5);
+      const supplyCredit = addedCount * 15; // 방 내부 발송 차감 기준(15원) 잔액 적립
       const r = rooms.find(item => item.roomNo === activeChargingRoom);
       if (r) {
-        r.balance = (r.balance || 0) + amt;
+        r.balance = (r.balance || 0) + supplyCredit;
         saveRooms();
         renderRooms();
+
+        // 본사 관리자(admin.html) 지점/팀 합산 실적에 자동 합산 연동!
+        try {
+          const allB = JSON.parse(localStorage.getItem('wooriaptcd_hq_all_branches') || '[]');
+          if (allB.length > 0) {
+            const targetB = allB.find(b => b.branch === settings.branch) || allB[0];
+            targetB.pushCount = (targetB.pushCount || 12000) + addedCount;
+            targetB.wallet = (targetB.wallet || 0) + amt;
+            localStorage.setItem('wooriaptcd_hq_all_branches', JSON.stringify(allB));
+          }
+        } catch(e) {}
+
+        alert(`✅ [충전 완료]
+
+• 충전 방: 방 ${r.roomNo}번 (${r.name})
+• 충전 건수: ${addedCount.toLocaleString()}건 (건당 15원 + VAT 1.5원 = 16.5원)
+• 결제 금액: ${amt.toLocaleString()}원 (VAT포함)
+
+팀원 지갑 충전 및 본사 팀별 통합 정산 장부에 즉시 반영되었습니다!`);
       }
       closeChargeModal();
     }
 
-    // Global Recharge
+    // Global Recharge (팀 전체 일괄 충전 - 16.5원 기준)
     function openGlobalRechargeModal() {
-      const amtStr = prompt('25개 방 모든 팀원 지갑에 일괄 충전할 금액을 입력해 주세요 (원):', '10000');
-      if (amtStr) {
-        const amt = parseInt(amtStr, 10);
-        if (amt > 0) {
+      syncHqBankDisplay();
+      const cntStr = prompt('25개 방 각 팀원에게 일괄 충전할 푸시 건수를 입력해 주세요 (건당 15원+VAT=16.5원, 예: 1000):', '1000');
+      if (cntStr) {
+        const cnt = parseInt(cntStr, 10);
+        if (cnt > 0) {
+          const supplyPerRoom = cnt * 15;
+          const totalPayWon = Math.round(cnt * 25 * 16.5);
           rooms.forEach(r => {
-            r.balance = (r.balance || 0) + amt;
+            r.balance = (r.balance || 0) + supplyPerRoom;
           });
           saveRooms();
           renderRooms();
-          alert(`⚡ 25명 팀원 각 방에 ${amt.toLocaleString()}원씩 일괄 충전되었습니다.`);
+
+          try {
+            const allB = JSON.parse(localStorage.getItem('wooriaptcd_hq_all_branches') || '[]');
+            if (allB.length > 0) {
+              const targetB = allB.find(b => b.branch === settings.branch) || allB[0];
+              targetB.pushCount = (targetB.pushCount || 12000) + (cnt * 25);
+              localStorage.setItem('wooriaptcd_hq_all_branches', JSON.stringify(allB));
+            }
+          } catch(e) {}
+
+          alert(`⚡ 25명 팀원 각 방에 ${cnt.toLocaleString()}건씩 (총 ${(cnt*25).toLocaleString()}건 / 합계 ${totalPayWon.toLocaleString()}원, VAT포함) 일괄 충전 및 본사 정산 합산이 완료되었습니다!`);
         }
       }
     }

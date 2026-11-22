@@ -435,6 +435,26 @@
         </div>
       </div>
 
+      
+      <!-- 본사 수금 통장 원클릭 전환 (대표이사 개인통장 ⇄ 법인통장) & 운영시간(09:00~18:00) 설정 바 -->
+      <div style="background:#091e42; color:#fff; border:2px solid #f59e0b; border-radius:14px; padding:16px 20px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px;">
+        <div>
+          <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+            <span style="background:#f59e0b; color:#000; font-size:11.5px; font-weight:900; padding:3px 9px; border-radius:6px;">🏦 본사 수금 계좌 & 운영시간 제어</span>
+            <strong id="hqBankModeBadge" style="font-size:15px; color:#facc15;">[현재: 👤 대표이사 개인통장 수금 모드 (세금 보호)]</strong>
+            <span style="font-size:12.5px; color:#38bdf8; font-weight:800;">| 🕘 무통장 운영시간: 평일 오전 09:00 ~ 오후 18:00 (💳 카드결제 24시간 자동)</span>
+          </div>
+          <div style="font-size:12.5px; color:#cbd5e1; margin-top:6px;" id="hqCurrentBankDetail">
+            현재 전체 사이트(지점 발주 & 팀원 16.5원 충전) 적용 계좌: <b>대표이사 개인 통장</b> (추후 세금 정산 완료 시 우측 버튼으로 1초 만에 법인 통장으로 일괄 전환)
+          </div>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button type="button" class="btn-act" style="background:#f59e0b; color:#000; font-weight:900;" onclick="toggleHqBankAccountMode()">
+            🔄 개인통장 ⇄ 법인통장 1초 전환 및 계좌설정
+          </button>
+        </div>
+      </div>
+
       <!-- 정산 요약 카드 3종 (매월 건수 및 본사 수익 직관적 표시) -->
       <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:16px; margin-bottom:20px;">
         <div style="background:#f0fdf4; border:1.5px solid #86efac; border-radius:12px; padding:18px;">
@@ -1279,6 +1299,47 @@ ${memo}`);
         prompt('아래 내용을 복사(Ctrl+C)하세요:', pitch);
       }
     }
+
+  
+    function loadHqBankConfig() {
+      const cfg = JSON.parse(localStorage.getItem('wooriaptcd_hq_bank_config') || '{"mode":"personal","bank":"농협은행 (대표 개인)","acct":"개인통장 계좌번호","holder":"장수용 (대표이사)","hours":"평일 오전 09:00 ~ 오후 18:00"}');
+      const badge = document.getElementById('hqBankModeBadge');
+      const detail = document.getElementById('hqCurrentBankDetail');
+      if (badge && detail) {
+        if (cfg.mode === 'personal') {
+          badge.innerHTML = '[현재: 👤 대표이사 개인통장 수금 모드 (세금 압류 보호)]';
+          badge.style.color = '#facc15';
+        } else {
+          badge.innerHTML = '[현재: 🏢 본사 법인통장 정식 수금 모드]';
+          badge.style.color = '#34d399';
+        }
+        detail.innerHTML = `현재 전국 지점 발주 및 팀원 충전창 노출 계좌: <b style="color:#fff;">${cfg.bank} ${cfg.acct} (예금주: ${cfg.holder})</b> | 운영시간: <b>${cfg.hours}</b>`;
+      }
+    }
+
+    function toggleHqBankAccountMode() {
+      const cfg = JSON.parse(localStorage.getItem('wooriaptcd_hq_bank_config') || '{"mode":"personal","bank":"농협은행 (대표 개인)","acct":"개인통장 계좌번호","holder":"장수용 (대표이사)","hours":"평일 오전 09:00 ~ 오후 18:00"}');
+      const nextMode = cfg.mode === 'personal' ? 'corp' : 'personal';
+      const modeName = nextMode === 'personal' ? '👤 대표이사 개인통장 모드' : '🏢 본사 법인통장 모드';
+      const bankInput = prompt(`[${modeName}로 전환] 적용할 은행명과 계좌번호를 입력해 주세요:`, nextMode === 'personal' ? '농협은행 (대표이사 개인계좌)' : '법인은행 (본사 법인계좌)');
+      if (!bankInput) return;
+      const holderInput = prompt('예금주명을 입력해 주세요:', nextMode === 'personal' ? '장수용' : '우리아파트CD 법인');
+      if (!holderInput) return;
+
+      const newCfg = {
+        mode: nextMode,
+        bank: bankInput,
+        acct: '',
+        holder: holderInput,
+        hours: '평일 오전 09:00 ~ 오후 18:00'
+      };
+      localStorage.setItem('wooriaptcd_hq_bank_config', JSON.stringify(newCfg));
+      loadHqBankConfig();
+      alert(`✅ [${modeName}]로 1초 전환 완료되었습니다!
+
+전국 지점 발주창(/b2b)과 25명 팀원 충전창(/manager)에 즉시 반영되었습니다.`);
+    }
+    window.addEventListener('DOMContentLoaded', loadHqBankConfig);
 
   </script>
 </body>
