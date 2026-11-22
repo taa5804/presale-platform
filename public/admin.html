@@ -429,6 +429,7 @@
               <option value="2026-09">2026년 09월 (정산 마감)</option>
             </select>
           </div>
+          <button type="button" class="btn-act" style="background:linear-gradient(135deg,#0284c7,#0369a1); color:#fff;" onclick="copyPushPitchText()">📋 영업용 비교설명문 복사 (네이버·알리고 vs 웹푸시)</button>
           <button type="button" class="btn-act btn-emerald" onclick="exportSettlementExcel()">📥 정산 내역 엑셀 다운로드</button>
           <button type="button" class="btn-act btn-sky" onclick="reloadHqData()">🔄 새로고침</button>
         </div>
@@ -1246,6 +1247,39 @@ ${memo}`);
 
     // Auto Init
     checkAuth();
+  
+    function copyPushPitchText() {
+      const pitch = `[📊 네이버클라우드 · 알리고 vs 우리아파트CD 웹푸시 핵심 비교]
+
+지점장님·팀장님! 기존에 쓰시던 문자업체(네이버클라우드, 알리고)와 저희 [우리아파트CD 안심주차 웹푸시]는 차원이 다릅니다.
+
+1️⃣ 발송 비용 70~85% 즉시 절감
+• 네이버클라우드 / 알리고: 장문(LMS) 30~40원, 명함 이미지(MMS) 100~120원
+• 우리 웹푸시: 글자수 제한 없음 + 설계사 명함/비교견적 링크 포함 무조건 [건당 15원 (VAT포함 16.5원)] 단일가!
+
+2️⃣ 통신사 스팸함 차단 0% (100% 차주 화면 도달)
+• 일반 문자(알리고 등): '보험, 만기, 설계사' 단어만 들어가도 스마트폰 스팸함으로 직행해 차주가 아예 못 봅니다. (카카오 알림톡은 영업성 발송 자체가 금지되어 반려됨)
+• 우리 웹푸시: 고객이 자기 차 앞유리 [자동차 QR]을 직접 찍고 개통한 직통 알림이라 스팸 차단 없이 차주 휴대폰 화면 맨 위에 100% 즉시 뜹니다!
+
+3️⃣ 복잡한 통신사 서류 심사 없음 (25명 팀원 방 즉시 개설)
+• 네이버클라우드 / 알리고: 팀원 25명의 통신서비스 이용증명원, 위임장, 발신번호 사전등록 등 서류 절차가 매우 복잡합니다.
+• 우리 웹푸시: 통신사 서류 심사 일절 없이, 지점 초도 발주(1,000장 / 50만원) 즉시 팀장님과 25명 팀원 전용 ERP 방이 그 자리에서 열립니다.
+
+4️⃣ 자동차·운전자·화재 3대 보험 자동 타겟팅 & 팀별 합산 정산
+• 고객은 자동차 QR만 찍으면 팀원 방에 차주 DB(차량번호·만기월)가 자동 등록됩니다.
+• 팀장님은 팀원 개개인을 일일이 관리하실 필요 없이 [팀 단위 합산(건당 16.5원)]으로 한눈에 보시고, 지점 사업자등록증으로 전자세금계산서를 100% 발행해 드립니다.
+
+👉 지점 도입 및 자동검색 확인: https://www.wooriaptcd.com/landing`;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(pitch).then(() => {
+          alert('✅ [네이버클라우드·알리고 vs 우리 웹푸시 영업 비교 설명문]이 복사되었습니다!\n\n카톡이나 문자에 바로 붙여넣기(Ctrl+V) 하시면 됩니다.');
+        });
+      } else {
+        prompt('아래 내용을 복사(Ctrl+C)하세요:', pitch);
+      }
+    }
+
   </script>
 </body>
 </html>
