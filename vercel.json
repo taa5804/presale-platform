@@ -61,6 +61,10 @@
     {
       "source": "/robots.txt",
       "destination": "/robots.txt"
+    },
+    {
+      "source": "/compare",
+      "destination": "/compare.html"
     }
   ],
   "headers": [
