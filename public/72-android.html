@@ -1,388 +1,779 @@
 <!DOCTYPE html>
+
 <html lang="ko">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+
 <meta name="theme-color" content="#16a34a">
+
 <link rel="preconnect" href="https://dcysjuxyjqtvkihdsjvv.supabase.co" crossorigin>
+
 <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+
 <link rel="dns-prefetch" href="https://dcysjuxyjqtvkihdsjvv.supabase.co">
+
 <link rel="dns-prefetch" href="https://www.gstatic.com">
+
+
 
 <title>자동차 안심주차 QR 등록</title>
 
+
+
 <style>
+
 *{box-sizing:border-box}
+
 html,body{width:100%;min-height:100%;margin:0;}
+
 body{
+
   min-height:100vh;
+
   display:flex;
+
   align-items:center;
+
   justify-content:center;
+
   padding:20px;
+
   background:#f4f7fb;
+
   color:#111827;
+
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+
 }
+
 .card{
+
   display:none;
+
   width:100%;
+
   max-width:420px;
+
   padding:28px 22px;
+
   background:#fff;
+
   border-radius:18px;
+
   text-align:center;
+
   box-shadow:0 10px 35px rgba(15,23,42,.1);
+
 }
+
 .card.active{display:block;}
+
 h1{margin:0 0 14px;font-size:24px;}
+
 p,.guide{color:#64748b;line-height:1.7;}
+
 input{
+
   width:100%;
+
   height:54px;
+
   margin:10px 0;
+
   border:1px solid #cbd5e1;
+
   border-radius:11px;
+
   font-size:17px;
+
   text-align:center;
+
 }
+
 input:focus{outline:none;border-color:#16a34a;}
+
 button{
+
   width:100%;
+
   min-height:54px;
+
   margin-top:10px;
+
   border:0;
+
   border-radius:11px;
+
   background:#16a34a;
+
   color:#fff;
+
   font-size:17px;
+
   font-weight:800;
+
   cursor:pointer;
+
 }
+
 button:disabled{background:#cbd5e1;color:#64748b;cursor:not-allowed;}
+
 .status{margin-top:14px;font-weight:700;line-height:1.6;white-space:pre-line;}
+
 .error{color:#dc2626;}
+
 .waiting{color:#1d4ed8;}
+
 .success{color:#15803d;}
+
 </style>
 
+
+
   <!-- Vercel Web Analytics -->
+
   <script>
+
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+
   </script>
+
   <script defer src="/_vercel/insights/script.js"></script>
+
 </head>
+
+
 
 <body>
 
+
+
 <!-- 1단계: 차량번호 & 휴대전화 입력 + 푸시알림 동의 -->
+
 <section id="registerCard" class="card active">
+
   <h1>자동차 QR 등록</h1>
 
+
+
   <p>
+
     차량이동 요청을 받을<br>
+
     차량번호와 휴대전화번호를 입력해 주세요.
+
   </p>
 
-  <input
-    id="carPlate"
-    type="text"
-    placeholder="차량번호 입력 (예: 12가 3456)"
-    style="text-transform:uppercase;font-weight:700;"
-  >
+
 
   <input
-    id="phone"
-    type="tel"
-    inputmode="numeric"
-    maxlength="13"
-    placeholder="010-0000-0000"
+
+    id="carPlate"
+
+    type="text"
+
+    placeholder="차량번호 입력 (예: 12가 3456)"
+
+    style="text-transform:uppercase;font-weight:700;"
+
   >
+
+
+
+  <input
+
+    id="phone"
+
+    type="tel"
+
+    inputmode="numeric"
+
+    maxlength="13"
+
+    placeholder="010-0000-0000"
+
+  >
+
+
 
   <!-- 오직 [필수] 푸시알림 동의 1개만 유지 (거부감 유발 마케팅/만기 질문 없음) -->
+
   <div style="margin:14px 0 10px;text-align:left;background:#f8fafc;padding:12px;border:1px solid #cbd5e1;border-radius:10px;font-size:13px;line-height:1.5;">
+
     <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:bold;color:#0f172a;">
+
       <input type="checkbox" id="agreePrivacy" checked style="width:18px;height:18px;accent-color:#16a34a;">
+
       <span>[필수] 차량이동 요청 수신을 위한 푸시 알림 동의</span>
+
     </label>
+
     <div style="margin-top:6px;font-size:11.5px;color:#64748b;padding-left:26px;">
+
       🔒 수집된 차량번호와 연락처는 안심주차 호출 외 용도로 사용되지 않습니다.
+
     </div>
+
   </div>
+
+
 
   <button id="registerBtn" type="button" style="background:#16a34a;font-weight:900;">
+
     동의하고 다음 (알림 승인)
+
   </button>
+
+
 
   <div id="registerStatus" class="status"></div>
+
 </section>
+
+
 
 <!-- 2단계: 명확한 푸시 알림 허용 화면 (누락 없이 필수 표시) -->
+
 <section id="pushCard" class="card">
+
   <div style="font-size:44px;margin-bottom:10px;">🔔</div>
+
   <h1>푸시 알림 승인</h1>
 
+
+
   <div class="guide" style="font-size:15px;line-height:1.7;margin-bottom:18px;">
+
     차량이동 요청이 오면 스마트폰 상단 팝업과<br>
+
     진동으로 실시간 즉시 알려드립니다.<br><br>
+
     아래 <b>[푸시 알림 허용]</b> 버튼을 눌러 승인해 주세요.
+
   </div>
+
+
 
   <button id="pushBtn" type="button" style="background:#16a34a;font-weight:900;">
+
     푸시 알림 허용
+
   </button>
+
+
 
   <div id="pushStatus" class="status"></div>
+
 </section>
+
+
 
 <!-- 3단계: 완료 화면 -->
+
 <section id="completeCard" class="card">
+
   <div style="font-size:48px;margin-bottom:12px;">✅</div>
+
   <h1>자동차 QR 등록 완료</h1>
 
+
+
   <p style="font-size:16px;font-weight:700;color:#0f172a;margin-bottom:12px;">
+
     스마트폰 알림 등록이<br>
+
     성공적으로 완료되었습니다.
+
   </p>
 
+
+
   <div class="status success" style="line-height:1.6;font-size:14px;background:#f0fdf4;padding:12px;border-radius:10px;border:1px solid #bbf7d0;">
+
     이제 다른 사람이 차량 앞유리 QR을 스캔하여 차량이동 요청을 보내면 스마트폰 상단 푸시 알림으로 즉시 안내받으실 수 있습니다.
+
   </div>
 
+
+
   <button onclick="location.href='/72.html?qr='+encodeURIComponent(qrCode)" style="background:#0f172a;margin-top:16px;">
+
     내 차량 QR 이동요청 화면 확인 ➔
+
   </button>
+
 </section>
+
+
 
 <!-- 오류 화면 -->
+
 <section id="errorCard" class="card">
+
   <div style="font-size:44px;margin-bottom:10px;">⚠️</div>
+
   <h1>등록할 수 없습니다</h1>
+
   <p id="errorText"></p>
+
 </section>
 
+
+
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js"></script>
 
+
+
 <script>
+
 "use strict";
 
+
+
 const API_URL = "https://dcysjuxyjqtvkihdsjvv.supabase.co/functions/v1/send-vehicle-push";
+
 const SUPABASE_KEY = "sb_publishable_RZBX7u1v8MLBCfEJT0-eRg_jPcIulG2";
+
 const VAPID_KEY = "BDtVeUPEh-pooMUUtj4Bd2f5x7EHuWyx4TeunbaQvR8WQs65qwNxryhhORYoS5mxxWMn0GogdgDs1Qod93Vj0jM";
+
 const STORE_ID_KEY = "wooriapt_store_id";
 
+
+
 const FIREBASE_CONFIG = {
+
   apiKey: "AIzaSyB3nZdmUrj2wsKPQpOV8dlso7iI7fZo0Hc",
+
   authDomain: "wooriapt-carqr.firebaseapp.com",
+
   projectId: "wooriapt-carqr",
+
   storageBucket: "wooriapt-carqr.firebasestorage.app",
+
   messagingSenderId: "101299637796",
+
   appId: "1:101299637796:web:cb69372592026b7aa192b1",
+
   measurementId: "G-11E955VBX3"
+
 };
 
+
+
 const params = new URLSearchParams(window.location.search);
-let qrCode = String(params.get("qr") || "").trim().toUpperCase().replace(/[^A-Z0-9_-]/g, "");
+let pathQr = "";
+const pathMatch = window.location.pathname.match(/\/(?:c|register|qr)\/([A-Za-z0-9_-]+)/i);
+if (pathMatch && pathMatch[1]) { pathQr = pathMatch[1]; }
+
+let qrCode = String(params.get("qr") || pathQr || "").trim().toUpperCase().replace(/[^A-Z0-9_-]/g, "");
+
 if (!qrCode) {
+
   qrCode = localStorage.getItem("wooriapt_my_qr") || "CAR-0001";
+
 }
 
+
+
 const registerCard = document.getElementById("registerCard");
+
 const pushCard = document.getElementById("pushCard");
+
 const completeCard = document.getElementById("completeCard");
+
 const errorCard = document.getElementById("errorCard");
 
+
+
 const carPlateInput = document.getElementById("carPlate");
+
 const phoneInput = document.getElementById("phone");
+
 const agreePrivacy = document.getElementById("agreePrivacy");
 
+
+
 const registerBtn = document.getElementById("registerBtn");
+
 const pushBtn = document.getElementById("pushBtn");
 
+
+
 const registerStatus = document.getElementById("registerStatus");
+
 const pushStatus = document.getElementById("pushStatus");
+
 const errorText = document.getElementById("errorText");
+
+
 
 const cards = [registerCard, pushCard, completeCard, errorCard];
 
+
+
 let ownerPhone = "";
+
 let ownerPlate = "";
+
 let processing = false;
+
 let serviceWorkerRegistration = null;
 
+
+
 function showCard(card){
+
   cards.forEach(item => { item.classList.remove("active"); });
+
   card.classList.add("active");
+
   window.scrollTo(0, 0);
+
 }
+
+
 
 function setStatus(element, message, type){
+
   element.textContent = message || "";
+
   element.className = type ? "status " + type : "status";
+
 }
+
+
 
 function normalizePhone(value){
+
   return String(value || "").replace(/[^0-9]/g, "");
+
 }
+
+
 
 function validPhone(value){
+
   return /^01[016789][0-9]{7,8}$/.test(value);
+
 }
+
+
 
 function formatPhone(value){
+
   const number = normalizePhone(value).slice(0, 11);
+
   if(number.length <= 3) return number;
+
   if(number.length <= 7) return number.slice(0, 3) + "-" + number.slice(3);
+
   return number.slice(0, 3) + "-" + number.slice(3, 7) + "-" + number.slice(7);
+
 }
+
+
 
 async function prepareServiceWorker(){
+
   if(serviceWorkerRegistration) return serviceWorkerRegistration;
+
   if(!("serviceWorker" in navigator)){
+
     throw new Error("이 브라우저에서는 웹 알림을 지원하지 않습니다.");
+
   }
+
   await navigator.serviceWorker.register("/firebase-messaging-sw.js", { scope:"/", updateViaCache:"none" });
+
   serviceWorkerRegistration = await navigator.serviceWorker.ready;
+
   return serviceWorkerRegistration;
+
 }
+
+
 
 async function registerVehicle(token){
+
   const response = await fetch(API_URL, {
+
     method: "POST",
+
     headers: {
+
       "Content-Type": "application/json",
+
       Authorization: "Bearer " + SUPABASE_KEY,
+
       apikey: SUPABASE_KEY
+
     },
+
     body: JSON.stringify({
+
       action: "register",
+
       registration_type: "vehicle",
+
       qr_code: qrCode,
+
       car_number: ownerPlate,
+
       owner_phone: ownerPhone,
+
       push_token: token,
+
       platform: "android",
+
       user_agent: navigator.userAgent
+
     })
+
   });
 
+
+
   const data = await response.json().catch(() => ({}));
+
   if(!response.ok || data.ok === false || data.success === false){
+
     throw new Error(data.message || "자동차 등록에 실패했습니다.");
+
   }
+
   return data;
+
 }
 
+
+
 phoneInput.addEventListener("input", event => {
+
   event.target.value = formatPhone(event.target.value);
+
 });
+
+
 
 // 1단계 버튼: 입력값 검증 후 2단계 [푸시 알림 허용] 화면으로 전환
+
 registerBtn.addEventListener("click", () => {
+
   ownerPlate = (carPlateInput ? carPlateInput.value.trim() : "");
+
   if(!ownerPlate || ownerPlate.length < 4){
+
     setStatus(registerStatus, "차량번호를 올바르게 입력해 주세요. (예: 12가 3456)", "error");
+
     carPlateInput.focus();
+
     return;
+
   }
+
+
 
   ownerPhone = normalizePhone(phoneInput.value);
+
   if (!validPhone(ownerPhone)) {
+
     setStatus(registerStatus, "휴대전화번호를 정확히 입력해 주세요.", "error");
+
     phoneInput.focus();
+
     return;
+
   }
+
+
 
   if (agreePrivacy && !agreePrivacy.checked) {
+
     setStatus(registerStatus, "차량이동 알림 수신 동의가 필요합니다.", "error");
+
     return;
+
   }
+
+
 
   localStorage.setItem("wooriapt_my_plate", ownerPlate);
+
   localStorage.setItem("wooriapt_my_phone", ownerPhone);
+
   localStorage.setItem("wooriapt_my_qr", qrCode);
 
+
+
   setStatus(registerStatus, "", "");
+
   // 2단계 알림 승인 화면 표시!
+
   showCard(pushCard);
+
 });
+
+
 
 // 2단계 버튼: 사용자가 명확하게 [푸시 알림 허용]을 눌러 브라우저 권한 획득 & 등록
+
 pushBtn.addEventListener("click", async () => {
+
   if (processing) return;
+
   processing = true;
+
   pushBtn.disabled = true;
+
   pushBtn.textContent = "알림 승인 및 등록 중...";
+
   setStatus(pushStatus, "알림 권한을 요청하고 있습니다...", "waiting");
 
+
+
   try {
+
     if (!("Notification" in window)) {
+
       throw new Error("이 기기 브라우저에서는 푸시 알림을 지원하지 않습니다.");
+
     }
+
+
 
     let permission = Notification.permission;
+
     if (permission !== "granted") {
+
       permission = await Notification.requestPermission();
+
       if (permission !== "granted") {
+
         throw new Error("차량이동 알림을 받으시려면 브라우저 [알림 허용]을 눌러주셔야 합니다.");
+
       }
+
     }
+
+
 
     if (!firebase.apps.length) {
+
       firebase.initializeApp(FIREBASE_CONFIG);
+
     }
+
+
 
     const registration = await prepareServiceWorker();
+
     const messaging = firebase.messaging();
 
+
+
     const token = await messaging.getToken({
+
       vapidKey: VAPID_KEY,
+
       serviceWorkerRegistration: registration
+
     });
 
+
+
     if (!token) {
+
       throw new Error("푸시 알림 토큰 발급에 실패했습니다. 잠시 후 다시 시도해 주세요.");
+
     }
 
+
+
     setStatus(pushStatus, "차량 정보를 등록하는 중입니다...", "waiting");
+
     const result = await registerVehicle(token);
 
+
+
     processing = false;
+
     showCard(completeCard);
 
+
+
   } catch (error) {
+
     processing = false;
+
     pushBtn.disabled = false;
+
     pushBtn.textContent = "푸시 알림 허용";
+
     setStatus(
+
       pushStatus,
+
       error instanceof Error ? error.message : "알림 등록에 실패했습니다.",
+
       "error"
+
     );
+
   }
+
 });
 
+
+
 (async function start(){
+
   if(!qrCode){
+
     errorText.textContent = "자동차 QR 정보를 확인할 수 없습니다.";
+
     showCard(errorCard);
+
     return;
+
   }
 
+
+
   const savedPlate = localStorage.getItem("wooriapt_my_plate");
+
   const savedPhone = localStorage.getItem("wooriapt_my_phone");
+
   if(savedPlate && carPlateInput) carPlateInput.value = savedPlate;
+
   if(savedPhone && phoneInput) phoneInput.value = formatPhone(savedPhone);
+
+
 
   showCard(registerCard);
 
+
+
   try{
+
     await prepareServiceWorker();
+
   }catch(error){
+
     console.warn("서비스워커 준비:", error);
+
   }
+
 })();
+
 </script>
+
 </body>
+
 </html>
+

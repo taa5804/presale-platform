@@ -4,99 +4,63 @@
   "rewrites": [
     {
       "source": "/print",
-      "destination": "/samsung-qr-print.html"
+      "destination": "/samsung-qr-print"
     },
     {
       "source": "/c/:car",
-      "destination": "/72.html?qr=:car"
+      "destination": "/72?qr=:car"
+    },
+    {
+      "source": "/c/:car/",
+      "destination": "/72?qr=:car"
     },
     {
       "source": "/c",
-      "destination": "/72.html"
+      "destination": "/72"
     },
     {
       "source": "/72",
-      "destination": "/72.html"
+      "destination": "/72"
     },
     {
       "source": "/register/:car",
-      "destination": "/72-android.html?qr=:car"
+      "destination": "/72-android?qr=:car"
     },
     {
       "source": "/register",
-      "destination": "/72-android.html"
+      "destination": "/72-android"
     },
     {
       "source": "/b2b",
-      "destination": "/b2b.html"
+      "destination": "/b2b"
     },
     {
       "source": "/order",
-      "destination": "/b2b.html"
+      "destination": "/b2b"
     },
     {
       "source": "/manager",
-      "destination": "/manager.html"
+      "destination": "/manager"
     },
     {
       "source": "/admin",
-      "destination": "/admin.html"
+      "destination": "/admin"
     },
     {
       "source": "/hq",
-      "destination": "/admin.html"
+      "destination": "/admin"
     },
     {
       "source": "/search",
-      "destination": "/search.html"
+      "destination": "/search"
     },
     {
       "source": "/landing",
-      "destination": "/landing.html"
-    },
-    {
-      "source": "/sitemap.xml",
-      "destination": "/sitemap.xml"
-    },
-    {
-      "source": "/robots.txt",
-      "destination": "/robots.txt"
+      "destination": "/landing"
     },
     {
       "source": "/compare",
-      "destination": "/compare.html"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
-        },
-        {
-          "key": "X-Frame-Options",
-          "value": "SAMEORIGIN"
-        },
-        {
-          "key": "X-XSS-Protection",
-          "value": "1; mode=block"
-        }
-      ]
-    },
-    {
-      "source": "/(sw.js|firebase-messaging-sw.js)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache, no-store, must-revalidate"
-        },
-        {
-          "key": "Content-Type",
-          "value": "application/javascript; charset=utf-8"
-        }
-      ]
+      "destination": "/compare"
     }
   ]
 }
