@@ -1,4 +1,4 @@
-// [Google Firebase Cloud Messaging Service Worker for Wooriapt Car QR CD Platform]
+// [Google Firebase Cloud Messaging Service Worker - Energen Mart Live Web Push]
 importScripts("https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js");
 importScripts("https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js");
 
@@ -21,52 +21,56 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-function getNotificationDetails(payload) {
-  let title = (payload && payload.notification && payload.notification.title) ||
-              (payload && payload.data && payload.data.title) ||
-              "🚗 [우리아파트CD 안심주차] 차량이동 요청";
-
-  let body = (payload && payload.notification && payload.notification.body) ||
-             (payload && payload.data && payload.data.body) ||
-             "주차된 차량의 이동 요청이 접수되었습니다. 지금 확인해 주세요.";
-
-  let targetUrl = (payload && payload.data && payload.data.url) || "/c.html?view=owner";
+function getEnergenNotification(payload) {
+  const title = "🛒 [에너젠마트] 주말 초특가 세일 전단지 도착!";
+  const body = "국내산 1등급 생삼겹살 100g 1,290원 · 신선 왕란 1판 4,980원! 지금 터치하여 에너젠마트 특가 상품을 주문하세요.";
+  const targetUrl = "https://mart-platform.vercel.app/74.html";
 
   const options = {
     body: body,
-    icon: "/icon-192.png",
-    badge: "/icon-192.png",
-    vibrate: [500, 250, 500, 250, 500],
+    icon: "https://mart-platform.vercel.app/icon-192.png",
+    badge: "https://mart-platform.vercel.app/icon-192.png",
+    image: "https://mart-platform.vercel.app/test-flyer.png",
+    vibrate: [400, 150, 400, 150, 400],
     requireInteraction: true,
     renotify: true,
-    tag: "wooriaptcd-" + Date.now(),
+    tag: "energen-mart-push-" + Date.now(),
     data: {
       url: targetUrl
     }
   };
-
-  return { title: title, options: options };
+  return { title, options };
 }
 
-messaging.onBackgroundMessage(function(payload) {
-  const details = getNotificationDetails(payload);
-  return self.registration.showNotification(details.title, details.options);
+self.addEventListener("push", function(event) {
+  let payload = {};
+  if (event.data) {
+    try { payload = event.data.json(); } catch(e) {}
+  }
+  const { title, options } = getEnergenNotification(payload);
+  event.waitUntil(self.registration.showNotification(title, options));
 });
+
+try {
+  messaging.onBackgroundMessage(function(payload) {
+    const { title, options } = getEnergenNotification(payload);
+    return self.registration.showNotification(title, options);
+  });
+} catch(e) {}
 
 self.addEventListener("notificationclick", function(event) {
   event.notification.close();
-  const urlToOpen = (event.notification.data && event.notification.data.url) ? event.notification.data.url : "/c.html?view=owner";
-
+  const targetUrl = "https://mart-platform.vercel.app/74.html";
   event.waitUntil(
-    clients.matchAll({ type: "window", includeUncontrolled: true }).then(function(windowClients) {
-      for (let i = 0; i < windowClients.length; i++) {
-        const client = windowClients[i];
-        if (client.url.includes(urlToOpen) && "focus" in client) {
+    clients.matchAll({ type: "window", includeUncontrolled: true }).then(function(clientList) {
+      for (let client of clientList) {
+        if ("focus" in client) {
+          client.navigate(targetUrl);
           return client.focus();
         }
       }
       if (clients.openWindow) {
-        return clients.openWindow(urlToOpen);
+        return clients.openWindow(targetUrl);
       }
     })
   );
